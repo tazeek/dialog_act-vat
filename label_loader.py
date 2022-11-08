@@ -60,6 +60,7 @@ class LabelLoader:
 
             # Check mismatch between the lengths
             # 01/08/2022: Index 673 has the mistmatch
+            # This has been resolved with Yanran Li
             if len(utterances) != len(value):
                 print(f'Mismatch at Index: {int(key) + 1}')
                 continue
@@ -68,7 +69,7 @@ class LabelLoader:
             utter_list += utterances
 
         data = {
-            'label': act_list,
+            'dialog_act': act_list,
             'utterance': utter_list
         }
 
@@ -79,6 +80,6 @@ class LabelLoader:
         if transform_label:
             mapper = self._get_act_mapping()
 
-            self._df_file['label'] = self._df_file['label'].map(lambda x: mapper[x])
+            self._df_file['dialog_act'] = self._df_file['dialog_act'].map(lambda x: mapper[x])
 
         return self._df_file
