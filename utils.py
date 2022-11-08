@@ -1,6 +1,6 @@
 from string import punctuation
 
-def preprocess_text(utterances: list, remove_punctuation=True) -> list:
+def preprocess_text(utterances: list, remove_punctuation:'bool'=True) -> list:
 
     processed_utterances = []
 
