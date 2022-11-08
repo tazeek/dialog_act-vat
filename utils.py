@@ -1,4 +1,6 @@
-def preprocess_text(utterances: list) -> list:
+from string import punctuation
+
+def preprocess_text(utterances: list, remove_punctuation=True) -> list:
 
     processed_utterances = []
 
@@ -7,6 +9,14 @@ def preprocess_text(utterances: list) -> list:
         processed = utterance.strip()
 
         # Split on whitespace
-        processed_utterances += [processed.split(' ')]
+        words = processed.split(' ')
+        
+
+        # Remove punctuation
+        if remove_punctuation:
+            words = [word for word in words if word not in punctuation]
+
+        processed_utterances += [words]
+
 
     return processed_utterances

@@ -11,7 +11,7 @@ if __name__ == '__main__':
 
     print(x_train[0])
     # Preprocess the data (DailyDialog)
-    x_train = preprocess_text(x_train)
+    x_train = preprocess_text(x_train, remove_punctuation=True)
     print(x_train)
 
     # Prepare the model
