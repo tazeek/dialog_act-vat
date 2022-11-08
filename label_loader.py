@@ -4,7 +4,7 @@ class LabelLoader:
 
     def __init__(self):
 
-        # Directory attribute
+        # Directory attribute for DailyDialog
         self._data_dir = 'label_data\\'
 
         # Load dialogues

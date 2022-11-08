@@ -1,3 +1,5 @@
+from label_loader import LabelLoader
+
 if __name__ == '__main__':
 
     # Load the data (DailyDialog)
