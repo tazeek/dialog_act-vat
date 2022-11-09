@@ -20,6 +20,8 @@ if __name__ == '__main__':
     glove_model = utils.load_glove_vector()
     print(f"Length of GloVe model: {len(glove_model)}")
 
+    # Create lookup table
+
     # Prepare the model
 
     # Create the VAT formula
