@@ -45,7 +45,7 @@ def convert_word_index(words_list: list) -> dict:
 
     return word_to_index
 
-def load_glove_vector():
+def create_glove_embeddings():
 
     path = 'pre_trained\glove.6B.50d.txt'
     glove = {}
@@ -61,3 +61,14 @@ def load_glove_vector():
             glove[word] = vector
         
     return glove
+
+def create_glove_embeddings(glove_vectors: dict, word_index_dict: dict) -> list:
+
+    embeddings = np.zeroes((len(word_index_dict), 50))
+
+    # Loop through word_index_dict
+    for word, index in word_index_dict.items():
+
+        # Check if item is in glove_vectors
+
+    return ...
