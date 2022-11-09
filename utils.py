@@ -6,20 +6,19 @@ import numpy as np
 def preprocess_text(utterances: list, remove_punctuation:'bool'=True) -> list:
 
     processed_utterances = []
-    tokenizer = get_tokenizer("spacy")
+    tokenizer = get_tokenizer("basic_english")
+
+    """
+        TODO:
+        - Complete the sentence (example: i'll -> i will)
+        - Need to lowercase?
+    """
 
     for utterance in utterances:
-        # Remove whitespace from beginning and end
-        #processed = utterance.strip()
-
-        # Split on whitespace
-        #words = processed.split(' ')
+        # Split based on tokenizer
         words = tokenizer(utterance)
-        print(words)
-        print('\n')
-        
 
-        # Remove punctuation
+        # Remove punctuation (OPTIONAL)
         if remove_punctuation:
             words = [word for word in words if word not in punctuation]
 
