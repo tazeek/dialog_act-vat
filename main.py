@@ -9,15 +9,16 @@ if __name__ == '__main__':
     # Differentiate labels and text
     x_train, y_train = label_loader['utterance'], label_loader['dialog_act']
 
-    # Preprocess the data (DailyDialog)
+    # Preprocess the data and get tokens (DailyDialog)
     x_train = utils.preprocess_text(x_train, remove_punctuation=False)
 
     # Get word to index dictionary
     word_to_index = utils.convert_word_index(x_train)
+    print(f"Number of unique words: {len(word_to_index)}")
 
     # Load GloVe model
     glove_model = utils.load_glove_vector()
-    print(len(glove_model))
+    print(f"Length of GloVe model: {len(glove_model)}")
 
     # Prepare the model
 
