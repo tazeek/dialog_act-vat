@@ -1,4 +1,5 @@
 from string import punctuation
+import numpy as np
 
 def preprocess_text(utterances: list, remove_punctuation:'bool'=True) -> list:
 
@@ -41,4 +42,17 @@ def convert_word_index(words_list: list) -> dict:
 
 def load_glove_vector():
 
-    ...
+    path = 'pre_trained\glove.6B.50d.txt'
+    glove = {}
+
+    with open(path, encoding="utf8") as f:
+
+        for line in f.readlines():
+            values = line.split()
+            
+            word = values[0]
+            vector = np.array(values[1:], dtype='float32')
+
+            glove[word] = vector
+        
+    return glove

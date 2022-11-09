@@ -16,6 +16,8 @@ if __name__ == '__main__':
     word_to_index = utils.convert_word_index(x_train)
 
     # Load GloVe model
+    glove_model = utils.load_glove_vector()
+    print(len(glove_model))
 
     # Prepare the model
 
