@@ -24,9 +24,17 @@ def preprocess_text(utterances: list, remove_punctuation:'bool'=True) -> list:
 def convert_word_index(words_list: list) -> dict:
 
     word_to_index = {}
+    index = 0
 
-    # Check if word does not exist
+    
+    for list in words_list:
 
-    # Increment index
+        for word in list:
+
+            # Check if word does not exist
+            # and Increment index
+            if word not in word_to_index:
+                word_to_index[word] = index
+                index += 1
 
     return word_to_index

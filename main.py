@@ -1,5 +1,5 @@
 from label_loader import LabelLoader
-from utils import preprocess_text
+import utils
 
 if __name__ == '__main__':
 
@@ -9,10 +9,13 @@ if __name__ == '__main__':
     # Differentiate labels and text
     x_train, y_train = label_loader['utterance'], label_loader['dialog_act']
 
-    print(x_train[0])
     # Preprocess the data (DailyDialog)
-    x_train = preprocess_text(x_train, remove_punctuation=False)
-    print(x_train)
+    x_train = utils.preprocess_text(x_train, remove_punctuation=False)
+
+    # Get word to index dictionary
+    word_to_index = utils.convert_word_index(x_train)
+
+    # Load GloVe model
 
     # Prepare the model
 
