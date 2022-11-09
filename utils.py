@@ -1,6 +1,7 @@
 from string import punctuation
 from torchtext.data import get_tokenizer
 
+import torch
 import numpy as np
 
 def preprocess_text(utterances: list, remove_punctuation:'bool'=True) -> list:
@@ -74,4 +75,4 @@ def create_glove_embeddings(glove_vectors: dict, word_index_dict: dict) -> list:
 
             embeddings[index] = glove_vectors[word]
 
-    return embeddings
+    return torch.from_numpy(embeddings).float()
