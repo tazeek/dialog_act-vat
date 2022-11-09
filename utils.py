@@ -1,16 +1,22 @@
 from string import punctuation
+from torchtext.data import get_tokenizer
+
 import numpy as np
 
 def preprocess_text(utterances: list, remove_punctuation:'bool'=True) -> list:
 
     processed_utterances = []
+    tokenizer = get_tokenizer("spacy")
 
     for utterance in utterances:
         # Remove whitespace from beginning and end
-        processed = utterance.strip()
+        #processed = utterance.strip()
 
         # Split on whitespace
-        words = processed.split(' ')
+        #words = processed.split(' ')
+        words = tokenizer(utterance)
+        print(words)
+        print('\n')
         
 
         # Remove punctuation
