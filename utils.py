@@ -20,3 +20,13 @@ def preprocess_text(utterances: list, remove_punctuation:'bool'=True) -> list:
 
 
     return processed_utterances
+
+def convert_word_index(words_list: list) -> dict:
+
+    word_to_index = {}
+
+    # Check if word does not exist
+
+    # Increment index
+
+    return word_to_index
