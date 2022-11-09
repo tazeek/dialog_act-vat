@@ -38,3 +38,7 @@ def convert_word_index(words_list: list) -> dict:
                 index += 1
 
     return word_to_index
+
+def load_glove_vector():
+
+    ...
