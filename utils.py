@@ -1,5 +1,6 @@
 from string import punctuation
 from torchtext.data import get_tokenizer
+from torch.autograd import Variable
 
 import torch
 import numpy as np
@@ -76,5 +77,21 @@ def create_glove_embeddings(glove_vectors: dict, word_index_dict: dict) -> list:
             embeddings[index] = glove_vectors[word]
 
     print(f"Number of words found: {count}")
-    
+
     return torch.from_numpy(embeddings).float()
+
+def embeddings_test(embeddings: dict, glove_vectors: dict, word_index_dict: dict, test_str: str):
+
+    # Get the index first
+    index = word_index_dict[test_str]
+
+    # Print out embeddings first
+    embedding_test = embeddings(Variable(torch.LongTensor([index])))
+    print(embedding_test)
+
+    print('\n\n')
+    # Get the glove value
+    glove_test = glove_vectors[test_str]
+    print(glove_test)
+    
+    return None

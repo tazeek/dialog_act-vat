@@ -1,4 +1,5 @@
 from label_loader import LabelLoader
+
 import utils
 
 if __name__ == '__main__':
@@ -20,8 +21,9 @@ if __name__ == '__main__':
     glove_model = utils.load_glove_model()
     print(f"Length of GloVe model: {len(glove_model)}")
 
-    # Create lookup table
+    # Create lookup table and check for embeddings test
     glove_embeddings = utils.create_glove_embeddings(glove_model, word_to_index)
+    utils.embeddings_test(glove_embeddings, glove_model, word_to_index, 'hungry')
 
     # Prepare the model
 
