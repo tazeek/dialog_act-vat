@@ -46,7 +46,7 @@ def convert_word_index(words_list: list) -> dict:
 
     return word_to_index
 
-def create_glove_embeddings():
+def load_glove_model():
 
     path = 'pre_trained\glove.6B.50d.txt'
     glove = {}
@@ -65,14 +65,16 @@ def create_glove_embeddings():
 
 def create_glove_embeddings(glove_vectors: dict, word_index_dict: dict) -> list:
 
-    embeddings = np.zeroes((len(word_index_dict), 50))
-
+    embeddings = np.zeros((len(word_index_dict), 50))
+    count = 0
     # Loop through word_index_dict
     for word, index in word_index_dict.items():
 
         # Check if item is in glove_vectors
         if word in glove_vectors:
-
+            count += 1
             embeddings[index] = glove_vectors[word]
 
+    print(f"Number of words found: {count}")
+    
     return torch.from_numpy(embeddings).float()
