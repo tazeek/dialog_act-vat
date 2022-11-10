@@ -11,7 +11,7 @@ if __name__ == '__main__':
     # Differentiate labels and text
     x_train, y_train = label_loader['utterance'], label_loader['dialog_act']
 
-    # Preprocess the data and get tokens (DailyDialog)
+    # Preprocess the text and get tokens (DailyDialog)
     x_train = utils.preprocess_text(x_train, remove_punctuation=False)
 
     # Get word to index dictionary
@@ -28,7 +28,10 @@ if __name__ == '__main__':
 
     # Prepare the model
     model = LSTM_GLove(glove_embeddings)
-    print(model)
+
+    # Break up the dataset into training and testing
+
+    # Transform the data based on the lookup table
 
     # Create the VAT formula
 
