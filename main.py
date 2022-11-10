@@ -1,4 +1,5 @@
 from label_loader import LabelLoader
+from lstm_glove import LSTM_GLove
 
 import utils
 
@@ -26,6 +27,8 @@ if __name__ == '__main__':
     #utils.embeddings_test(glove_embeddings, glove_model, word_to_index, 'hungry')
 
     # Prepare the model
+    model = LSTM_GLove(glove_embeddings)
+    print(model)
 
     # Create the VAT formula
 

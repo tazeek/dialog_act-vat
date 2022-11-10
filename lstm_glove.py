@@ -4,6 +4,8 @@ class LSTM_GLove(nn.Module):
 
     def __init__(self, embedding_layer):
 
+        super(LSTM_GLove, self).__init__()
+
         # Number of samples to pass in training
         # Explanation: https://discuss.pytorch.org/t/generic-question-about-batch-sizes/1321
         self._batch_size = 64
@@ -13,7 +15,7 @@ class LSTM_GLove(nn.Module):
         # Hidden Nodes: Number of Nodes
         self._output_size = 4
         self._layers = 1
-        self._hidden_nodes = 512
+        self._hidden_nodes = 256
 
         # Vocab size: Number of unique words
         # Embedding dim: Dimension size of each word
