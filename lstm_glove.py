@@ -30,8 +30,7 @@ class LSTM_GLove(nn.Module):
             input_size = self._embedding_dim, 
             hidden_size = self._hidden_nodes,
             num_layers = self._layers,
-            batch_first = True,
-            dropout = 0.5
+            batch_first = True
         )
 
         self._label = nn.Linear(self._hidden_nodes, self._output_size)
