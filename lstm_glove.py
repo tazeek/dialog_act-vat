@@ -16,11 +16,22 @@ class LSTM_GLove(nn.Module):
         self._hidden_nodes = 512
 
         # Vocab size: Number of unique words
+        # Embedding dim: Dimension size of each word
         self._vocab_size = embedding_layer.size(0)
         self._embedding_dim = embedding_layer.size(1)
         
+        # Create embedding layer and weights
+        # We don't have retrain the gradients again
         self._word_embeddings = nn.Embedding(self._vocab_size, self._embedding_dim)
         self._word_embeddings.weight = nn.Parameter(embedding_layer, requires_grad = False)
 
-        self._lstm = nn.LSTM(self._embedding_dim, self._hidden_nodes)
+        # Create the LSTM model
+        self._lstm = nn.LSTM(
+            input_size = self._embedding_dim, 
+            hidden_size = self._hidden_nodes,
+            num_layers = self._layers,
+            batch_first = True,
+            dropout = 0.5
+        )
+
         self._label = nn.Linear(self._hidden_nodes, self._output_size)
