@@ -36,3 +36,7 @@ class LSTM_GLove(nn.Module):
         )
 
         self._label = nn.Linear(self._hidden_nodes, self._output_size)
+
+    def forward(input):
+        
+        ...
