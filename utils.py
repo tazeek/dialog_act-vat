@@ -122,9 +122,8 @@ def embeddings_test(embeddings: dict, glove_vectors: dict, word_index_dict: dict
     return None
 
 def transform_dataloader(dataloader_dataset):
-    loader = DataLoader(dataloader_dataset, batch_size=2, shuffle=False, collate_fn=_custom_collate)
-
-    for x,y in loader:
-        print(x, "Targets", y, "\n")
-        print("\n")
-    return None
+    return DataLoader(dataloader_dataset, 
+        batch_size=2, 
+        shuffle=False, 
+        collate_fn=_custom_collate
+    )

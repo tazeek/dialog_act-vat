@@ -34,9 +34,9 @@ if __name__ == '__main__':
     #model = LSTM_GLove(glove_embeddings)
 
     # Use Dataset class for PyTorch
+    # and use dataloader to load
     train_set = DataLoader_DA(x_train, y_train)
-    #print(next(iter(train_set)))
-    utils.transform_dataloader(train_set)
+    train_generator = utils.transform_dataloader(train_set)
 
     # Break up the dataset into training and testing
 
