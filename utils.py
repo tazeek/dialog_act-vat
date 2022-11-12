@@ -51,7 +51,7 @@ def transform_text_integer(words_list: list, index_dict: dict) -> list:
     transformed_list = []
 
     for words in words_list:
-        transformed_list += [index_dict[word] for word in words]
+        transformed_list += [[index_dict[word] for word in words]]
     
     return transformed_list
 
