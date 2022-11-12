@@ -2,12 +2,26 @@ from string import punctuation
 from torch.autograd import Variable
 from torch import nn
 from torch.utils.data import DataLoader
-
+from torch.nn.utils.rnn import pad_sequence
 import torch
 import numpy as np
 
 def _tokenizer(utterance: str):
     return [word for word in utterance.split(" ") if word != '']
+
+def _custom_collate(data: list):
+    print(data)
+
+    inputs = [torch.tensor(d['text']) for d in data]
+    labels = [d['class'] for d in data]
+
+    inputs = pad_sequence(inputs, batch_first=True)
+    labels = torch.tensor(labels)
+
+    return {
+        'text': inputs,
+        'class': labels
+    }
 
 def preprocess_text(utterances: list, remove_punctuation:'bool'=True) -> list:
 
@@ -32,11 +46,14 @@ def preprocess_text(utterances: list, remove_punctuation:'bool'=True) -> list:
 
     return processed_utterances
 
+def transform_text_integer(words_list: list, index_dict: dict) -> list:
+
+    transformed_list = []
+
 def convert_word_index(words_list: list) -> dict:
 
     word_to_index = {}
     index = 0
-
     
     for list in words_list:
 
@@ -104,7 +121,7 @@ def embeddings_test(embeddings: dict, glove_vectors: dict, word_index_dict: dict
     return None
 
 def transform_dataloader(dataloader_dataset):
-    loader = DataLoader(dataloader_dataset, batch_size=2, shuffle=False)
+    loader = DataLoader(dataloader_dataset, batch_size=2, shuffle=False, collate_fn=_custom_collate)
     batch = next(iter(loader))
     print(batch)
 
