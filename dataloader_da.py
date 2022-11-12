@@ -16,5 +16,5 @@ class DataLoader_DA(Dataset):
 
         return {
             'text': text,
-            'class': label
+            'class': int(label)
         }

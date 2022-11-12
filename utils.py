@@ -10,7 +10,6 @@ def _tokenizer(utterance: str):
     return [word.lower() for word in utterance.split(" ") if word != '']
 
 def _custom_collate(data: list):
-    print(data)
 
     inputs = [torch.tensor(d['text']) for d in data]
     labels = [d['class'] for d in data]
@@ -18,10 +17,7 @@ def _custom_collate(data: list):
     inputs = pad_sequence(inputs, batch_first=True)
     labels = torch.tensor(labels)
 
-    return {
-        'text': inputs,
-        'class': labels
-    }
+    return inputs, labels
 
 def preprocess_text(utterances: list, remove_punctuation:'bool'=True) -> list:
 
@@ -57,8 +53,8 @@ def transform_text_integer(words_list: list, index_dict: dict) -> list:
 
 def convert_word_index(words_list: list) -> dict:
 
-    word_to_index = {}
-    index = 0
+    word_to_index = {0: '<pad>'}
+    index = 1
     
     for list in words_list:
 
@@ -127,7 +123,8 @@ def embeddings_test(embeddings: dict, glove_vectors: dict, word_index_dict: dict
 
 def transform_dataloader(dataloader_dataset):
     loader = DataLoader(dataloader_dataset, batch_size=2, shuffle=False, collate_fn=_custom_collate)
-    batch = next(iter(loader))
-    print(batch)
 
+    for x,y in loader:
+        print(x, "Targets", y, "\n")
+        print("\n")
     return None

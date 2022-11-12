@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     # Transform the text to index format
     x_train = utils.transform_text_integer(x_train, word_to_index)
-    
+
     # Load GloVe model
     #glove_model = utils.load_glove_model()
     #print(f"Length of GloVe model: {len(glove_model)}")
@@ -34,8 +34,9 @@ if __name__ == '__main__':
     #model = LSTM_GLove(glove_embeddings)
 
     # Use Dataset class for PyTorch
-    #train_set = DataLoader_DA(x_train, y_train)
-    #utils.transform_dataloader(train_set)
+    train_set = DataLoader_DA(x_train, y_train)
+    #print(next(iter(train_set)))
+    utils.transform_dataloader(train_set)
 
     # Break up the dataset into training and testing
 
