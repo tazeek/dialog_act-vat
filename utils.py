@@ -7,7 +7,7 @@ import torch
 import numpy as np
 
 def _tokenizer(utterance: str):
-    return [word for word in utterance.split(" ") if word != '']
+    return [word.lower() for word in utterance.split(" ") if word != '']
 
 def _custom_collate(data: list):
     print(data)
@@ -49,6 +49,11 @@ def preprocess_text(utterances: list, remove_punctuation:'bool'=True) -> list:
 def transform_text_integer(words_list: list, index_dict: dict) -> list:
 
     transformed_list = []
+
+    for words in words_list:
+        transformed_list += [index_dict[word] for word in words]
+    
+    return transformed_list
 
 def convert_word_index(words_list: list) -> dict:
 
