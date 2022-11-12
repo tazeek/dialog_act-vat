@@ -1,6 +1,6 @@
 from label_loader import LabelLoader
 from lstm_glove import LSTM_GLove
-
+from dataloader_da import DataLoader_DA
 import utils
 
 if __name__ == '__main__':
@@ -15,19 +15,23 @@ if __name__ == '__main__':
     x_train = utils.preprocess_text(x_train, remove_punctuation=False)
 
     # Get word to index dictionary
-    word_to_index = utils.convert_word_index(x_train)
-    print(f"Number of unique words: {len(word_to_index)}")
+    #word_to_index = utils.convert_word_index(x_train)
+    #print(f"Number of unique words: {len(word_to_index)}")
 
     # Load GloVe model
-    glove_model = utils.load_glove_model()
-    print(f"Length of GloVe model: {len(glove_model)}")
+    #glove_model = utils.load_glove_model()
+    #print(f"Length of GloVe model: {len(glove_model)}")
 
     # Create lookup table and check for embeddings test
-    glove_embeddings = utils.create_glove_embeddings(glove_model, word_to_index)
+    #glove_embeddings = utils.create_glove_embeddings(glove_model, word_to_index)
     #utils.embeddings_test(glove_embeddings, glove_model, word_to_index, 'hungry')
 
     # Prepare the model
-    model = LSTM_GLove(glove_embeddings)
+    #model = LSTM_GLove(glove_embeddings)
+
+    # Use Dataset class for PyTorch
+    dataset = DataLoader_DA(x_train, y_train)
+    print('\nFirst iteration of data set: ', next(iter(dataset)), '\n')
 
     # Break up the dataset into training and testing
 

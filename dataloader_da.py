@@ -12,7 +12,7 @@ class DataLoader_DA(Dataset):
     def __getitem__(self, idx):
         
         label = self._labels[idx]
-        text = self.text[idx]
+        text = self._text[idx]
 
         return {
             'text': text,
