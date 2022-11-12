@@ -1,6 +1,7 @@
 from label_loader import LabelLoader
 from lstm_glove import LSTM_GLove
 from dataloader_da import DataLoader_DA
+
 import utils
 
 if __name__ == '__main__':
@@ -30,8 +31,8 @@ if __name__ == '__main__':
     #model = LSTM_GLove(glove_embeddings)
 
     # Use Dataset class for PyTorch
-    dataset = DataLoader_DA(x_train, y_train)
-    print('\nFirst iteration of data set: ', next(iter(dataset)), '\n')
+    train_set = DataLoader_DA(x_train, y_train)
+    utils.transform_dataloader(train_set)
 
     # Break up the dataset into training and testing
 

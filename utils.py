@@ -1,7 +1,7 @@
 from string import punctuation
-from torchtext.data import get_tokenizer
 from torch.autograd import Variable
 from torch import nn
+from torch.utils.data import DataLoader
 
 import torch
 import numpy as np
@@ -12,7 +12,6 @@ def _tokenizer(utterance: str):
 def preprocess_text(utterances: list, remove_punctuation:'bool'=True) -> list:
 
     processed_utterances = []
-    tokenizer = get_tokenizer("basic_english")
 
     """
         TODO:
@@ -101,5 +100,12 @@ def embeddings_test(embeddings: dict, glove_vectors: dict, word_index_dict: dict
     # Get the glove value
     glove_test = glove_vectors[test_str]
     print(glove_test)
+
+    return None
+
+def transform_dataloader(dataloader_dataset):
+    loader = DataLoader(dataloader_dataset, batch_size=2, shuffle=False)
+    batch = next(iter(loader))
+    print(batch)
 
     return None
