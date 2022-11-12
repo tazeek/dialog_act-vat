@@ -13,11 +13,12 @@ def _custom_collate(data: list):
 
     inputs = [torch.tensor(d['text']) for d in data]
     labels = [d['class'] for d in data]
+    input_len = len(inputs)
 
-    inputs = pad_sequence(inputs, batch_first=True)
+    inputs_padded = pad_sequence(inputs, batch_first=True)
     labels = torch.tensor(labels)
 
-    return inputs, labels
+    return input_len, inputs_padded, labels
 
 def preprocess_text(utterances: list, remove_punctuation:'bool'=True) -> list:
 
