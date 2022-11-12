@@ -6,6 +6,9 @@ from torch import nn
 import torch
 import numpy as np
 
+def _tokenizer(utterance: str):
+    return [word for word in utterance.split(" ") if word != '']
+
 def preprocess_text(utterances: list, remove_punctuation:'bool'=True) -> list:
 
     processed_utterances = []
@@ -19,7 +22,7 @@ def preprocess_text(utterances: list, remove_punctuation:'bool'=True) -> list:
 
     for utterance in utterances:
         # Split based on tokenizer
-        words = tokenizer(utterance)
+        words = _tokenizer(utterance)
 
         # Remove punctuation (OPTIONAL)
         if remove_punctuation:
