@@ -1,4 +1,5 @@
 from torch import nn
+from torch.nn.utils.rnn import pad_sequence, pack_padded_sequence
 
 class LSTM_GLove(nn.Module):
 
@@ -43,6 +44,12 @@ class LSTM_GLove(nn.Module):
         x_embed = self._word_embeddings(input)
         
         # Input the embeddings to the pack padded sequence
+        pack_output = pack_padded_sequence(
+            x_embed, 
+            actual_batch_len, 
+            batch_first=True, 
+            enforce_sorted=False
+        )
 
         # Input the second transformation to LSTM
 
