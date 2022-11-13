@@ -1,7 +1,7 @@
 from string import punctuation
 from torch.autograd import Variable
 from torch import nn
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, random_split
 from torch.nn.utils.rnn import pad_sequence, pack_padded_sequence
 from torch import nn
 
@@ -131,7 +131,15 @@ def embeddings_test(embeddings: dict, glove_vectors: dict, word_index_dict: dict
 
 def split_training_testing(x_full, y_full):
 
-    ...
+    # 60% for training, 20% for validation, 20% for testing (VAT)
+    # 60% for training, 40% for testing (Non-VAT)
+    train_dataset, test_dataset = random_split(
+        x_full, 
+        [0.6, 0.4],
+        generator=torch.Generator().manual_seed(42)
+    )
+    
+    return None
 
 def transform_dataloader(dataloader_dataset):
     return DataLoader(dataloader_dataset, 
