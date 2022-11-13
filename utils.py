@@ -2,7 +2,7 @@ from string import punctuation
 from torch.autograd import Variable
 from torch import nn
 from torch.utils.data import DataLoader
-from torch.nn.utils.rnn import pad_sequence
+from torch.nn.utils.rnn import pad_sequence, pack_padded_sequence
 import torch
 import numpy as np
 
@@ -128,3 +128,14 @@ def transform_dataloader(dataloader_dataset):
         shuffle=False, 
         collate_fn=_custom_collate
     )
+
+def train_model(dataloader):
+
+    # Loop through dataloader
+    for (length, padded_input, label) in enumerate(dataloader):
+        print(length)
+        print(padded_input)
+        print(label)
+        break
+    
+    exit()
