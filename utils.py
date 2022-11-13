@@ -133,13 +133,19 @@ def split_training_testing(x_full, y_full):
 
     # 60% for training, 20% for validation, 20% for testing (VAT)
     # 60% for training, 40% for testing (Non-VAT)
-    train_dataset, test_dataset = random_split(
+    x_train, x_test = random_split(
         x_full, 
         [0.6, 0.4],
         generator=torch.Generator().manual_seed(42)
     )
-    
-    return None
+
+    y_train, y_test = random_split(
+        y_full, 
+        [0.6, 0.4],
+        generator=torch.Generator().manual_seed(42)
+    )
+
+    return x_train, y_train, x_test, y_test
 
 def transform_dataloader(dataloader_dataset):
     return DataLoader(dataloader_dataset, 
