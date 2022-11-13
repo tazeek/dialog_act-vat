@@ -40,7 +40,8 @@ class LSTM_GLove(nn.Module):
     def forward(self, input, actual_batch_len):
         
         # Transform from raw to embeddings
-
+        x_embed = self._word_embeddings(input)
+        
         # Input the embeddings to the pack padded sequence
 
         # Input the second transformation to LSTM
