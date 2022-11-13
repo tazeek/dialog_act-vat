@@ -11,11 +11,16 @@ def _tokenizer(utterance: str):
 
 def _custom_collate(data: list):
 
-    inputs = [torch.tensor(d['text']) for d in data]
-    labels = [d['class'] for d in data]
-    input_len = len(inputs)
+    # Get original input length for pack padded sequence
+    input_len = [len(d['text']) for d in data]
+    input_len = torch.tensor(input_len)
 
+    # For padding process
+    inputs = [torch.tensor(d['text']) for d in data]
     inputs_padded = pad_sequence(inputs, batch_first=True)
+
+    # For labels
+    labels = [d['class'] for d in data]
     labels = torch.tensor(labels)
 
     return input_len, inputs_padded, labels
@@ -131,6 +136,7 @@ def transform_dataloader(dataloader_dataset):
 
 def train_model(dataloader):
 
+    print(next(iter(dataloader)))
     # Loop through dataloader
     for (length, padded_input, label) in enumerate(dataloader):
         print(length)
