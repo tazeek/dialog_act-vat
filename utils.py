@@ -129,6 +129,10 @@ def embeddings_test(embeddings: dict, glove_vectors: dict, word_index_dict: dict
 
     return None
 
+def split_training_testing(x_full, y_full):
+
+    ...
+
 def transform_dataloader(dataloader_dataset):
     return DataLoader(dataloader_dataset, 
         batch_size=2, 
@@ -140,4 +144,5 @@ def train_model(dataloader, embeddings):
 
     for (length, padded_input, label) in dataloader:
         ...
-    exit()
+    
+    return None
