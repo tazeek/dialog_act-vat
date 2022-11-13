@@ -55,4 +55,4 @@ class LSTM_GLove(nn.Module):
         out_lstm, (hidden, cell) = self._lstm(pack_output)
 
         # Get the output in the fully connected layer
-        return self.linear(hidden[-1])
+        return self._linear(hidden[-1])
