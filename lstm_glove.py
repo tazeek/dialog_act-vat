@@ -14,7 +14,7 @@ class LSTM_GLove(nn.Module):
         # Output size: Based on labels
         # Layers: Number of layers
         # Hidden Nodes: Number of Nodes
-        self._output_size = 4
+        self._output_size = 1
         self._layers = 1
         self._hidden_nodes = 256
 
@@ -36,7 +36,7 @@ class LSTM_GLove(nn.Module):
             batch_first = True
         )
 
-        self._label = nn.Linear(self._hidden_nodes, self._output_size)
+        self._linear = nn.Linear(self._hidden_nodes, self._output_size)
 
     def forward(self, input, actual_batch_len):
         
@@ -55,6 +55,4 @@ class LSTM_GLove(nn.Module):
         out_lstm, (hidden, cell) = self._lstm(pack_output)
 
         # Get the output in the fully connected layer
-        output = self._label(out_lstm)
-
-        return output
+        return self.linear(hidden[-1])
