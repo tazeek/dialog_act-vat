@@ -52,6 +52,9 @@ class LSTM_GLove(nn.Module):
         )
 
         # Input the second transformation to LSTM
+        out_lstm, (hidden, cell) = self._lstm(pack_output)
 
         # Get the output in the fully connected layer
-        ...
+        output = self._label(out_lstm)
+
+        return output
