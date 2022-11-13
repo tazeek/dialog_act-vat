@@ -37,6 +37,13 @@ class LSTM_GLove(nn.Module):
 
         self._label = nn.Linear(self._hidden_nodes, self._output_size)
 
-    def forward(input):
+    def forward(self, input, actual_batch_len):
         
+        # Transform from raw to embeddings
+
+        # Input the embeddings to the pack padded sequence
+
+        # Input the second transformation to LSTM
+
+        # Get the output in the fully connected layer
         ...
