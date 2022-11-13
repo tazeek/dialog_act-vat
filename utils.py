@@ -3,6 +3,8 @@ from torch.autograd import Variable
 from torch import nn
 from torch.utils.data import DataLoader
 from torch.nn.utils.rnn import pad_sequence, pack_padded_sequence
+from torch import nn
+
 import torch
 import numpy as np
 
@@ -134,15 +136,8 @@ def transform_dataloader(dataloader_dataset):
         collate_fn=_custom_collate
     )
 
-def train_model(dataloader):
+def train_model(dataloader, embeddings):
 
-    # Loop through dataloader
     for (length, padded_input, label) in dataloader:
-
-        # Transform the data based on the lookup table
-        print(length)
-        print(padded_input)
-        print(label)
-        break
-    
+        ...
     exit()
