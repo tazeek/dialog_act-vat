@@ -23,15 +23,12 @@ if __name__ == '__main__':
     x_train = utils.transform_text_integer(x_train, word_to_index)
 
     # Load GloVe model
-    #glove_model = utils.load_glove_model()
-    #print(f"Length of GloVe model: {len(glove_model)}")
+    glove_model = utils.load_glove_model()
+    print(f"Length of GloVe model: {len(glove_model)}")
 
     # Create lookup table and check for embeddings test
-    #glove_embeddings = utils.create_glove_embeddings(glove_model, word_to_index)
+    glove_embeddings = utils.create_glove_embeddings(glove_model, word_to_index)
     #utils.embeddings_test(glove_embeddings, glove_model, word_to_index, 'hungry')
-
-    # Prepare the model
-    #model = LSTM_GLove(glove_embeddings)
 
     # Use Dataset class for PyTorch
     # and use dataloader to load
@@ -39,11 +36,14 @@ if __name__ == '__main__':
     train_generator = utils.transform_dataloader(train_set)
 
     # Break up the dataset into training and testing
-
-    # Transform the data based on the lookup table
+    # TODO: use the zip files to load the information
 
     # Create the VAT formula
 
+    # Prepare the model
+    #model = LSTM_GLove(glove_embeddings)
+
     # Train the model
+    utils.train_model(train_generator, glove_embeddings)
 
     # Test the model
