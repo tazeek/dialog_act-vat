@@ -12,10 +12,6 @@ if __name__ == '__main__':
     # Differentiate labels and text
     full_file, full_labels = label_loader['utterance'], label_loader['dialog_act']
 
-    # Break up the dataset into training and testing
-    # TODO: use the zip files to load the information
-    utils.split_training_testing(full_file, full_labels)
-    
     # Preprocess the text and get tokens (DailyDialog)
     #full_file = utils.preprocess_text(full_file, remove_punctuation=False)
 
@@ -33,6 +29,10 @@ if __name__ == '__main__':
     # Create lookup table and check for embeddings test
     #glove_embeddings = utils.create_glove_embeddings(glove_model, word_to_index)
     #utils.embeddings_test(glove_embeddings, glove_model, word_to_index, 'hungry')
+
+    # Break up the dataset into training and testing
+    # TODO: use the zip files to load the information
+    x_train, y_train, x_test, y_test = utils.split_training_testing(full_file, full_labels)
 
     # Use Dataset class for PyTorch
     # and use dataloader to load
