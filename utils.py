@@ -136,9 +136,10 @@ def transform_dataloader(dataloader_dataset):
 
 def train_model(dataloader):
 
-    print(next(iter(dataloader)))
     # Loop through dataloader
-    for (length, padded_input, label) in enumerate(dataloader):
+    for (length, padded_input, label) in dataloader:
+
+        # Transform the data based on the lookup table
         print(length)
         print(padded_input)
         print(label)
