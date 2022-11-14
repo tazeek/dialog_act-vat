@@ -167,17 +167,25 @@ def train_model(train_data, glove_embeddings):
     # Define Optimizer
     #optimizer = optim.Adam(net.parameters(), lr= 0.001)
 
-    for (length, padded_input, label) in train_data:
-        ...
+    for epoch in range(4):
+        
+        for (original_lengths, padded_inputs, labels) in train_data:
+            
+            # Load inputs and labels
+            # inputs, labels = inputs.to(device), labels.to(device)
 
-        # Compute the loss
-        #loss = criterion(y_pred, label)
+            # Predict the outputs
+            # y_pred, h = model(padded_inputs, original_lengths)
 
-        # Update for parameter
-        #loss.backward()
+            # Compute the loss
+            #loss = criterion(y_pred.squeeze(), labels.float())
 
-        # Compute updates for parameters
-        #optimizer.step()
-        #optimizer.zero_grad()
+            # Update for parameter
+            #loss.backward()
+
+            # Compute updates for parameters
+            #optimizer.step()
+            #optimizer.zero_grad()
+            ...
 
     return None
