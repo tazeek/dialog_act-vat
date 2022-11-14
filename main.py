@@ -1,5 +1,4 @@
 from label_loader import LabelLoader
-from lstm_glove import LSTM_GLove
 from dataloader_da import DataLoader_DA
 
 import utils
@@ -46,12 +45,9 @@ if __name__ == '__main__':
 
     test_set = DataLoader_DA(x_test, y_test)
     test_generator = utils.transform_dataloader(test_set)
-
-    # Prepare the model
-    #model = LSTM_GLove(glove_embeddings)
-
+    
     # Train the model
-    #utils.train_model(train_generator, glove_embeddings)
+    utils.train_model(train_generator, glove_embeddings)
 
     # Test the model
 

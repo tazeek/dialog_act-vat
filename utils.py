@@ -4,6 +4,7 @@ from torch import nn
 from torch.utils.data import DataLoader, random_split
 from torch.nn.utils.rnn import pad_sequence, pack_padded_sequence
 from torch import nn
+from lstm_glove import LSTM_GLove
 
 import torch
 import numpy as np
@@ -154,12 +155,29 @@ def transform_dataloader(dataloader_dataset):
         collate_fn=_custom_collate
     )
 
-def train_model(train_data):
+def train_model(train_data, glove_embeddings):
+
+    # Prepare the model
+    model = LSTM_GLove(glove_embeddings)
+    print(model)
 
     # Define the loss function
     criterion = nn.CrossEntropyLoss()
-    
+
+    # Define Optimizer
+    #optimizer = optim.Adam(net.parameters(), lr= 0.001)
+
     for (length, padded_input, label) in train_data:
         ...
-    
+
+        # Compute the loss
+        #loss = criterion(y_pred, label)
+
+        # Update for parameter
+        #loss.backward()
+
+        # Compute updates for parameters
+        #optimizer.step()
+        #optimizer.zero_grad()
+
     return None
