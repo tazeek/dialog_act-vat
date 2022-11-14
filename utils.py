@@ -154,9 +154,12 @@ def transform_dataloader(dataloader_dataset):
         collate_fn=_custom_collate
     )
 
-def train_model(dataloader, embeddings):
+def train_model(train_data):
 
-    for (length, padded_input, label) in dataloader:
+    # Define the loss function
+    criterion = nn.CrossEntropyLoss()
+    
+    for (length, padded_input, label) in train_data:
         ...
     
     return None
