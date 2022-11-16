@@ -59,7 +59,7 @@ def train_model(train_data, glove_embeddings):
     criterion = nn.CrossEntropyLoss()
 
     # Define Optimizer
-    optimizer = optim.Adam(net.parameters(), lr= 0.001)
+    optimizer = optim.Adam(model.parameters(), lr= 0.001)
 
     # Use GPU, if available
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
