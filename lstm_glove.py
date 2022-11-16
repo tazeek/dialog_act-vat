@@ -14,7 +14,7 @@ class LSTM_GLove(nn.Module):
         # Output size: Based on labels
         # Layers: Number of layers
         # Hidden Nodes: Number of Nodes
-        self._output_size = 1
+        self._output_size = 4
         self._layers = 1
         self._hidden_nodes = 256
 
@@ -25,7 +25,7 @@ class LSTM_GLove(nn.Module):
         
         # Create embedding layer and weights
         # We don't have retrain the gradients again
-        self._word_embeddings = nn.Embedding(self._vocab_size, self._embedding_dim)
+        self._word_embeddings = nn.Embedding(self._vocab_size, self._embedding_dim, padding_idx=0)
         self._word_embeddings.weight = nn.Parameter(embedding_layer, requires_grad = False)
 
         # Create the LSTM model
@@ -37,14 +37,14 @@ class LSTM_GLove(nn.Module):
         )
 
         self._linear = nn.Linear(self._hidden_nodes, self._output_size)
-        self._dropout = nn.Dropout(0.2)
-        self._act = nn.Softmax()
+        #self._dropout = nn.Dropout(0.2)
+        #self._act = nn.Softmax(dim=1)
 
     def forward(self, input, actual_batch_len):
         
         # Transform from raw to embeddings
         x_embed = self._word_embeddings(input)
-        x_embed = self._dropout(x_embed)
+        #x_embed = self._dropout(x_embed)
         
         # Input the embeddings to the pack padded sequence
         pack_output = pack_padded_sequence(
@@ -56,8 +56,8 @@ class LSTM_GLove(nn.Module):
 
         # Input the second transformation to LSTM
         out_lstm, (hidden, cell) = self._lstm(pack_output)
-        dense_outputs = self._linear(hidden[-1])
+        #dense_outputs = self._linear(hidden[-1])
 
         # Get the output in the softmax
-        output = self._act(dense_outputs)
-        return output
+        #output = self._act(dense_outputs)
+        return self._linear(hidden[-1])

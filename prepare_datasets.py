@@ -25,7 +25,7 @@ def _custom_collate(data: list):
 
 def _transform_dataloader(dataloader_dataset):
     return DataLoader(dataloader_dataset, 
-        batch_size=128, 
+        batch_size=64, 
         shuffle=False, 
         collate_fn=_custom_collate
     )

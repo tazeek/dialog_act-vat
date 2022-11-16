@@ -39,7 +39,7 @@ def train_model(train_data, glove_embeddings):
 
     accuracy_stats = { 'train' : []}
     loss_stats = {'train': []}
-    epochs = 10
+    epochs = 100
 
     for epoch in tqdm(range(1, epochs + 1)):
         
@@ -50,6 +50,9 @@ def train_model(train_data, glove_embeddings):
 
         for (x_original_len, x_padded, y_train) in train_data:
             
+            # Convert to LongTensor
+            y_train = y_train.type(torch.LongTensor)
+
             # Load inputs and labels onto device
             x_padded, y_train = x_padded.to(device), y_train.to(device)
 
@@ -59,7 +62,7 @@ def train_model(train_data, glove_embeddings):
             y_pred = model(x_padded, x_original_len)
 
             # Compute the loss and accuracy
-            train_loss = criterion(y_pred.squeeze(), y_train.float())
+            train_loss = criterion(y_pred.squeeze(), y_train)
             train_acc = multi_accuracy_calculation(y_pred, y_train)
 
             # Back propagation
@@ -71,7 +74,6 @@ def train_model(train_data, glove_embeddings):
             train_epoch_acc += train_acc.item()
 
             # Update the dictionary losses
-            accuracy_stats['train'].append(train_epoch_acc/len(train_data))
             loss_stats['train'].append(train_epoch_loss/len(train_data))
         
         print(
