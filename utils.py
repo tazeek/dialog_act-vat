@@ -3,6 +3,7 @@ from torch.utils.data import DataLoader, random_split
 from torch.nn.utils.rnn import pad_sequence, pack_padded_sequence
 from torch import nn
 from torch import optim
+from tqdm.notebook import tqdm
 
 from lstm_glove import LSTM_GLove
 
@@ -82,7 +83,7 @@ def train_model(train_data, glove_embeddings):
     loss_stats = {'train': []}
     epochs = 5
 
-    for epoch in range( (1, epochs + 1)):
+    for epoch in tqdm(range( (1, epochs + 1))):
         
         model.train()
 
@@ -114,5 +115,11 @@ def train_model(train_data, glove_embeddings):
             # Update the dictionary losses
             accuracy_stats['train'].append(train_epoch_acc/len(train_data))
             loss_stats['train'].append(train_epoch_loss/len(train_data))
+        
+        print(
+            f'Epoch {epoch+0:03}: |'
+            f' Train Loss: {train_epoch_loss/len(train_loader):.5f} | '
+            f' Train Acc: {train_epoch_acc/len(train_loader):.3f} | '
+        )
         
     return model
