@@ -57,7 +57,7 @@ def multi_accuracy_calculation(prediction, actual):
     correct_pred = (y_pred_tags == actual).float()
     acc = correct_pred.sum() / len(correct_pred)
     acc = torch.round(acc * 100)
-    
+
     return acc
 
 def train_model(train_data, glove_embeddings):
@@ -77,28 +77,36 @@ def train_model(train_data, glove_embeddings):
     
     # Mount model onto the GPU
     model.to(device)
+
+    accuracy_stats = { 'train' : []}
+    loss_stats = {'train': []}
     
     for epoch in range(4):
         
         model.train()
 
-        for (original_lengths, padded_inputs, labels) in train_data:
+        train_epoch_loss = 0
+        train_epoch_acc = 0
+
+        for (x_original_len, x_padded, y_train) in train_data:
             
-            # Load inputs and labels
-            # inputs, labels = inputs.to(device), labels.to(device)
+            # Load inputs and labels onto device
+            x_padded, y_train = x_padded.to(device), y_train.to(device)
+
+            optimizer.zero_grad()
 
             # Predict the outputs
-            # y_pred, h = model(padded_inputs, original_lengths)
+            y_pred = model(x_padded, x_original_len)
 
-            # Compute the loss
-            #loss = criterion(y_pred.squeeze(), labels.float())
+            # Compute the loss and accuracy
+            train_loss = criterion(y_pred.squeeze(), y_train.float())
+            train_acc = multi_accuracy_calculation(y_pred, y_train)
 
-            # Update for parameter
-            #loss.backward()
-
-            # Compute updates for parameters
-            #optimizer.step()
-            #optimizer.zero_grad()
-            ...
-
+            # Update for parameters and compute the updates
+            train_loss.backward()
+            optimizer.step()
+            
+            train_epoch_loss += train_loss.item()
+            train_epoch_acc += train_acc.item()
+        
     return None
