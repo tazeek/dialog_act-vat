@@ -1,6 +1,5 @@
 from torch import nn
-from torch.utils.data import DataLoader, random_split
-from torch.nn.utils.rnn import pad_sequence, pack_padded_sequence
+
 from torch import nn
 from torch import optim
 from tqdm.notebook import tqdm
@@ -8,47 +7,6 @@ from tqdm.notebook import tqdm
 from lstm_glove import LSTM_GLove
 
 import torch
-
-def _custom_collate(data: list):
-
-    # Get original input length for pack padded sequence
-    input_len = [len(d['text']) for d in data]
-    input_len = torch.tensor(input_len)
-
-    # For padding process
-    inputs = [torch.tensor(d['text']) for d in data]
-    inputs_padded = pad_sequence(inputs, batch_first=True)
-
-    # For labels
-    labels = [d['class'] for d in data]
-    labels = torch.tensor(labels)
-
-    return input_len, inputs_padded, labels
-
-def split_training_testing(x_full, y_full):
-
-    # 60% for training, 20% for validation, 20% for testing (VAT)
-    # 60% for training, 40% for testing (Non-VAT)
-    x_train, x_test = random_split(
-        x_full, 
-        [0.6, 0.4],
-        generator=torch.Generator().manual_seed(42)
-    )
-
-    y_train, y_test = random_split(
-        y_full, 
-        [0.6, 0.4],
-        generator=torch.Generator().manual_seed(42)
-    )
-
-    return x_train, y_train, x_test, y_test
-
-def transform_dataloader(dataloader_dataset):
-    return DataLoader(dataloader_dataset, 
-        batch_size=128, 
-        shuffle=False, 
-        collate_fn=_custom_collate
-    )
 
 def multi_accuracy_calculation(prediction, actual):
 
