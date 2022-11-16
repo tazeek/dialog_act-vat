@@ -49,6 +49,17 @@ def transform_dataloader(dataloader_dataset):
         collate_fn=_custom_collate
     )
 
+def multi_accuracy_calculation(prediction, actual):
+
+    y_pred_softmax = torch.log_softmax(prediction, dim = 1)
+    _, y_pred_tags = torch.max(y_pred_softmax, dim = 1)
+
+    correct_pred = (y_pred_tags == actual).float()
+    acc = correct_pred.sum() / len(correct_pred)
+    acc = torch.round(acc * 100)
+    
+    return acc
+
 def train_model(train_data, glove_embeddings):
 
     # Prepare the model
@@ -69,6 +80,8 @@ def train_model(train_data, glove_embeddings):
     
     for epoch in range(4):
         
+        model.train()
+
         for (original_lengths, padded_inputs, labels) in train_data:
             
             # Load inputs and labels
