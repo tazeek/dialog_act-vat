@@ -22,9 +22,9 @@ class DailyDialog_Loader():
 
             # Extract the text
             self._dialogue_dict = self._extract_dialog(z, text_file)
-            print(self._dialogue_dict)
 
             # Extract the labels
+            self._act_dict = self._extract_act_labels(z, label_file)
 
         return None
     
@@ -46,6 +46,14 @@ class DailyDialog_Loader():
 
         return utterances_dict
 
-    def _extract_act_labels(self):
+    def _extract_act_labels(self, zip, filename):
+        
+        act_dict = {}
+        with zip.open(filename, 'r') as f:
 
-        ...
+            for index, line in enumerate(f.readlines()):
+                # For conversion from binary to string format
+                line = line.decode('utf-8')
+                act_dict[index] = line.split()
+            
+        return act_dict
