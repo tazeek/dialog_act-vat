@@ -7,7 +7,10 @@ class DailyDialog_Loader():
 
         self._filename = 'label_data\\' + f'\{filename}'
         self._dialogue_dict = None
-        self._act_labels = None
+        self._act_dict = None
+
+        self._act_encoder = {}
+        self._act_decoder = {}
 
         # Open Zip file
         self._open_zip()
@@ -15,10 +18,24 @@ class DailyDialog_Loader():
         # Perform mapping
         self._df_file = self._map_utter_act()
 
+        # Create the encoder for act labels
+        self._create_act_encoder()
+
     def _get_act_mapping(self) -> dict:
         return {
             '1': 'inform', '2': 'question', '3': 'directive', '4': 'commissive'
         }
+
+    def _create_act_encoder(self):
+
+        # Get all unique labels
+        all_act_labels = sorted(set(self._df_file['dialog_act']))
+        
+        for i, label in enumerate(all_act_labels):
+            self._act_encoder[label] = i
+            self._act_decoder[i] = label
+
+        return None
 
     def _open_zip(self):
 
@@ -83,9 +100,6 @@ class DailyDialog_Loader():
             if len(utterances) != len(value):
                 print(f'Mismatch at Index: {int(key) + 1}')
                 continue
-            
-            # Value decremented, as PyTorch counts from 0 to N
-            value = [int(val) - 1 for val in value]
 
             act_list += value
             utter_list += utterances
