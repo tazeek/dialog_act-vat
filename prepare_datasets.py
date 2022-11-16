@@ -1,4 +1,5 @@
 from dailydialog_loader import DailyDialog_Loader
+from dataloader_da import DataLoader_DA
 
 from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader, random_split
@@ -22,14 +23,14 @@ def _custom_collate(data: list):
 
     return input_len, inputs_padded, labels
 
-def transform_dataloader(dataloader_dataset):
+def _transform_dataloader(dataloader_dataset):
     return DataLoader(dataloader_dataset, 
         batch_size=128, 
         shuffle=False, 
         collate_fn=_custom_collate
     )
 
-def prepare_datasets():
+def fetch_generators(word_to_index: dict):
 
     # Load the raw datasets
     x_train, y_train = DailyDialog_Loader('train.zip').fetch_dataframe()
@@ -41,4 +42,19 @@ def prepare_datasets():
     x_test = text_processing.preprocess_text(x_test, remove_punctuation=False)
     x_val = text_processing.preprocess_text(x_val, remove_punctuation=False)
 
-    return x_train, x_val, x_test
+    # Transform to integer format for lookup
+    x_train = text_processing.transform_text_integer(x_train, word_to_index)
+    x_test = text_processing.transform_text_integer(x_test, word_to_index)
+    x_val = text_processing.transform_text_integer(x_val, word_to_index)
+
+    # Convert to DataLoaders
+    train_set = DataLoader_DA(x_train, y_train)
+    train_generator = _transform_dataloader(train_set)
+
+    test_set = DataLoader_DA(x_test, y_test)
+    test_generator = _transform_dataloader(test_set)
+
+    valid_set = DataLoader_DA(x_val, y_val)
+    valid_generator = _transform_dataloader(valid_set)
+
+    return train_generator, test_generator, valid_generator
