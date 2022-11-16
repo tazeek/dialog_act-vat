@@ -81,7 +81,7 @@ def train_model(train_data, glove_embeddings):
 
     accuracy_stats = { 'train' : []}
     loss_stats = {'train': []}
-    epochs = 5
+    epochs = 10
 
     for epoch in tqdm(range(1, epochs + 1)):
         
@@ -100,9 +100,6 @@ def train_model(train_data, glove_embeddings):
             # Predict the outputs
             y_pred = model(x_padded, x_original_len)
 
-            print(y_pred)
-            print('\n\n')
-            
             # Compute the loss and accuracy
             train_loss = criterion(y_pred.squeeze(), y_train.float())
             train_acc = multi_accuracy_calculation(y_pred, y_train)
