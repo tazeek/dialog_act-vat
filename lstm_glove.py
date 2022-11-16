@@ -37,11 +37,14 @@ class LSTM_GLove(nn.Module):
         )
 
         self._linear = nn.Linear(self._hidden_nodes, self._output_size)
+        self._dropout = nn.Dropout(0.2)
+        self._act = nn.Softmax()
 
     def forward(self, input, actual_batch_len):
         
         # Transform from raw to embeddings
         x_embed = self._word_embeddings(input)
+        x_embed = self._dropout(x_embed)
         
         # Input the embeddings to the pack padded sequence
         pack_output = pack_padded_sequence(
@@ -53,6 +56,8 @@ class LSTM_GLove(nn.Module):
 
         # Input the second transformation to LSTM
         out_lstm, (hidden, cell) = self._lstm(pack_output)
+        dense_outputs = self._linear(hidden[-1])
 
-        # Get the output in the fully connected layer
-        return self._linear(hidden[-1])
+        # Get the output in the softmax
+        output = self._act(dense_outputs)
+        return output
