@@ -64,6 +64,9 @@ class LabelLoader:
             if len(utterances) != len(value):
                 print(f'Mismatch at Index: {int(key) + 1}')
                 continue
+            
+            # Value decremented, as PyTorch counts from 0 to N
+            value = [int(val) - 1 for val in value]
 
             act_list += value
             utter_list += utterances
@@ -80,6 +83,7 @@ class LabelLoader:
         if transform_label:
             mapper = self._get_act_mapping()
 
-            self._df_file['dialog_act'] = self._df_file['dialog_act'].map(lambda x: mapper[x])
+            # For correct mapping
+            self._df_file['dialog_act'] = self._df_file['dialog_act'].map(lambda x: mapper[x+1])
 
         return self._df_file
