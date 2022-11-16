@@ -23,9 +23,7 @@ if __name__ == '__main__':
     # Create lookup table and check for embeddings test
     #glove_embeddings = glove_embeddings.create_glove_embeddings(word_to_index)\
 
-    # Break up the dataset into training and testing
-    # TODO: use the zip files to load the information
-    #x_train, y_train, x_test, y_test = utils.split_training_testing(full_file, full_labels)
+    # Break up the dataset into training, validation, and testing
     x_train = DailyDialog_Loader('train.zip').fetch_dataframe()
     x_val = DailyDialog_Loader('validation.zip').fetch_dataframe()
     x_test = DailyDialog_Loader('test.zip').fetch_dataframe()
