@@ -117,6 +117,9 @@ class DailyDialog_Loader():
             mapper = self._get_act_mapping()
 
             # For correct mapping
-            self._df_file['dialog_act'] = self._df_file['dialog_act'].map(lambda x: mapper[x+1])
+            self._df_file['dialog_act_word'] = self._df_file['dialog_act'].map(lambda x: mapper[x+1])
+
+        # Perform transformation on dialog act label
+        self._df_file['dialog_act'] = self._df_file['dialog_act'].map(lambda x: self._act_encoder[x])
 
         return self._df_file['utterance'], self._df_file['dialog_act']
