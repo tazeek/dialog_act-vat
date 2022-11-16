@@ -15,6 +15,11 @@ class DailyDialog_Loader():
         # Perform mapping
         self._df_file = self._map_utter_act()
 
+    def _get_act_mapping(self) -> dict:
+        return {
+            '1': 'inform', '2': 'question', '3': 'directive', '4': 'commissive'
+        }
+
     def _open_zip(self):
 
         with zipfile.ZipFile(self._filename) as z:
