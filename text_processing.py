@@ -9,8 +9,8 @@ def preprocess_text(utterances: list, remove_punctuation:'bool'=True) -> list:
 
     """
         TODO:
-        - Complete the sentence (example: i'll -> i will)
-        - Need to lowercase?
+        - Complete the sentence (example: i'll -> i, will)
+        - Break sentence further (example: jane's -> jane, ', s)
     """
 
     for utterance in utterances:

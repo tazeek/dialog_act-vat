@@ -2,10 +2,11 @@ from torch import nn
 from torch.utils.data import DataLoader, random_split
 from torch.nn.utils.rnn import pad_sequence, pack_padded_sequence
 from torch import nn
+from torch import optim
+
 from lstm_glove import LSTM_GLove
 
 import torch
-import numpy as np
 
 def _custom_collate(data: list):
 
@@ -58,13 +59,13 @@ def train_model(train_data, glove_embeddings):
     criterion = nn.CrossEntropyLoss()
 
     # Define Optimizer
-    #optimizer = optim.Adam(net.parameters(), lr= 0.001)
+    optimizer = optim.Adam(net.parameters(), lr= 0.001)
 
     # Use GPU, if available
-    #device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
     
     # Mount model onto the GPU
-    #model.to(device)
+    model.to(device)
     
     for epoch in range(4):
         
