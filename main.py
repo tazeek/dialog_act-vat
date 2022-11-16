@@ -26,10 +26,13 @@ if __name__ == '__main__':
     # Fetch the datasets (from raw to data generator format)
     train_generator, test_generator, valid_generator = prepare_datasets.fetch_generators(word_to_index)
     
+    # Create the VAT formula and test:
+    # - DailyDialog's validation set
+    # - Unlabeled data
+    # - Both
+
     # Train the model
-    model = utils.train_model(train_generator, glove_embeddings)
+    #model = utils.train_model(train_generator, glove_embeddings)
 
     # Test the model
     #utils.test_model(test_generator, model)
-
-    # Create the VAT formula
