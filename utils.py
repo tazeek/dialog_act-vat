@@ -118,8 +118,8 @@ def train_model(train_data, glove_embeddings):
         
         print(
             f'Epoch {epoch+0:03}: |'
-            f' Train Loss: {train_epoch_loss/len(train_loader):.5f} | '
-            f' Train Acc: {train_epoch_acc/len(train_loader):.3f} | '
+            f' Train Loss: {train_epoch_loss/len(train_data):.5f} | '
+            f' Train Acc: {train_epoch_acc/len(train_data):.3f} | '
         )
         
     return model
