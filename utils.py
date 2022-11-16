@@ -83,7 +83,7 @@ def train_model(train_data, glove_embeddings):
     loss_stats = {'train': []}
     epochs = 5
 
-    for epoch in tqdm(range( (1, epochs + 1))):
+    for epoch in tqdm(range(1, epochs + 1)):
         
         model.train()
 

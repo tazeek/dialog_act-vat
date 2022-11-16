@@ -57,7 +57,7 @@ def create_glove_embeddings(word_index_dict: dict, embeddings_test:'bool'=False)
             count += 1
             embeddings[index] = glove_vectors[word]
 
-    print(f"Number of words found: {count}")
+    print(f"Size of lookup table: {count}")
 
     if embeddings_test:
         _do_embeddings_test(embeddings, glove_vectors, word_index_dict, 'cake')
