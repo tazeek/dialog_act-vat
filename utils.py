@@ -1,4 +1,5 @@
 from torch import nn
+from torchmetrics import Accuracy
 
 from torch import nn
 from torch import optim
@@ -8,16 +9,17 @@ from lstm_glove import LSTM_GLove
 
 import torch
 
-def multi_accuracy_calculation(prediction, actual):
+def multi_accuracy_calculation(y_pred, y_train, device):
 
-    y_pred_softmax = torch.log_softmax(prediction, dim = 1)
+    # Get the predicted labels
+    y_pred_softmax = torch.log_softmax(y_pred, dim = 1)
     _, y_pred_tags = torch.max(y_pred_softmax, dim = 1)
 
-    correct_pred = (y_pred_tags == actual).float()
-    acc = correct_pred.sum() / len(correct_pred)
-    acc = torch.round(acc * 100)
+    accuracy = Accuracy().to(device)
+    acc_score = accuracy(y_pred_tags, y_train)
+    acc_score = torch.round(acc_score * 100)
 
-    return acc
+    return acc_score
 
 def train_model(train_data, glove_embeddings):
 
@@ -63,18 +65,16 @@ def train_model(train_data, glove_embeddings):
 
             # Compute the loss and accuracy
             train_loss = criterion(y_pred.squeeze(), y_train)
-            train_acc = multi_accuracy_calculation(y_pred, y_train)
+            train_acc = multi_accuracy_calculation(y_pred, y_train, device)
 
             # Back propagation
             # Update for parameters and compute the updates
             train_loss.backward()
             optimizer.step()
             
+            # Update for Display
             train_epoch_loss += train_loss.item()
             train_epoch_acc += train_acc.item()
-
-            # Update the dictionary losses
-            loss_stats['train'].append(train_epoch_loss/len(train_data))
         
         print(
             f'Epoch {epoch+0:03}: |'
