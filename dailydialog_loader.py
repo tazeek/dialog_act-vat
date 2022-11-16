@@ -105,4 +105,4 @@ class DailyDialog_Loader():
             # For correct mapping
             self._df_file['dialog_act'] = self._df_file['dialog_act'].map(lambda x: mapper[x+1])
 
-        return self._df_file
+        return self._df_file['utterance'], self._df_file['dialog_act']
