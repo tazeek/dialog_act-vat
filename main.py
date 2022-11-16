@@ -43,8 +43,9 @@ if __name__ == '__main__':
     test_generator = utils.transform_dataloader(test_set)
     
     # Train the model
-    utils.train_model(train_generator, glove_embeddings)
+    model = utils.train_model(train_generator, glove_embeddings)
 
     # Test the model
+    utils.test_model(test_generator, model)
 
     # Create the VAT formula

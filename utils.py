@@ -100,6 +100,9 @@ def train_model(train_data, glove_embeddings):
             # Predict the outputs
             y_pred = model(x_padded, x_original_len)
 
+            print(y_pred)
+            print('\n\n')
+            
             # Compute the loss and accuracy
             train_loss = criterion(y_pred.squeeze(), y_train.float())
             train_acc = multi_accuracy_calculation(y_pred, y_train)
@@ -123,3 +126,25 @@ def train_model(train_data, glove_embeddings):
         )
         
     return model
+
+
+def test_model(test_loader, model):
+
+    # Use GPU, if available
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    
+    # Mount model onto the GPU
+    model.to(device)
+
+    with torch.no_grad():
+        model.eval()
+
+        for X_batch, _ in test_loader:
+
+            X_batch = X_batch.to(device)
+            y_test_pred = model(X_batch)
+            _, y_pred_tags = torch.max(y_test_pred, dim = 1)
+            y_pred_list.append(y_pred_tags.cpu().numpy())
+            y_pred_list = [a.squeeze().tolist() for a in y_pred_list]
+    
+    return None
