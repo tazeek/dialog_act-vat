@@ -1,4 +1,5 @@
 import zipfile
+import pandas as pd
 
 class DailyDialog_Loader():
 
@@ -10,6 +11,9 @@ class DailyDialog_Loader():
 
         # Open Zip file
         self._open_zip()
+
+        # Perform mapping
+        self._df_file = self._map_utter_act()
 
     def _open_zip(self):
 
@@ -57,3 +61,43 @@ class DailyDialog_Loader():
                 act_dict[index] = line.split()
             
         return act_dict
+
+    def _map_utter_act(self) -> pd.DataFrame:
+        
+        # Convert from dict to list
+        act_list = []
+        utter_list = []
+
+        for key, value in self._act_dict.items():
+
+            utterances = self._dialogue_dict[key]
+
+            # Check mismatch between the lengths
+            # 01/08/2022: Index 673 has the mistmatch
+            # This has been resolved with Yanran Li
+            if len(utterances) != len(value):
+                print(f'Mismatch at Index: {int(key) + 1}')
+                continue
+            
+            # Value decremented, as PyTorch counts from 0 to N
+            value = [int(val) - 1 for val in value]
+
+            act_list += value
+            utter_list += utterances
+
+        data = {
+            'dialog_act': act_list,
+            'utterance': utter_list
+        }
+
+        return pd.DataFrame(data)
+
+    def fetch_dataframe(self, transform_label=False) -> pd.DataFrame:
+
+        if transform_label:
+            mapper = self._get_act_mapping()
+
+            # For correct mapping
+            self._df_file['dialog_act'] = self._df_file['dialog_act'].map(lambda x: mapper[x+1])
+
+        return self._df_file
