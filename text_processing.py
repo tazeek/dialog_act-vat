@@ -41,4 +41,15 @@ def convert_word_index(words_list: list) -> dict:
                 word_to_index[word] = index
                 index += 1
 
+    print(f"Number of unique words: {len(word_to_index)}")
+
     return word_to_index
+
+def transform_text_integer(words_list: list, index_dict: dict) -> list:
+
+    transformed_list = []
+
+    for words in words_list:
+        transformed_list += [[index_dict[word] for word in words]]
+    
+    return transformed_list

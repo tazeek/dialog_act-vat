@@ -18,7 +18,6 @@ if __name__ == '__main__':
 
     # Get word to index dictionary
     word_to_index = text_processing.convert_word_index(all_possible_words_list)
-    print(f"Number of unique words: {len(word_to_index)}")
 
     # Create lookup table and check for embeddings test
     glove_embeddings = glove_embeddings.create_glove_embeddings(word_to_index)\
@@ -32,8 +31,8 @@ if __name__ == '__main__':
     x_test = text_processing.preprocess_text(x_test, remove_punctuation=False)
 
     # Transform to integer format for lookup
-    x_train = utils.transform_text_integer(x_train, word_to_index)
-    x_test = utils.transform_text_integer(x_test, word_to_index)
+    x_train = text_processing.transform_text_integer(x_train, word_to_index)
+    x_test = text_processing.transform_text_integer(x_test, word_to_index)
 
     # Use Dataset class for PyTorch
     # and use dataloader to load

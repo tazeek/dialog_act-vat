@@ -23,15 +23,6 @@ def _custom_collate(data: list):
 
     return input_len, inputs_padded, labels
 
-def transform_text_integer(words_list: list, index_dict: dict) -> list:
-
-    transformed_list = []
-
-    for words in words_list:
-        transformed_list += [[index_dict[word] for word in words]]
-    
-    return transformed_list
-
 def split_training_testing(x_full, y_full):
 
     # 60% for training, 20% for validation, 20% for testing (VAT)
