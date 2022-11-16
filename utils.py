@@ -1,4 +1,3 @@
-from torch.autograd import Variable
 from torch import nn
 from torch.utils.data import DataLoader, random_split
 from torch.nn.utils.rnn import pad_sequence, pack_padded_sequence
@@ -32,26 +31,6 @@ def transform_text_integer(words_list: list, index_dict: dict) -> list:
         transformed_list += [[index_dict[word] for word in words]]
     
     return transformed_list
-
-def embeddings_test(embeddings: dict, glove_vectors: dict, word_index_dict: dict, test_str: str):
-
-    # Create the embedding layer
-    embedding_layer = nn.Embedding(embeddings.size(0), embeddings.size(1))
-    embedding_layer.weight = nn.Parameter(embeddings)
-    
-    # Get the index first
-    index = word_index_dict[test_str]
-
-    # Print out embeddings first
-    embedding_test = embedding_layer(Variable(torch.LongTensor([index])))
-    print(embedding_test)
-
-    print('\n\n')
-    # Get the glove value
-    glove_test = glove_vectors[test_str]
-    print(glove_test)
-
-    return None
 
 def split_training_testing(x_full, y_full):
 

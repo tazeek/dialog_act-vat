@@ -1,4 +1,8 @@
+from torch import nn
+from torch.autograd import Variable
 
+import numpy as np
+import torch
 
 def _load_glove_model():
 
@@ -17,10 +21,31 @@ def _load_glove_model():
         
     return glove
 
-def create_glove_embeddings(word_index_dict: dict) -> list:
+def _do_embeddings_test(embeddings: dict, glove_vectors: dict, word_index_dict: dict, test_str: str):
+
+    # Create the embedding layer
+    embedding_layer = nn.Embedding(embeddings.size(0), embeddings.size(1))
+    embedding_layer.weight = nn.Parameter(embeddings)
+    
+    # Get the index first
+    index = word_index_dict[test_str]
+
+    # Print out embeddings first
+    embedding_test = embedding_layer(Variable(torch.LongTensor([index])))
+    print(embedding_test)
+
+    print('\n\n')
+    # Get the glove value
+    glove_test = glove_vectors[test_str]
+    print(glove_test)
+
+    return None
+
+def create_glove_embeddings(word_index_dict: dict, embeddings_test:'bool'=False) -> list:
 
     # Load glove model
     glove_vectors = _load_glove_model()
+    print(f"Length of GloVe model: {len(glove_vectors)}")
 
     embeddings = np.zeros((len(word_index_dict), 50))
     count = 0
@@ -33,5 +58,8 @@ def create_glove_embeddings(word_index_dict: dict) -> list:
             embeddings[index] = glove_vectors[word]
 
     print(f"Number of words found: {count}")
+
+    if embeddings_test:
+        _do_embeddings_test(embeddings, glove_vectors, word_index_dict, 'cake')
 
     return torch.from_numpy(embeddings).float()
