@@ -1,4 +1,3 @@
-from string import punctuation
 from torch.autograd import Variable
 from torch import nn
 from torch.utils.data import DataLoader, random_split
@@ -8,9 +7,6 @@ from lstm_glove import LSTM_GLove
 
 import torch
 import numpy as np
-
-def _tokenizer(utterance: str):
-    return [word.lower() for word in utterance.split(" ") if word != '']
 
 def _custom_collate(data: list):
 
@@ -28,29 +24,6 @@ def _custom_collate(data: list):
 
     return input_len, inputs_padded, labels
 
-def preprocess_text(utterances: list, remove_punctuation:'bool'=True) -> list:
-
-    processed_utterances = []
-
-    """
-        TODO:
-        - Complete the sentence (example: i'll -> i will)
-        - Need to lowercase?
-    """
-
-    for utterance in utterances:
-        # Split based on tokenizer
-        words = _tokenizer(utterance)
-
-        # Remove punctuation (OPTIONAL)
-        if remove_punctuation:
-            words = [word for word in words if word not in punctuation]
-
-        processed_utterances += [words]
-
-
-    return processed_utterances
-
 def transform_text_integer(words_list: list, index_dict: dict) -> list:
 
     transformed_list = []
@@ -59,56 +32,6 @@ def transform_text_integer(words_list: list, index_dict: dict) -> list:
         transformed_list += [[index_dict[word] for word in words]]
     
     return transformed_list
-
-def convert_word_index(words_list: list) -> dict:
-
-    word_to_index = {0: '<pad>'}
-    index = 1
-    
-    for list in words_list:
-
-        for word in list:
-
-            # Check if word does not exist
-            # and Increment index
-            if word not in word_to_index:
-                word_to_index[word] = index
-                index += 1
-
-    return word_to_index
-
-def load_glove_model():
-
-    path = 'pre_trained\glove.6B.50d.txt'
-    glove = {}
-
-    with open(path, encoding="utf8") as f:
-
-        for line in f.readlines():
-            values = line.split()
-            
-            word = values[0]
-            vector = np.array(values[1:], dtype='float32')
-
-            glove[word] = vector
-        
-    return glove
-
-def create_glove_embeddings(glove_vectors: dict, word_index_dict: dict) -> list:
-
-    embeddings = np.zeros((len(word_index_dict), 50))
-    count = 0
-    # Loop through word_index_dict
-    for word, index in word_index_dict.items():
-
-        # Check if item is in glove_vectors
-        if word in glove_vectors:
-            count += 1
-            embeddings[index] = glove_vectors[word]
-
-    print(f"Number of words found: {count}")
-
-    return torch.from_numpy(embeddings).float()
 
 def embeddings_test(embeddings: dict, glove_vectors: dict, word_index_dict: dict, test_str: str):
 
@@ -167,6 +90,12 @@ def train_model(train_data, glove_embeddings):
     # Define Optimizer
     #optimizer = optim.Adam(net.parameters(), lr= 0.001)
 
+    # Use GPU, if available
+    #device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    
+    # Mount model onto the GPU
+    #model.to(device)
+    
     for epoch in range(4):
         
         for (original_lengths, padded_inputs, labels) in train_data:
