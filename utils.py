@@ -80,8 +80,9 @@ def train_model(train_data, glove_embeddings):
 
     accuracy_stats = { 'train' : []}
     loss_stats = {'train': []}
-    
-    for epoch in range(4):
+    epochs = 5
+
+    for epoch in range( (1, epochs + 1)):
         
         model.train()
 
@@ -102,11 +103,16 @@ def train_model(train_data, glove_embeddings):
             train_loss = criterion(y_pred.squeeze(), y_train.float())
             train_acc = multi_accuracy_calculation(y_pred, y_train)
 
+            # Back propagation
             # Update for parameters and compute the updates
             train_loss.backward()
             optimizer.step()
             
             train_epoch_loss += train_loss.item()
             train_epoch_acc += train_acc.item()
+
+            # Update the dictionary losses
+            accuracy_stats['train'].append(train_epoch_acc/len(train_data))
+            loss_stats['train'].append(train_epoch_loss/len(train_data))
         
-    return None
+    return model
