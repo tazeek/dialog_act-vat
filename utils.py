@@ -84,12 +84,14 @@ def train_model(train_data, glove_embeddings):
             train_epoch_acc += train_acc.item()
             train_epoch_f1 += train_f1.item()
         
-        print(
-            f'Epoch {epoch+0:03}: |'
-            f' Train Loss: {train_epoch_loss/train_set_size:.5f} | '
-            f' Train Acc: {train_epoch_acc/train_set_size:.3f} | '
-            f' Train F1: {train_epoch_f1/train_set_size:.3f} | '
-        )
+        # Print every 10 epochs
+        if epoch % 10 == 0:
+            print(
+                f'Epoch {epoch+0:03}: |'
+                f' Train Loss: {train_epoch_loss/train_set_size:.5f} | '
+                f' Train Acc: {train_epoch_acc/train_set_size:.3f} | '
+                f' Train F1: {train_epoch_f1/train_set_size:.3f} | '
+            )
         
     return model
 
