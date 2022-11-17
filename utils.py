@@ -10,6 +10,7 @@ from sklearn.metrics import classification_report
 from lstm_glove import LSTM_GLove
 
 import torch
+import numpy as np
 
 def metrics_evaluation(y_pred, y_train, device):
 
@@ -28,7 +29,7 @@ def metrics_evaluation(y_pred, y_train, device):
 
     return acc_score, f1_score
 
-def train_model(train_data, glove_embeddings):
+def train_model(train_data, validation_data, glove_embeddings):
 
     # Prepare the model
     model = LSTM_GLove(glove_embeddings)
@@ -133,6 +134,10 @@ def test_model(test_data, model):
         y_pred_list = [a.squeeze().tolist() for a in y_pred_list]
         y_test_list = [a.squeeze().tolist() for a in y_test_list]
     
+    # Flatten list
+    y_pred_list = [output for list in y_pred_list for output in list]
+    y_test_list = [output for list in y_test_list for output in list]
+
     print(classification_report(y_test_list, y_pred_list))
 
     return None

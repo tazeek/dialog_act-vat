@@ -32,7 +32,7 @@ if __name__ == '__main__':
     # - Both
 
     # Train the model
-    model = utils.train_model(train_generator, glove_embeddings)
+    model = utils.train_model(train_generator, valid_generator, glove_embeddings)
 
     # Test the model
     utils.test_model(test_generator, model)
