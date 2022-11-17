@@ -49,7 +49,7 @@ class VATLoss(nn.Module):
             random_pert = self.xi * d
 
             # Perform using random perturbation
-            pred_out = model(x + random_pert, x_len)
+            pred_out = model(x, x_len, random_pert)
             output = F.log_softmax(pred_out, dim = 1)
 
             # Find adversarial distance from the KL loss
@@ -66,7 +66,7 @@ class VATLoss(nn.Module):
 
         # Multiply with epsilon
         r_adv = d * self.eps
-        pred_out = model(x + r_adv, x_len)
+        pred_out = model(x, x_len, r_adv)
         output = F.log_softmax(pred_out, dim=1)
 
         # Find the KL Divergence loss again, which is the LDS

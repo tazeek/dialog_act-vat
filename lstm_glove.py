@@ -1,6 +1,8 @@
 from torch import nn
 from torch.nn.utils.rnn import pad_sequence, pack_padded_sequence
 
+import torch
+
 class LSTM_GLove(nn.Module):
 
     def __init__(self, embedding_layer):
@@ -37,14 +39,15 @@ class LSTM_GLove(nn.Module):
         )
 
         self._linear = nn.Linear(self._hidden_nodes, self._output_size)
-        #self._dropout = nn.Dropout(0.2)
-        #self._act = nn.Softmax(dim=1)
 
-    def forward(self, input, actual_batch_len):
+    def forward(self, input, actual_batch_len, perturbation=None):
         
         # Transform from raw to embeddings
         x_embed = self._word_embeddings(input)
-        #x_embed = self._dropout(x_embed)
+
+        # Perturbation check (only in VAT checks)
+        if perturbation:
+            x_embed = torch.add(x_embed, perturbation)
         
         # Input the embeddings to the pack padded sequence
         pack_output = pack_padded_sequence(
