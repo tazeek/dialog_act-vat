@@ -35,4 +35,4 @@ if __name__ == '__main__':
     model = utils.train_model(train_generator, glove_embeddings)
 
     # Test the model
-    #utils.test_model(test_generator, model)
+    utils.test_model(test_generator, model)
