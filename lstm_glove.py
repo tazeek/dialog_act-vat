@@ -47,12 +47,7 @@ class LSTM_GLove(nn.Module):
 
         # Perturbation check (only in VAT checks)
         if perturbation.nelement() != 0:
-            print(perturbation.size(dim=1))
-            print(x_embed.size(dim=1))
 
-            print(x_embed)
-            print('\n')
-            print(perturbation)
             x_embed = torch.add(x_embed, perturbation)
         
         # Input the embeddings to the pack padded sequence
