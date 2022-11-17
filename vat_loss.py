@@ -39,11 +39,14 @@ class VATLoss(nn.Module):
     def _generate_vat_perturbation(self, model, pred, x, x_len):
 
         # Prepare random unit
-        d = torch.rand(x.shape).sub(0.5).to(x.device)
+        batch_size, max_length, embed_dim = x.shape[0], x.shape[1], 50
+        out = torch.zeros(batch_size,max_length,embed_dim)
+        
+        # Dimension format of D is:
+        # - Batch Size * Max_Length * Dimension of each word
+        # - B * M * V
+        d = torch.rand(out.shape).sub(0.5).to(x.device)
         d = self._l2_normalize(d)
-
-        print(x[0])
-        print(d[0])
 
         for _ in range(self.ip):
 
