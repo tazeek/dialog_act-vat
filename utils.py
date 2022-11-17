@@ -4,7 +4,8 @@ from torchmetrics.classification import MulticlassF1Score
 
 from torch import nn
 from torch import optim
-from tqdm.notebook import tqdm
+
+from sklearn.metrics import classification_report
 
 from lstm_glove import LSTM_GLove
 
@@ -127,9 +128,11 @@ def test_model(test_data, model):
             _, y_pred_tags = torch.max(y_pred_softmax, dim = 1)
 
             y_pred_list.append(y_pred_tags.cpu().numpy())
-            y_pred_list = [a.squeeze().tolist() for a in y_pred_list]
-
             y_test_list.append(y_test.cpu().numpy())
-            y_test_list = [a.squeeze().tolist() for a in y_test_list]
+            
+        y_pred_list = [a.squeeze().tolist() for a in y_pred_list]
+        y_test_list = [a.squeeze().tolist() for a in y_test_list]
     
+    print(classification_report(y_test_list, y_pred_list))
+
     return None
