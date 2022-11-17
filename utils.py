@@ -46,7 +46,7 @@ def train_model(train_data, glove_embeddings):
     # Mount model onto the GPU
     model.to(device)
 
-    epochs = 20
+    epochs = 10
     train_set_size = len(train_data)
 
     for epoch in range(1, epochs + 1):
@@ -129,7 +129,7 @@ def test_model(test_data, model):
 
             y_pred_list.append(y_pred_tags.cpu().numpy())
             y_test_list.append(y_test.cpu().numpy())
-            
+
         y_pred_list = [a.squeeze().tolist() for a in y_pred_list]
         y_test_list = [a.squeeze().tolist() for a in y_test_list]
     
