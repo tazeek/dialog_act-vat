@@ -56,34 +56,40 @@ class VATLoss(nn.Module):
             adv_distance = F.kl_div(output, pred, reduction='batchmean')
             adv_distance.backward()
 
-            # Update with new gradients
+            # Update gradients and the new unit from the adversarial distance
             d = self._l2_normalize(d.grad)
             model.zero_grad()
 
         return d
 
+    def _calculate_lds_score(self, model, pred, d, x, x_len):
+
+        # Multiply with epsilon
+        r_adv = d * self.eps
+        pred_out = model(x + r_adv, x_len)
+        output = F.log_softmax(pred_out, dim=1)
+
+        # Find the KL Divergence loss again, which is the LDS
+        lds = F.kl_div(output, pred, reduction='batchmean')
+
+        return lds
+
     def forward(self, model, x, x_len):
 
         model.eval()
+
+        d = None
+        pred = None
+        lds = None
 
         with torch.no_grad():
             pred = F.softmax(model(x, x_len), dim=1)
 
         with _disable_tracking_bn_stats(model):
             # calc adversarial direction
-            for _ in range(self.ip):
-                d.requires_grad_()
-                pred_hat = model(x + self.xi * d)
-                logp_hat = F.log_softmax(pred_hat, dim=1)
-                adv_distance = F.kl_div(logp_hat, pred, reduction='batchmean')
-                adv_distance.backward()
-                d = self._l2_normalize(d.grad)
-                model.zero_grad()
+            d = self._generate_vat_perturbation(model, pred, x, x_len)
     
             # calc LDS
-            r_adv = d * self.eps
-            pred_hat = model(x + r_adv, x_len)
-            logp_hat = F.log_softmax(pred_hat, dim=1)
-            lds = F.kl_div(logp_hat, pred, reduction='batchmean')
+            lds = self._calculate_lds_score(model, pred, d, x, x_len)
 
         return lds
