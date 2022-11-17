@@ -82,8 +82,6 @@ class VATLoss(nn.Module):
 
     def forward(self, model, x, x_len):
 
-        model.eval()
-
         d = None
         pred = None
         lds = None
