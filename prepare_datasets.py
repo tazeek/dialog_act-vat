@@ -23,9 +23,9 @@ def _custom_collate(data: list):
 
     return input_len, inputs_padded, labels
 
-def _transform_dataloader(dataloader_dataset):
+def _transform_dataloader(dataloader_dataset, batch_size):
     return DataLoader(dataloader_dataset, 
-        batch_size=64, 
+        batch_size=batch_size, 
         shuffle=False, 
         collate_fn=_custom_collate
     )
@@ -49,12 +49,12 @@ def fetch_generators(word_to_index: dict):
 
     # Convert to DataLoaders
     train_set = DataLoader_DA(x_train, y_train)
-    train_generator = _transform_dataloader(train_set)
+    train_generator = _transform_dataloader(train_set, 64)
 
     test_set = DataLoader_DA(x_test, y_test)
-    test_generator = _transform_dataloader(test_set)
+    test_generator = _transform_dataloader(test_set, 64)
 
     valid_set = DataLoader_DA(x_val, y_val)
-    valid_generator = _transform_dataloader(valid_set)
+    valid_generator = _transform_dataloader(valid_set, 128)
 
     return train_generator, test_generator, valid_generator
