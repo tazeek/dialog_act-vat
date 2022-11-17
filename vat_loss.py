@@ -18,7 +18,7 @@ def _disable_tracking_bn_stats(model):
 
 class VATLoss(nn.Module):
 
-    def __init__(self, xi=10.0, eps=1.0, ip=1):
+    def __init__(self, xi=1e-6, eps=1.0, ip=1):
         """VAT loss
         :param xi: hyperparameter of VAT (default: 10.0)
         :param eps: hyperparameter of VAT (default: 1.0)
@@ -41,6 +41,8 @@ class VATLoss(nn.Module):
         # prepare random unit tensor
         d = torch.rand(x.shape).sub(0.5).to(x.device)
         d = self._l2_normalize(d)
+
+        model.eval()
 
         with _disable_tracking_bn_stats(model):
             # calc adversarial direction
