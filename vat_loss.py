@@ -42,6 +42,9 @@ class VATLoss(nn.Module):
         d = torch.rand(x.shape).sub(0.5).to(x.device)
         d = self._l2_normalize(d)
 
+        print(x[0])
+        print(d[0])
+
         for _ in range(self.ip):
 
             # Generate the random noise

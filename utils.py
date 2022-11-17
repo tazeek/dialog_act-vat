@@ -76,6 +76,8 @@ def train_model(train_data, validation_data, glove_embeddings):
 
             # For VAT Loss
             x_original_len_val, x_padded_val, _ = next(iter(validation_data))
+            x_padded_val = x_padded_val.to(device)
+
             vat_loss = VATLoss()
             lds = vat_loss(model, x_padded_val, x_original_len_val)
 
@@ -92,12 +94,13 @@ def train_model(train_data, validation_data, glove_embeddings):
             train_epoch_loss += train_loss.item()
             train_epoch_acc += train_acc.item()
             train_epoch_f1 += train_f1.item()
+            train_vat_loss += lds.item()
         
         # Print every 10 epochs
         print(
             f'Epoch {epoch+0:03}: |'
             f' Train Loss: {train_epoch_loss/train_set_size:.5f} | '
-            f' VAT Loss: {lds * alpha_val} | '
+            f' VAT Loss: {(train_vat_loss * alpha_val)/train_set_size:.5f} | '
             f' Train Acc: {train_epoch_acc/train_set_size:.3f} | '
             f' Train F1: {train_epoch_f1/train_set_size:.3f} | '
         )
