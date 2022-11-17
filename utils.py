@@ -94,7 +94,7 @@ def train_model(train_data, glove_embeddings):
     return model
 
 
-def test_model(test_loader, model):
+def test_model(test_data, model):
 
     # Use GPU, if available
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -102,14 +102,26 @@ def test_model(test_loader, model):
     # Mount model onto the GPU
     model.to(device)
 
+    y_pred_list = []
+    
     with torch.no_grad():
         model.eval()
 
-        for X_batch, _ in test_loader:
+        for (x_original_len, x_padded, y_test) in test_data:
 
-            X_batch = X_batch.to(device)
-            y_test_pred = model(X_batch)
-            _, y_pred_tags = torch.max(y_test_pred, dim = 1)
+            # Convert to LongTensor
+            y_test = y_test.type(torch.LongTensor)
+
+            # Load inputs and labels onto device
+            x_padded, y_test = x_padded.to(device), y_test.to(device)
+
+            # Predict the outputs
+            y_pred = model(x_padded, x_original_len)
+
+            # Get the predicted labels
+            y_pred_softmax = torch.log_softmax(y_pred, dim = 1)
+            _, y_pred_tags = torch.max(y_pred_softmax, dim = 1)
+
             y_pred_list.append(y_pred_tags.cpu().numpy())
             y_pred_list = [a.squeeze().tolist() for a in y_pred_list]
     
