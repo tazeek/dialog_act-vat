@@ -1,5 +1,6 @@
 from torch import nn
-from torchmetrics import Accuracy, F1Score
+from torchmetrics import Accuracy
+from torchmetrics.classification import MulticlassF1Score
 
 from torch import nn
 from torch import optim
@@ -16,7 +17,7 @@ def metrics_evaluation(y_pred, y_train, device):
     _, y_pred_tags = torch.max(y_pred_softmax, dim = 1)
 
     accuracy = Accuracy().to(device)
-    f1 = F1Score(num_classes = 4).to(device)
+    f1 = MulticlassF1Score(num_classes = 4).to(device)
 
     acc_score = accuracy(y_pred_tags, y_train)
     acc_score = torch.round(acc_score * 100)
