@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     # Fetch the datasets (from raw to data generator format)
     train_generator, test_generator, valid_generator = prepare_datasets.fetch_generators(word_to_index)
-    
+
     # Create the VAT formula and test:
     # - DailyDialog's validation set
     # - Unlabeled data

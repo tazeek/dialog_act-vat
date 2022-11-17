@@ -8,6 +8,7 @@ from torch import optim
 from sklearn.metrics import classification_report
 
 from lstm_glove import LSTM_GLove
+from vat_loss import VATLoss
 
 import torch
 import numpy as np
@@ -48,6 +49,7 @@ def train_model(train_data, validation_data, glove_embeddings):
     model.to(device)
 
     epochs = 10
+    alpha_val = 0.01
     train_set_size = len(train_data)
 
     for epoch in range(1, epochs + 1):
@@ -72,6 +74,11 @@ def train_model(train_data, validation_data, glove_embeddings):
             # Predict the outputs
             y_pred = model(x_padded, x_original_len)
 
+            # For VAT Loss
+            x_original_len_val, x_padded_val, _ = next(iter(validation_data))
+            vat_loss = VATLoss()
+            lds = vat_loss(model, x_padded_val, x_original_len_val)
+
             # Compute the loss and accuracy
             train_loss = criterion(y_pred.squeeze(), y_train)
             train_acc, train_f1 = metrics_evaluation(y_pred, y_train, device)
@@ -87,13 +94,13 @@ def train_model(train_data, validation_data, glove_embeddings):
             train_epoch_f1 += train_f1.item()
         
         # Print every 10 epochs
-        if epoch % 10 == 0:
-            print(
-                f'Epoch {epoch+0:03}: |'
-                f' Train Loss: {train_epoch_loss/train_set_size:.5f} | '
-                f' Train Acc: {train_epoch_acc/train_set_size:.3f} | '
-                f' Train F1: {train_epoch_f1/train_set_size:.3f} | '
-            )
+        print(
+            f'Epoch {epoch+0:03}: |'
+            f' Train Loss: {train_epoch_loss/train_set_size:.5f} | '
+            f' VAT Loss: {lds * alpha_val} | '
+            f' Train Acc: {train_epoch_acc/train_set_size:.3f} | '
+            f' Train F1: {train_epoch_f1/train_set_size:.3f} | '
+        )
         
     return model
 
