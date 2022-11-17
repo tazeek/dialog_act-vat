@@ -48,7 +48,7 @@ def train_model(train_data, validation_data, glove_embeddings):
     # Mount model onto the GPU
     model.to(device)
 
-    epochs = 10
+    epochs = 100
     alpha_val = 0.01
     train_set_size = len(train_data)
 
@@ -57,7 +57,7 @@ def train_model(train_data, validation_data, glove_embeddings):
         model.train()
 
         train_epoch_loss = 0
-
+        train_vat_loss = 0
         train_epoch_f1 = 0
         train_epoch_acc = 0
 
@@ -82,7 +82,7 @@ def train_model(train_data, validation_data, glove_embeddings):
             lds = vat_loss(model, x_padded_val, x_original_len_val)
 
             # Compute the loss and accuracy
-            train_loss = criterion(y_pred.squeeze(), y_train)
+            train_loss = criterion(y_pred.squeeze(), y_train) + (lds * alpha_val)
             train_acc, train_f1 = metrics_evaluation(y_pred, y_train, device)
 
             # Back propagation
