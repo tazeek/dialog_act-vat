@@ -31,6 +31,18 @@ if __name__ == '__main__':
     # - Unlabeled data
     # - Both
 
+    # TODO:
+    # - Break apart train model code
+    # - Store train results in a CSV file
+    # - Visualize results from CSV file
+    # - Add hyperparameters for getting args
+    # - Store confusion matrix for labels
+    # - Use RoBERTa and BERT embeddings
+    # - Visualize perturbed vs original results
+    # - Save different types of models
+    # - Compare with existing results and SOTA
+    # - Check if VAT loss is actually correct or not (Refer to Paper)
+
     # Train the model
     model = utils.train_model(train_generator, valid_generator, glove_embeddings)
 
