@@ -23,13 +23,24 @@ def _create_parser():
     return parser.parse_args()
 
 def _get_base_filename(args):
+
+    # File name format: <model>_<embed>_<vat>
+    base_filename = args.model + '_' + args.embed
+
+    if args.vat:
+        base_filename += '_vat'
     
-    return ...
+    return base_filename
 
 if __name__ == '__main__':
 
     # Get parser for command line inputs
     args = _create_parser()
+
+    # Get filename
+    base_filename = _get_base_filename(args)
+    print(base_filename)
+    exit()
 
     # Load the data (DailyDialog)
     label_loader = LabelLoader().fetch_dataframe()
