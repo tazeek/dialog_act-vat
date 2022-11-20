@@ -32,7 +32,6 @@ if __name__ == '__main__':
     # - Both
 
     # TODO:
-    # - Break apart train model code
     # - Store train results in a CSV file
     # - Visualize results from CSV file
     # - Add hyperparameters for getting args
@@ -42,6 +41,9 @@ if __name__ == '__main__':
     # - Save different types of models
     # - Compare with existing results and SOTA
     # - Check if VAT loss is actually correct or not (Refer to Paper)
+
+    # Later TODO:
+    # - Convert model.py to class file
 
     # Train the model
     train_model = model.train_model(train_generator, valid_generator, glove_embeddings)
