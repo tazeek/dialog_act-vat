@@ -22,6 +22,10 @@ def _create_parser():
 
     return parser.parse_args()
 
+def _get_base_filename(args):
+    
+    return ...
+
 if __name__ == '__main__':
 
     # Get parser for command line inputs
