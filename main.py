@@ -11,13 +11,13 @@ def _create_parser():
 
     parser = argparse.ArgumentParser(description='Parser for VAT and Dialog Act')
     
-    parser.add_argument('--model', default='lstm', metavar='Model',
+    parser.add_argument('--model', default='lstm', metavar='model',
         help='Name of the model for training')
 
-    parser.add_argument('--embed', default='glove', metavar='Embed',
+    parser.add_argument('--embed', default='glove', metavar='embed',
         help='Embeddings required for the model')
     
-    parser.add_argument('--VAT', default=0, metavar='VAT',
+    parser.add_argument('--vat', default=None, metavar='vat',
         help='Check if the model requires VAT for Semi-supervision')
 
     return parser.parse_args()
@@ -26,9 +26,9 @@ if __name__ == '__main__':
 
     # Get parser
     args = _create_parser()
-    print(args)
+    print(args.model)
     exit()
-    
+
     # Load the data (DailyDialog)
     label_loader = LabelLoader().fetch_dataframe()
 
