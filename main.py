@@ -39,8 +39,6 @@ if __name__ == '__main__':
 
     # Get filename
     base_filename = _get_base_filename(args)
-    print(base_filename)
-    exit()
 
     # Load the data (DailyDialog)
     label_loader = LabelLoader().fetch_dataframe()
