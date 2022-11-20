@@ -24,10 +24,8 @@ def _create_parser():
 
 if __name__ == '__main__':
 
-    # Get parser
+    # Get parser for command line inputs
     args = _create_parser()
-    print(args.model)
-    exit()
 
     # Load the data (DailyDialog)
     label_loader = LabelLoader().fetch_dataframe()
@@ -55,7 +53,6 @@ if __name__ == '__main__':
     # TODO:
     # - Store train results in a CSV file
     # - Visualize results from CSV file
-    # - Add hyperparameters for getting args
     # - Store confusion matrix for labels
     # - Use RoBERTa and BERT embeddings
     # - Visualize perturbed vs original results
