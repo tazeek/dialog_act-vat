@@ -1,7 +1,7 @@
 from label_loader import LabelLoader
 from dailydialog_loader import DailyDialog_Loader
 
-import utils
+import model
 import text_processing
 import glove_embeddings
 import prepare_datasets
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     # - Check if VAT loss is actually correct or not (Refer to Paper)
 
     # Train the model
-    model = utils.train_model(train_generator, valid_generator, glove_embeddings)
+    train_model = model.train_model(train_generator, valid_generator, glove_embeddings)
 
     # Test the model
-    utils.test_model(test_generator, model)
+    model.test_model(test_generator, train_model)

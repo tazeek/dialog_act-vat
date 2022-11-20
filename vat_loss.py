@@ -43,8 +43,10 @@ class VATLoss(nn.Module):
         out = torch.zeros(batch_size,max_length,embed_dim)
         
         # Dimension format of D is:
-        # - Batch Size * Max_Length * Dimension of each word
+        # - Batch Size * Max_Length * Embedding size
         # - B * M * V
+        # 128 * 100
+        # 128 * 100 * 50
         d = torch.rand(out.shape).sub(0.5).to(x.device)
         d = self._l2_normalize(d)
 
