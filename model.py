@@ -19,6 +19,23 @@ def _create_model(glove_embeddings):
 
     return model
 
+def _get_device():
+
+    # Use GPU, if available
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+    return device
+
+def _get_hyperparams():
+
+    params = {
+        'lr': 0.001,
+        'epochs': 100,
+        'alpha_val': 0.01
+    }
+
+    return params
+
 def metrics_evaluation(y_pred, y_train, device):
 
     # Get the predicted labels
@@ -42,20 +59,23 @@ def train_model(train_data, validation_data, glove_embeddings):
     model = _create_model(glove_embeddings)
     print(model)
 
+    # Use GPU, if available
+    device = _get_device()
+
+    # Mount model onto the GPU
+    model.to(device)
+
+    # Get the hyperparameters
+    hyper_params = _get_hyperparams()
+
     # Define the loss function
     criterion = nn.CrossEntropyLoss()
 
     # Define Optimizer
-    optimizer = optim.Adam(model.parameters(), lr= 0.001)
+    optimizer = optim.Adam(model.parameters(), lr= hyper_params['lr'])
 
-    # Use GPU, if available
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    
-    # Mount model onto the GPU
-    model.to(device)
-
-    epochs = 100
-    alpha_val = 0.01
+    epochs = hyper_params['epochs']
+    alpha_val = hyper_params['alpha_val']
     train_set_size = len(train_data)
 
     for epoch in range(1, epochs + 1):
