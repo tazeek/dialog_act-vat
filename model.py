@@ -36,6 +36,17 @@ def _get_hyperparams():
 
     return params
 
+def _vat_loss_calculation(model, device, validation_data):
+
+    # For VAT Loss
+    x_original_len_val, x_padded_val, _ = next(iter(validation_data))
+    x_padded_val = x_padded_val.to(device)
+
+    vat_loss = VATLoss()
+    lds = vat_loss(model, x_padded_val, x_original_len_val)
+
+    return lds
+
 def metrics_evaluation(y_pred, y_train, device):
 
     # Get the predicted labels
@@ -100,12 +111,8 @@ def train_model(train_data, validation_data, glove_embeddings):
             # Predict the outputs
             y_pred = model(x_padded, x_original_len)
 
-            # For VAT Loss
-            x_original_len_val, x_padded_val, _ = next(iter(validation_data))
-            x_padded_val = x_padded_val.to(device)
-
-            vat_loss = VATLoss()
-            lds = vat_loss(model, x_padded_val, x_original_len_val)
+            # For VAT
+            lds = _vat_loss_calculation(model, device, validation_data)
 
             # Compute the loss and accuracy
             train_loss = criterion(y_pred.squeeze(), y_train) + (lds * alpha_val)
