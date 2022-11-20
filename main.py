@@ -5,6 +5,13 @@ import model
 import text_processing
 import glove_embeddings
 import prepare_datasets
+import argparse
+
+def create_parser():
+
+    parser = argparse.ArgumentParser(description='Parser for VAT and Dialog Act')
+    
+    return parser.parse_args()
 
 if __name__ == '__main__':
 
