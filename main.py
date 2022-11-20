@@ -62,6 +62,7 @@ if __name__ == '__main__':
 
     # Later TODO:
     # - Convert model.py to class file
+    # - Add in rest of hyperparameters
 
     # Train the model
     train_model = model.train_model(train_generator, valid_generator, glove_embeddings)
