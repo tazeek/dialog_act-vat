@@ -13,6 +13,12 @@ from vat_loss import VATLoss
 import torch
 import numpy as np
 
+def _create_model(glove_embeddings):
+
+    model = LSTM_GLove(glove_embeddings)
+
+    return model
+
 def metrics_evaluation(y_pred, y_train, device):
 
     # Get the predicted labels
@@ -33,7 +39,7 @@ def metrics_evaluation(y_pred, y_train, device):
 def train_model(train_data, validation_data, glove_embeddings):
 
     # Prepare the model
-    model = LSTM_GLove(glove_embeddings)
+    model = _create_model(glove_embeddings)
     print(model)
 
     # Define the loss function
