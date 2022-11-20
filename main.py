@@ -7,14 +7,28 @@ import glove_embeddings
 import prepare_datasets
 import argparse
 
-def create_parser():
+def _create_parser():
 
     parser = argparse.ArgumentParser(description='Parser for VAT and Dialog Act')
     
+    parser.add_argument('--model', default='lstm', metavar='Model',
+        help='Name of the model for training')
+
+    parser.add_argument('--embed', default='glove', metavar='Embed',
+        help='Embeddings required for the model')
+    
+    parser.add_argument('--VAT', default=0, metavar='VAT',
+        help='Check if the model requires VAT for Semi-supervision')
+
     return parser.parse_args()
 
 if __name__ == '__main__':
 
+    # Get parser
+    args = _create_parser()
+    print(args)
+    exit()
+    
     # Load the data (DailyDialog)
     label_loader = LabelLoader().fetch_dataframe()
 
