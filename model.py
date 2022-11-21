@@ -98,6 +98,9 @@ def train_model(train_data, validation_data, glove_embeddings):
     alpha_val = hyper_params['alpha_val']
     train_set_size = len(train_data)
 
+    # For storing results
+    results_dict = _get_results_dictionary()
+
     for epoch in range(1, epochs + 1):
         
         model.train()
@@ -124,7 +127,7 @@ def train_model(train_data, validation_data, glove_embeddings):
             lds = _vat_loss_calculation(model, device, validation_data)
 
             # Compute the loss and accuracy
-            train_loss = criterion(y_pred.squeeze(), y_train) + (lds * alpha_val)
+            train_loss = criterion(y_pred.squeeze(), y_train)
             train_acc, train_f1 = metrics_evaluation(y_pred, y_train, device)
 
             # Back propagation
@@ -136,15 +139,19 @@ def train_model(train_data, validation_data, glove_embeddings):
             train_epoch_loss += train_loss.item()
             train_epoch_acc += train_acc.item()
             train_epoch_f1 += train_f1.item()
-            train_vat_loss += lds.item()
+            #train_vat_loss += lds.item()
 
         # Store the results
+        results_dict['epoch'].append(epoch)
+        results_dict['cross_entropy_loss'].append(train_epoch_loss)
+        results_dict['accuracy'].append(train_epoch_acc)
+        results_dict['f1'].append(train_epoch_f1)
         
         # Print every 10 epochs
         print(
             f'Epoch {epoch+0:03}: |'
             f' Train Loss: {train_epoch_loss/train_set_size:.5f} | '
-            f' VAT Loss: {(train_vat_loss * alpha_val)/train_set_size:.5f} | '
+            #f' VAT Loss: {(train_vat_loss * alpha_val)/train_set_size:.5f} | '
             f' Train Acc: {train_epoch_acc/train_set_size:.3f} | '
             f' Train F1: {train_epoch_f1/train_set_size:.3f} | '
         )
