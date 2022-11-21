@@ -58,13 +58,16 @@ def _get_results_dictionary() -> dict:
         'f1': []
     }
 
-def _save_csv_file():
+def _save_csv_file(base_file, data) -> None:
 
     # Convert to dataframe
+    df = pd.DataFrame(data)
 
-    # Save dataframe
+    # Save dataframe to CSV
+    base_file += '_training_results.csv'
+    df.to_csv(base_file, index=False)
 
-    return ...
+    return None
 
 def metrics_evaluation(y_pred, y_train, device):
 
