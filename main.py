@@ -5,6 +5,29 @@ import model
 import logging
 import argparse
 
+def _get_logger():
+
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+
+    formatter = logging.Formatter(
+        "[%(asctime)s] " + \
+        "[%(filename)s] " + \
+        "[line:%(lineno)d] " + \
+        "[%(levelname)s] %(message)s"
+    )
+
+    fh = logging.FileHandler('log_file.log', 'w')
+    fh.setFormatter(formatter)
+
+    sh = logging.StreamHandler()
+    sh.setFormatter(formatter)
+
+    logger.addHandler(fh)
+    logger.addHandler(sh)
+
+    return logger
+
 def _create_parser():
 
     parser = argparse.ArgumentParser(description='Parser for VAT and Dialog Act')
@@ -31,6 +54,9 @@ def _get_base_filename(args):
     return base_filename
 
 if __name__ == '__main__':
+
+    # Get the logger
+    logger = _get_logger()
 
     # Get parser for command line inputs
     args = _create_parser()
