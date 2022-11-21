@@ -47,6 +47,15 @@ def _vat_loss_calculation(model, device, validation_data):
 
     return lds
 
+def _get_results_dictionary():
+
+    return {
+        'epoch': [],
+        'train_loss': [],
+        'accuracy': [],
+        'f1': []
+    }
+
 def metrics_evaluation(y_pred, y_train, device):
 
     # Get the predicted labels
@@ -128,6 +137,8 @@ def train_model(train_data, validation_data, glove_embeddings):
             train_epoch_acc += train_acc.item()
             train_epoch_f1 += train_f1.item()
             train_vat_loss += lds.item()
+
+        # Store the results
         
         # Print every 10 epochs
         print(
@@ -137,6 +148,8 @@ def train_model(train_data, validation_data, glove_embeddings):
             f' Train Acc: {train_epoch_acc/train_set_size:.3f} | '
             f' Train F1: {train_epoch_f1/train_set_size:.3f} | '
         )
+
+    # Save the CSV file
         
     return model
 
