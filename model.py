@@ -175,7 +175,6 @@ def train_model(train_data, validation_data, glove_embeddings, base_filename):
         )
 
     # Save the CSV file
-    print(results_dict)
     _save_csv_file(results_dict, base_filename)
 
     return model

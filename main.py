@@ -76,7 +76,7 @@ if __name__ == '__main__':
     # - Add in rest of hyperparameters
     # - Add logging parameters
     # - Check if metrics are calculated properly
-    # - Store the CSV results in a file
+    # - Store the CSV results in a folder
 
     # Train the model
     train_model = model.train_model(train_generator, valid_generator, glove_embeddings, base_filename)
