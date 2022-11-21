@@ -1,8 +1,7 @@
-from label_loader import LabelLoader
-from dailydialog_loader import DailyDialog_Loader
+from data_loaders import dailydialog_full
+from preprocessing import text_processing
 
 import model
-import text_processing
 import glove_embeddings
 import prepare_datasets
 import argparse
@@ -40,8 +39,8 @@ if __name__ == '__main__':
     # Get filename
     base_filename = _get_base_filename(args)
 
-    # Load the data (DailyDialog)
-    label_loader = LabelLoader().fetch_dataframe()
+    # Load the full data of DailyDialog
+    label_loader = dailydialog_full.DailyDialog_Full().fetch_dataframe()
 
     # Differentiate labels and text
     full_file, full_labels = label_loader['utterance'], label_loader['dialog_act']
@@ -75,6 +74,8 @@ if __name__ == '__main__':
     # - Add logging parameters
     # - Check if metrics are calculated properly
     # - Store the CSV results in a folder
+
+    # NEXT: Segment codebase (see paper) -> Add logging parameters
 
     # Train the model
     train_model = model.train_model(train_generator, valid_generator, glove_embeddings, base_filename)
