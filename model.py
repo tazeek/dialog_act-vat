@@ -10,8 +10,10 @@ from sklearn.metrics import classification_report
 from lstm_glove import LSTM_GLove
 from vat_loss import VATLoss
 
-import torch
 import numpy as np
+import pandas as pd
+
+import torch
 
 def _create_model(glove_embeddings):
 
@@ -47,7 +49,7 @@ def _vat_loss_calculation(model, device, validation_data):
 
     return lds
 
-def _get_results_dictionary():
+def _get_results_dictionary() -> dict:
 
     return {
         'epoch': [],
@@ -55,6 +57,14 @@ def _get_results_dictionary():
         'accuracy': [],
         'f1': []
     }
+
+def _save_csv_file():
+
+    # Convert to dataframe
+
+    # Save dataframe
+
+    return ...
 
 def metrics_evaluation(y_pred, y_train, device):
 
