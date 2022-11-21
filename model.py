@@ -53,7 +53,7 @@ def _get_results_dictionary() -> dict:
 
     return {
         'epoch': [],
-        'train_loss': [],
+        'cross_entropy_loss': [],
         'accuracy': [],
         'f1': []
     }
