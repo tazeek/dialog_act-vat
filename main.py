@@ -64,8 +64,6 @@ if __name__ == '__main__':
     # - Both
 
     # TODO:
-    # - Store train results in a CSV file
-    # - Visualize results from CSV file
     # - Store confusion matrix for labels
     # - Use RoBERTa and BERT embeddings
     # - Visualize perturbed vs original results
@@ -76,9 +74,12 @@ if __name__ == '__main__':
     # Later TODO:
     # - Convert model.py to class file
     # - Add in rest of hyperparameters
+    # - Add logging parameters
+    # - Check if metrics are calculated properly
+    # - Store the CSV results in a file
 
     # Train the model
-    train_model = model.train_model(train_generator, valid_generator, glove_embeddings)
+    train_model = model.train_model(train_generator, valid_generator, glove_embeddings, base_filename)
 
     # Test the model
     model.test_model(test_generator, train_model)
