@@ -7,7 +7,7 @@ from torch import optim
 
 from sklearn.metrics import classification_report, confusion_matrix
 
-from lstm_glove import LSTM_GLove
+from models import lstm_glove
 from vat_loss import VATLoss
 
 import numpy as np
@@ -18,7 +18,7 @@ import torch
 
 def _create_model(glove_embeddings):
 
-    model = LSTM_GLove(glove_embeddings)
+    model = lstm_glove.LSTM_GLove(glove_embeddings)
 
     return model
 
@@ -65,8 +65,8 @@ def _save_csv_file(data, base_file) -> None:
     df = pd.DataFrame(data)
 
     # Save dataframe to CSV
-    base_file += '_training_results.csv'
-    df.to_csv(base_file, index=False)
+    file_name = 'results/' + base_file + '_training_results.csv'
+    df.to_csv(file_name, index=False)
 
     return None
 
@@ -179,7 +179,7 @@ def train_model(train_data, validation_data, glove_embeddings, base_filename):
     _save_csv_file(results_dict, base_filename)
 
     # Save the model
-    torch.save(model.state_dict(), base_filename + '_model_weights.pth')
+    torch.save(model.state_dict(), 'models/' + base_filename + '_model_weights.pth')
 
     return model
 
@@ -227,7 +227,7 @@ def test_model(test_data, model, base_filename):
     # Get the confusion matrix
     # Save the confusion matrix
     cm_results = confusion_matrix(y_pred_list, y_test_list)
-    file_name = base_filename + '_confusion_matrix.pk'
+    file_name = 'results/' + base_filename + '_confusion_matrix.pk'
     pickle.dump(cm_results, open(file_name, "wb"))
     print(cm_results)
 

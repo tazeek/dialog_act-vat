@@ -1,9 +1,7 @@
 from data_loaders import dailydialog_full
-from preprocessing import text_processing, glove_embeddings
+from preprocessing import text_processing, glove_embeddings, prepare_datasets
 
 import model
-import glove_embeddings
-import prepare_datasets
 import argparse
 
 def _create_parser():
