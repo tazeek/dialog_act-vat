@@ -58,7 +58,7 @@ def _get_results_dictionary() -> dict:
         'f1': []
     }
 
-def _save_csv_file(base_file, data) -> None:
+def _save_csv_file(data, base_file) -> None:
 
     # Convert to dataframe
     df = pd.DataFrame(data)
@@ -137,7 +137,7 @@ def train_model(train_data, validation_data, glove_embeddings, base_filename):
             y_pred = model(x_padded, x_original_len)
 
             # For VAT
-            lds = _vat_loss_calculation(model, device, validation_data)
+            #lds = _vat_loss_calculation(model, device, validation_data)
 
             # Compute the loss and accuracy
             train_loss = criterion(y_pred.squeeze(), y_train)
@@ -154,6 +154,11 @@ def train_model(train_data, validation_data, glove_embeddings, base_filename):
             train_epoch_f1 += train_f1.item()
             #train_vat_loss += lds.item()
 
+        # Normalize results
+        train_epoch_loss = train_epoch_loss/train_set_size
+        train_epoch_acc = train_epoch_acc/train_set_size
+        train_epoch_f1 = train_epoch_f1/train_set_size
+
         # Store the results
         results_dict['epoch'].append(epoch)
         results_dict['cross_entropy_loss'].append(train_epoch_loss)
@@ -163,13 +168,14 @@ def train_model(train_data, validation_data, glove_embeddings, base_filename):
         # Print every 10 epochs
         print(
             f'Epoch {epoch+0:03}: |'
-            f' Train Loss: {train_epoch_loss/train_set_size:.5f} | '
+            f' Train Loss: {train_epoch_loss:.5f} | '
             #f' VAT Loss: {(train_vat_loss * alpha_val)/train_set_size:.5f} | '
-            f' Train Acc: {train_epoch_acc/train_set_size:.3f} | '
-            f' Train F1: {train_epoch_f1/train_set_size:.3f} | '
+            f' Train Acc: {train_epoch_acc:.3f} | '
+            f' Train F1: {train_epoch_f1:.3f} | '
         )
 
     # Save the CSV file
+    print(results_dict)
     _save_csv_file(results_dict, base_filename)
 
     return model
