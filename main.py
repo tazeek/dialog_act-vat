@@ -1,5 +1,5 @@
 from data_loaders import dailydialog_full
-from preprocessing import text_processing
+from preprocessing import text_processing, glove_embeddings
 
 import model
 import glove_embeddings
