@@ -82,4 +82,4 @@ if __name__ == '__main__':
     train_model = model.train_model(train_generator, valid_generator, glove_embeddings, base_filename)
 
     # Test the model
-    model.test_model(test_generator, train_model)
+    model.test_model(test_generator, train_model, base_filename)

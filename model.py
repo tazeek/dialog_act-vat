@@ -5,7 +5,7 @@ from torchmetrics.classification import MulticlassF1Score
 from torch import nn
 from torch import optim
 
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, confusion_matrix
 
 from lstm_glove import LSTM_GLove
 from vat_loss import VATLoss
@@ -13,6 +13,7 @@ from vat_loss import VATLoss
 import numpy as np
 import pandas as pd
 
+import pickle
 import torch
 
 def _create_model(glove_embeddings):
@@ -180,10 +181,10 @@ def train_model(train_data, validation_data, glove_embeddings, base_filename):
     return model
 
 
-def test_model(test_data, model):
+def test_model(test_data, model, base_filename):
 
     # Use GPU, if available
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    device = _get_device()
     
     # Mount model onto the GPU
     model.to(device)
@@ -220,6 +221,14 @@ def test_model(test_data, model):
     y_pred_list = [output for list in y_pred_list for output in list]
     y_test_list = [output for list in y_test_list for output in list]
 
+    # Get the confusion matrix
+    # Save the confusion matrix
+    cm_results = confusion_matrix(y_pred_list, y_test_list)
+    file_name = base_filename + '_confusion_matrix.pk'
+    pickle.dump(cm_results, open(file_name, "wb"))
+    print(cm_results)
+
+    print('\n')
     print(classification_report(y_test_list, y_pred_list))
 
     return None
