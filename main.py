@@ -59,6 +59,7 @@ if __name__ == '__main__':
     logger = _get_logger()
 
     # Get parser for command line inputs
+    logger.info('Fetching Parser')
     args = _create_parser()
 
     # Get filename
