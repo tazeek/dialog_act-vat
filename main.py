@@ -64,10 +64,8 @@ if __name__ == '__main__':
     # - Both
 
     # TODO:
-    # - Store confusion matrix for labels
     # - Use RoBERTa and BERT embeddings
     # - Visualize perturbed vs original results
-    # - Save different types of models
     # - Compare with existing results and SOTA
     # - Check if VAT loss is actually correct or not (Refer to Paper)
 
