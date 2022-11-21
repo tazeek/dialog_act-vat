@@ -178,6 +178,9 @@ def train_model(train_data, validation_data, glove_embeddings, base_filename):
     # Save the CSV file
     _save_csv_file(results_dict, base_filename)
 
+    # Save the model
+    torch.save(model.state_dict(), base_filename + '_model_weights.pth')
+
     return model
 
 
