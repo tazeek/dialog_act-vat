@@ -32,7 +32,7 @@ def _get_hyperparams():
 
     params = {
         'lr': 0.001,
-        'epochs': 100,
+        'epochs': 10,
         'alpha_val': 0.01
     }
 
@@ -86,7 +86,7 @@ def metrics_evaluation(y_pred, y_train, device):
 
     return acc_score, f1_score
 
-def train_model(train_data, validation_data, glove_embeddings):
+def train_model(train_data, validation_data, glove_embeddings, base_filename):
 
     # Prepare the model
     model = _create_model(glove_embeddings)
@@ -170,7 +170,8 @@ def train_model(train_data, validation_data, glove_embeddings):
         )
 
     # Save the CSV file
-        
+    _save_csv_file(results_dict, base_filename)
+
     return model
 
 
