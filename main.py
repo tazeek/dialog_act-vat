@@ -2,18 +2,19 @@ from data_loaders import dailydialog_full
 from preprocessing import text_processing, glove_embeddings, prepare_datasets
 
 import model
+import util_helper
 
 if __name__ == '__main__':
 
     # Get the logger
-    logger = _get_logger()
+    logger = util_helper.get_logger()
 
     # Get parser for command line inputs
     logger.info('Fetching Parser')
-    args = _create_parser()
+    args = util_helper.create_parser()
 
     # Get filename
-    base_filename = _get_base_filename(args)
+    base_filename = util_helper.get_base_filename(args)
 
     # Load the full data of DailyDialog
     label_loader = dailydialog_full.DailyDialog_Full().fetch_dataframe()

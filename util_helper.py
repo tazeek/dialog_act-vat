@@ -1,7 +1,7 @@
 import logging
 import argparse
 
-def _get_logger():
+def get_logger():
 
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
@@ -24,7 +24,7 @@ def _get_logger():
 
     return logger
 
-def _create_parser():
+def create_parser():
 
     parser = argparse.ArgumentParser(description='Parser for VAT and Dialog Act')
     
@@ -39,7 +39,7 @@ def _create_parser():
 
     return parser.parse_args()
 
-def _get_base_filename(args):
+def get_base_filename(args):
 
     # File name format: <model>_<embed>_<vat>
     base_filename = args.model + '_' + args.embed
