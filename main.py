@@ -4,6 +4,20 @@ from preprocessing import text_processing, glove_embeddings, prepare_datasets
 import model
 import util_helper
 
+def _get_index_dictionary():
+
+    # Load the full data of DailyDialog
+    label_loader = dailydialog_full.DailyDialog_Full().fetch_dataframe()
+
+    # Differentiate labels and text
+    full_file = label_loader['utterance']
+
+    # Preprocess the text and get tokens for dictionary creation
+    all_possible_words_list = text_processing.preprocess_text(full_file, remove_punctuation=False)
+
+    # Get word to index dictionary
+    return text_processing.convert_word_index(all_possible_words_list)
+
 if __name__ == '__main__':
 
     # Get the logger
@@ -16,20 +30,12 @@ if __name__ == '__main__':
     # Get filename
     base_filename = util_helper.get_base_filename(args)
 
-    # Load the full data of DailyDialog
-    label_loader = dailydialog_full.DailyDialog_Full().fetch_dataframe()
-
-    # Differentiate labels and text
-    full_file, full_labels = label_loader['utterance'], label_loader['dialog_act']
-
-    # Preprocess the text and get tokens for dictionary creation
-    all_possible_words_list = text_processing.preprocess_text(full_file, remove_punctuation=False)
-
     # Get word to index dictionary
-    word_to_index = text_processing.convert_word_index(all_possible_words_list)
+    logger.info('Loading Word-to-index dictionary')
+    word_to_index = _get_index_dictionary()
 
     # Create lookup table and check for embeddings test
-    glove_embeddings = glove_embeddings.create_glove_embeddings(word_to_index)\
+    glove_embeddings = glove_embeddings.create_glove_embeddings(word_to_index)
 
     # Fetch the datasets (from raw to data generator format)
     train_generator, test_generator, valid_generator = prepare_datasets.fetch_generators(word_to_index)
