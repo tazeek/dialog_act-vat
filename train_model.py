@@ -2,6 +2,8 @@ from models import lstm_glove
 from vat_loss import VATLoss
 from torchmetrics import Accuracy
 from torchmetrics.classification import MulticlassF1Score
+from torch import nn
+from torch import optim
 
 import pandas as pd
 import torch
@@ -15,11 +17,20 @@ class Model():
         self._epochs = 10
         self._alpha_val = 0.01
 
-        # Create model
-        self._model = self._create_model(args)
+        # Data Generators
+        self._train_data = None
+        self._test_data = None
+        self._unlabeled_data = None
+
+        # Results evaluation
+        self._eval_results = self._get_results_dictionary()
 
         # Device
         self._device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+        # Create model and mount to device
+        self._model = self._create_model(args)
+        self._model.to(self._device)
     
     def metrics_evaluation(y_pred, y_train, device):
 
@@ -74,3 +85,55 @@ class Model():
         lds = vat_loss(model, x_padded_val, x_original_len_val)
 
         return lds
+
+    def start_train(self, train_data):
+
+        # Define the loss function
+        criterion = nn.CrossEntropyLoss()
+
+        # Define Optimizer
+        optimizer = optim.Adam(
+            self._model.parameters(), 
+            lr= self._lr
+        )
+
+        for epoch in range(1, self._epochs + 1):
+
+            self._model.train()
+
+            train_epoch_loss = 0
+            train_vat_loss = 0
+            train_epoch_f1 = 0
+            train_epoch_acc = 0
+
+            for (x_original_len, x_padded, y_train) in train_data:
+
+                # Convert to LongTensor
+                y_train = y_train.type(torch.LongTensor)
+
+                # Load inputs and labels onto device
+                x_padded, y_train = x_padded.to(self._device), y_train.to(self._device)
+
+                optimizer.zero_grad()
+
+                # Predict the outputs
+                y_pred = self._model(x_padded, x_original_len)
+
+                # For VAT
+                #lds = _vat_loss_calculation(model, device, validation_data)
+
+                # Compute the loss and accuracy
+                train_loss = criterion(y_pred.squeeze(), y_train)
+                train_acc, train_f1 = self._metrics_evaluation(y_pred, y_train, self._device)
+
+                # Back propagation
+                # Update for parameters and compute the updates
+                train_loss.backward()
+                optimizer.step()
+                
+                # Update for Display
+                train_epoch_loss += train_loss.item()
+                train_epoch_acc += train_acc.item()
+                train_epoch_f1 += train_f1.item()
+                #train_vat_loss += lds.item()
+        ...
