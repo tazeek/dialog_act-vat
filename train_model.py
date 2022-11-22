@@ -22,6 +22,9 @@ class Model():
         self._test_data = None
         self._unlabeled_data = None
 
+        # Others
+        self._file_name = None
+
         # Results evaluation
         self._eval_results = self._get_results_dictionary()
 
@@ -52,10 +55,11 @@ class Model():
     def _save_csv_file(self, data, base_file) -> None:
 
         # Convert to dataframe
-        df = pd.DataFrame(data)
+        df = pd.DataFrame(self._eval_results)
 
         # Save dataframe to CSV
-        file_name = 'results/' + base_file + '_training_results.csv'
+        file_name = 'results/' + self._eval_results + '_training_results.csv'
+
         df.to_csv(file_name, index=False)
 
         return None
@@ -97,6 +101,8 @@ class Model():
             lr= self._lr
         )
 
+        train_set_size = len(train_data)
+
         for epoch in range(1, self._epochs + 1):
 
             self._model.train()
@@ -136,4 +142,34 @@ class Model():
                 train_epoch_acc += train_acc.item()
                 train_epoch_f1 += train_f1.item()
                 #train_vat_loss += lds.item()
-        ...
+            
+            # Normalize results
+            train_epoch_loss = train_epoch_loss/train_set_size
+            train_epoch_acc = train_epoch_acc/train_set_size
+            train_epoch_f1 = train_epoch_f1/train_set_size
+
+            # Store the results
+            self._eval_results['epoch'].append(epoch)
+            self._eval_results['cross_entropy_loss'].append(train_epoch_loss)
+            self._eval_results['accuracy'].append(train_epoch_acc)
+            self._eval_results['f1'].append(train_epoch_f1)
+            
+            # Print every 10 epochs
+            print(
+                f'Epoch {epoch+0:03}: |'
+                f' Train Loss: {train_epoch_loss:.5f} | '
+                #f' VAT Loss: {(train_vat_loss * alpha_val)/train_set_size:.5f} | '
+                f' Train Acc: {train_epoch_acc:.3f} | '
+                f' Train F1: {train_epoch_f1:.3f} | '
+            )
+
+        # Save the CSV file
+        self._save_csv_file()
+
+        # Save the model
+        torch.save(
+            self._model.state_dict(), 
+            'models/' + self._file_name + '_model_weights.pth'
+        )
+
+        return None
