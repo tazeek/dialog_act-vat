@@ -25,7 +25,7 @@ class Model():
         self._unlabeled_data = params['valid']
 
         # Others
-        self._file_name = None
+        self._base_file = params['file_name']
 
         # Results evaluation
         self._eval_results = self._get_results_dictionary()
@@ -55,13 +55,13 @@ class Model():
 
         return acc_score, f1_score
 
-    def _save_csv_file(self, data, base_file) -> None:
+    def _save_csv_file(self) -> None:
 
         # Convert to dataframe
         df = pd.DataFrame(self._eval_results)
 
         # Save dataframe to CSV
-        file_name = 'results/' + self._eval_results + '_training_results.csv'
+        file_name = 'results/' + self._base_file + '_training_results.csv'
 
         df.to_csv(file_name, index=False)
 
@@ -185,7 +185,7 @@ class Model():
         # Save the model
         torch.save(
             self._model.state_dict(), 
-            'models/' + self._file_name + '_model_weights.pth'
+            'models/' + self._base_file + '_model_weights.pth'
         )
 
         return None

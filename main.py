@@ -61,6 +61,7 @@ if __name__ == '__main__':
         'training': train_generator,
         'test': test_generator,
         'valid': valid_generator,
+        'file_name': base_filename,
         'args': args
     }
 
