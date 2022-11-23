@@ -82,6 +82,15 @@ class Model():
 
         return model
 
+    def _reset_metrics(self):
+
+        self._train_epoch_loss = 0
+        self._train_vat_loss = 0
+        self._train_epoch_f1 = 0
+        self._train_epoch_acc = 0
+
+        return None
+
     def _vat_loss_calculation(self, model, device, validation_data):
 
         # Create the VAT formula and test:
@@ -99,7 +108,7 @@ class Model():
 
         return lds
 
-    def start_train(self, train_data):
+    def start_train(self):
 
         # Define the loss function
         criterion = nn.CrossEntropyLoss()
@@ -116,10 +125,8 @@ class Model():
 
             self._model.train()
 
-            train_epoch_loss = 0
-            train_vat_loss = 0
-            train_epoch_f1 = 0
-            train_epoch_acc = 0
+            # Reset every poch
+            self._reset_metrics()
 
             for (x_original_len, x_padded, y_train) in self._train_data:
 
@@ -147,29 +154,29 @@ class Model():
                 optimizer.step()
                 
                 # Update for Display
-                train_epoch_loss += train_loss.item()
-                train_epoch_acc += train_acc.item()
-                train_epoch_f1 += train_f1.item()
-                #train_vat_loss += lds.item()
+                self._train_epoch_loss += train_loss.item()
+                self._train_epoch_acc += train_acc.item()
+                self._train_epoch_f1 += train_f1.item()
+                #self._train_vat_loss += lds.item()
             
             # Normalize results
-            train_epoch_loss = train_epoch_loss/train_set_size
-            train_epoch_acc = train_epoch_acc/train_set_size
-            train_epoch_f1 = train_epoch_f1/train_set_size
+            self._train_epoch_loss /= train_set_size
+            self._train_epoch_acc /= train_set_size
+            self._train_epoch_f1 /= train_set_size
 
             # Store the results
             self._eval_results['epoch'].append(epoch)
-            self._eval_results['cross_entropy_loss'].append(train_epoch_loss)
-            self._eval_results['accuracy'].append(train_epoch_acc)
-            self._eval_results['f1'].append(train_epoch_f1)
+            self._eval_results['cross_entropy_loss'].append(self._train_epoch_loss)
+            self._eval_results['accuracy'].append(self._train_epoch_acc)
+            self._eval_results['f1'].append(self._train_epoch_f1)
             
             # Print every 10 epochs
             print(
                 f'Epoch {epoch+0:03}: |'
-                f' Train Loss: {train_epoch_loss:.5f} | '
-                #f' VAT Loss: {(train_vat_loss * alpha_val)/train_set_size:.5f} | '
-                f' Train Acc: {train_epoch_acc:.3f} | '
-                f' Train F1: {train_epoch_f1:.3f} | '
+                f' Train Loss: {self._train_epoch_loss:.5f} | '
+                #f' VAT Loss: {(self._train_vat_loss * alpha_val)/train_set_size:.5f} | '
+                f' Train Acc: {self._train_epoch_acc:.3f} | '
+                f' Train F1: {self._train_epoch_f1:.3f} | '
             )
 
         # Save the CSV file
