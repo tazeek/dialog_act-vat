@@ -36,10 +36,10 @@ class Model():
         self._device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
         # Create model and mount to device
-        self._model = self._create_model()
+        self._model = self._create_model(params)
         self._model.to(self._device)
     
-    def metrics_evaluation(y_pred, y_train, device):
+    def _metrics_evaluation(self, y_pred, y_train, device):
 
         # TODO: Check if metrics are calculated properly
         # Get the predicted labels
@@ -78,9 +78,9 @@ class Model():
             'f1': []
         }
 
-    def _create_model(self):
+    def _create_model(self, params):
 
-        model = lstm_glove.LSTM_GLove()
+        model = lstm_glove.LSTM_GLove(params['embeddings'])
 
         return model
 

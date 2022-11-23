@@ -1,5 +1,6 @@
 from data_loaders import dailydialog_full
 from preprocessing import text_processing, glove_embeddings, prepare_datasets
+from train_model import Model
 
 import model
 import util_helper
@@ -62,14 +63,18 @@ if __name__ == '__main__':
         'test': test_generator,
         'valid': valid_generator,
         'file_name': base_filename,
+        'embeddings': embeddings,
         'args': args
     }
 
     logger.info('Training Model')
-    train_model = model.train_model(train_generator, valid_generator, glove_embeddings, base_filename)
+    model = Model(params_dict)
+    model.start_train()
+    #train_model = model.train_model(train_generator, valid_generator, glove_embeddings, base_filename)
     logger.info('Training done successfully')
 
     # Test the model
     logger.info('Testing Model')
-    model.test_model(test_generator, train_model, base_filename)
+    model.test_model()
+    #model.test_model(test_generator, train_model, base_filename)
     logger.info('Testing done successfully')
