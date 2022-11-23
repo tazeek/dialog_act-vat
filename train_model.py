@@ -10,7 +10,9 @@ import torch
 
 class Model():
 
-    def __init__(self, args):
+    def __init__(self, params):
+
+        args = params['args']
 
         # Hyperparams
         self._lr = 0.001
@@ -18,9 +20,9 @@ class Model():
         self._alpha_val = 0.01
 
         # Data Generators
-        self._train_data = None
-        self._test_data = None
-        self._unlabeled_data = None
+        self._train_data = params['training']
+        self._test_data = params['test']
+        self._unlabeled_data = params['valid']
 
         # Others
         self._file_name = None
@@ -32,11 +34,12 @@ class Model():
         self._device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
         # Create model and mount to device
-        self._model = self._create_model(args)
+        self._model = self._create_model()
         self._model.to(self._device)
     
     def metrics_evaluation(y_pred, y_train, device):
 
+        # TODO: Check if metrics are calculated properly
         # Get the predicted labels
         y_pred_softmax = torch.log_softmax(y_pred, dim = 1)
         _, y_pred_tags = torch.max(y_pred_softmax, dim = 1)
@@ -73,13 +76,19 @@ class Model():
             'f1': []
         }
 
-    def _create_model(self, args):
+    def _create_model(self):
 
         model = lstm_glove.LSTM_GLove()
 
         return model
 
     def _vat_loss_calculation(self, model, device, validation_data):
+
+        # Create the VAT formula and test:
+        # - DailyDialog's validation set
+        # - Unlabeled data
+        # - Both
+        # - Check if VAT loss is actually correct or not (Refer to Paper)
 
         # For VAT Loss
         x_original_len_val, x_padded_val, _ = next(iter(validation_data))
@@ -101,7 +110,7 @@ class Model():
             lr= self._lr
         )
 
-        train_set_size = len(train_data)
+        train_set_size = len(self._train_data)
 
         for epoch in range(1, self._epochs + 1):
 
@@ -112,7 +121,7 @@ class Model():
             train_epoch_f1 = 0
             train_epoch_acc = 0
 
-            for (x_original_len, x_padded, y_train) in train_data:
+            for (x_original_len, x_padded, y_train) in self._train_data:
 
                 # Convert to LongTensor
                 y_train = y_train.type(torch.LongTensor)

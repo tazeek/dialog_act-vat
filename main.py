@@ -18,6 +18,13 @@ def _get_index_dictionary():
     # Get word to index dictionary
     return text_processing.convert_word_index(all_possible_words_list)
 
+def _create_embeddings(word_to_index):
+
+    # TODO: Use RoBERTa and BERT embeddings
+
+    # For GloVe
+    return glove_embeddings.create_glove_embeddings(word_to_index)
+
 if __name__ == '__main__':
 
     # Get the logger
@@ -33,32 +40,35 @@ if __name__ == '__main__':
     # Get word to index dictionary
     logger.info('Loading Word-to-index dictionary')
     word_to_index = _get_index_dictionary()
+    logger.info('Word-to-index dictionary loaded successfully')
 
     # Create lookup table and check for embeddings test
-    glove_embeddings = glove_embeddings.create_glove_embeddings(word_to_index)
+    logger.info('Creating embeddings')
+    embeddings = _create_embeddings(word_to_index)
+    logger.info('Embeddings created successfully')
 
     # Fetch the datasets (from raw to data generator format)
+    logger.info('Loading dataset generators')
     train_generator, test_generator, valid_generator = prepare_datasets.fetch_generators(word_to_index)
-
-    # Create the VAT formula and test:
-    # - DailyDialog's validation set
-    # - Unlabeled data
-    # - Both
+    logger.info('Dataset generators loaded successfully')
 
     # TODO:
-    # - Use RoBERTa and BERT embeddings
     # - Visualize perturbed vs original results
     # - Compare with existing results and SOTA
-    # - Check if VAT loss is actually correct or not (Refer to Paper)
-
-    # Later TODO:
-    # - Convert model.py to class file
-    # - Add in rest of hyperparameters
-    # - Add logging parameters
-    # - Check if metrics are calculated properly
 
     # Train the model
+    params_dict = {
+        'training': train_generator,
+        'test': test_generator,
+        'valid': valid_generator,
+        'args': args
+    }
+
+    logger.info('Training Model')
     train_model = model.train_model(train_generator, valid_generator, glove_embeddings, base_filename)
+    logger.info('Training done successfully')
 
     # Test the model
+    logger.info('Testing Model')
     model.test_model(test_generator, train_model, base_filename)
+    logger.info('Testing done successfully')
