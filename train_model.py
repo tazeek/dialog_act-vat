@@ -4,7 +4,9 @@ from torchmetrics import Accuracy
 from torchmetrics.classification import MulticlassF1Score
 from torch import nn
 from torch import optim
+from sklearn.metrics import classification_report, confusion_matrix
 
+import pickle
 import pandas as pd
 import torch
 
@@ -187,5 +189,54 @@ class Model():
             self._model.state_dict(), 
             'models/' + self._base_file + '_model_weights.pth'
         )
+
+        return None
+
+    def test_model(self):
+        
+        # Mount model onto the GPU
+        self._model.to(self._device)
+
+        y_pred_list = []
+        y_test_list = []
+        
+        with torch.no_grad():
+            
+            self._model.eval()
+
+            for (x_original_len, x_padded, y_test) in self._test_data:
+
+                # Convert to LongTensor
+                y_test = y_test.type(torch.LongTensor)
+
+                # Load inputs and labels onto device
+                x_padded, y_test = x_padded.to(self._device), y_test.to(self._device)
+
+                # Predict the outputs
+                y_pred = self._model(x_padded, x_original_len)
+
+                # Get the predicted labels
+                y_pred_softmax = torch.log_softmax(y_pred, dim = 1)
+                _, y_pred_tags = torch.max(y_pred_softmax, dim = 1)
+
+                y_pred_list.append(y_pred_tags.cpu().numpy())
+                y_test_list.append(y_test.cpu().numpy())
+
+            y_pred_list = [a.squeeze().tolist() for a in y_pred_list]
+            y_test_list = [a.squeeze().tolist() for a in y_test_list]
+        
+        # Flatten list
+        y_pred_list = [output for list in y_pred_list for output in list]
+        y_test_list = [output for list in y_test_list for output in list]
+
+        # Get the confusion matrix
+        # Save the confusion matrix
+        cm_results = confusion_matrix(y_pred_list, y_test_list)
+        file_name = 'results/' + self._base_file + '_confusion_matrix.pk'
+        pickle.dump(cm_results, open(file_name, "wb"))
+        print(cm_results)
+
+        print('\n')
+        print(classification_report(y_test_list, y_pred_list))
 
         return None

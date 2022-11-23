@@ -45,7 +45,7 @@ def create_glove_embeddings(word_index_dict: dict, embeddings_test:'bool'=False)
 
     # Load glove model
     glove_vectors = _load_glove_model()
-    print(f"Length of GloVe model: {len(glove_vectors)}")
+    #print(f"Length of GloVe model: {len(glove_vectors)}")
 
     embeddings = np.zeros((len(word_index_dict), 50))
     count = 0
@@ -57,7 +57,7 @@ def create_glove_embeddings(word_index_dict: dict, embeddings_test:'bool'=False)
             count += 1
             embeddings[index] = glove_vectors[word]
 
-    print(f"Matched words found: {count}")
+    #print(f"Matched words found: {count}")
 
     if embeddings_test:
         _do_embeddings_test(embeddings, glove_vectors, word_index_dict, 'cake')
