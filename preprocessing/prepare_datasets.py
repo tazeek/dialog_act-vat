@@ -41,7 +41,7 @@ def fetch_generators(word_to_index: dict):
     x_test = text_processing.preprocess_text(x_test, remove_punctuation=False)
     x_val = text_processing.preprocess_text(x_val, remove_punctuation=False)
 
-    # Transform to integer format for lookup
+    # Transform to integer format for lookup (if using GloVe)
     x_train = text_processing.transform_text_integer(x_train, word_to_index)
     x_test = text_processing.transform_text_integer(x_test, word_to_index)
     x_val = text_processing.transform_text_integer(x_val, word_to_index)
