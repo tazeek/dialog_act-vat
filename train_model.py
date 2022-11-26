@@ -43,6 +43,7 @@ class Model():
 
         # TODO: Check if metrics are calculated properly
         # Get the predicted labels
+        # Metrics needed: F1 Score, Precision, Recall
         y_pred_softmax = torch.log_softmax(y_pred, dim = 1)
         _, y_pred_tags = torch.max(y_pred_softmax, dim = 1)
 
