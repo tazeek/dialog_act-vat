@@ -70,11 +70,10 @@ if __name__ == '__main__':
     logger.info('Training Model')
     model = Model(params_dict)
     model.start_train()
-    #train_model = model.train_model(train_generator, valid_generator, glove_embeddings, base_filename)
+    
     logger.info('Training done successfully')
 
     # Test the model
     logger.info('Testing Model')
     model.test_model()
-    #model.test_model(test_generator, train_model, base_filename)
     logger.info('Testing done successfully')
