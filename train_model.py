@@ -4,7 +4,7 @@ from torchmetrics import Accuracy
 from torchmetrics.classification import MulticlassF1Score
 from torch import nn
 from torch import optim
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import classification_report, confusion_matrix, precision_score, f1_score, recall_score
 
 import pickle
 import pandas as pd
@@ -47,16 +47,12 @@ class Model():
         y_pred_softmax = torch.log_softmax(y_pred, dim = 1)
         _, y_pred_tags = torch.max(y_pred_softmax, dim = 1)
 
-        accuracy = Accuracy().to(device)
-        f1 = MulticlassF1Score(num_classes = 4).to(device)
+        # Calculate the metrics
+        precision = precision_score(y_train, y_pred_tags, average='weighted')
+        f1 = f1_score(y_train, y_pred_tags, average='weighted')
+        recall = recall_score(y_train, y_pred_tags, average='weighted')
 
-        acc_score = accuracy(y_pred_tags, y_train)
-        acc_score = torch.round(acc_score * 100)
-
-        f1_score = f1(y_pred_tags, y_train)
-        f1_score = torch.round(f1_score * 100)
-
-        return acc_score, f1_score
+        return precision, f1, recall
 
     def _save_csv_file(self) -> None:
 
