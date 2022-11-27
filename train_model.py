@@ -1,10 +1,10 @@
 from models import lstm_glove
 from vat_loss import VATLoss
-from torchmetrics import Accuracy
-from torchmetrics.classification import MulticlassF1Score
+from torchmetrics import Recall
+from torchmetrics.classification import MulticlassF1Score, MulticlassPrecision
 from torch import nn
 from torch import optim
-from sklearn.metrics import classification_report, confusion_matrix, precision_score, f1_score, recall_score
+from sklearn.metrics import classification_report, confusion_matrix
 
 import pickle
 import pandas as pd
@@ -41,18 +41,21 @@ class Model():
     
     def _metrics_evaluation(self, y_pred, y_train, device):
 
-        # TODO: Check if metrics are calculated properly
-        # Get the predicted labels
-        # Metrics needed: F1 Score, Precision, Recall
+        # Get the predicted labels and convert to CPU
         y_pred_softmax = torch.log_softmax(y_pred, dim = 1)
         _, y_pred_tags = torch.max(y_pred_softmax, dim = 1)
 
         # Calculate the metrics
-        precision = precision_score(y_train, y_pred_tags, average='weighted')
-        f1 = f1_score(y_train, y_pred_tags, average='weighted')
-        recall = recall_score(y_train, y_pred_tags, average='weighted')
+        f1_metric = MulticlassF1Score(average = 'weighted', num_classes = 4).to(self._device)
+        f1_metric = f1_metric(y_pred_tags, y_train)
 
-        return precision, f1, recall
+        recall_metric = Recall(average = 'weighted', num_classes = 4).to(self._device)
+        recall_metric = recall_metric(y_pred_tags, y_train)
+
+        precision_metric = MulticlassPrecision(average = 'weighted', num_classes = 4).to(self._device)
+        precision_metric = precision_metric(y_pred_tags, y_train)
+
+        return precision_metric.item(), f1_metric.item(), recall_metric.item()
 
     def _save_csv_file(self) -> None:
 
@@ -145,7 +148,7 @@ class Model():
                 # For VAT
                 #lds = _vat_loss_calculation(model, device, validation_data)
 
-                # Compute the loss and accuracy
+                # Compute the loss and metrics
                 train_loss = criterion(y_pred.squeeze(), y_train)
                 precision, f1, recall = self._metrics_evaluation(y_pred, y_train, self._device)
 
