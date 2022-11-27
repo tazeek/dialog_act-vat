@@ -2,7 +2,6 @@ from data_loaders import dailydialog_full
 from preprocessing import text_processing, glove_embeddings, prepare_datasets
 from train_model import Model
 
-import model
 import util_helper
 
 def _get_index_dictionary():
