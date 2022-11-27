@@ -71,8 +71,9 @@ class Model():
         return {
             'epoch': [],
             'cross_entropy_loss': [],
-            'accuracy': [],
-            'f1': []
+            'precision': [],
+            'f1': [],
+            'recall': []
         }
 
     def _create_model(self, params):
@@ -86,7 +87,8 @@ class Model():
         self._train_epoch_loss = 0
         self._train_vat_loss = 0
         self._train_epoch_f1 = 0
-        self._train_epoch_acc = 0
+        self._train_epoch_prec = 0
+        self._train_epoch_recall = 0
 
         return None
 
@@ -145,7 +147,7 @@ class Model():
 
                 # Compute the loss and accuracy
                 train_loss = criterion(y_pred.squeeze(), y_train)
-                train_acc, train_f1 = self._metrics_evaluation(y_pred, y_train, self._device)
+                precision, f1, recall = self._metrics_evaluation(y_pred, y_train, self._device)
 
                 # Back propagation
                 # Update for parameters and compute the updates
@@ -154,28 +156,32 @@ class Model():
                 
                 # Update for Display
                 self._train_epoch_loss += train_loss.item()
-                self._train_epoch_acc += train_acc.item()
-                self._train_epoch_f1 += train_f1.item()
+                self._train_epoch_prec += precision
+                self._train_epoch_f1 += f1
+                self._train_epoch_recall += recall
                 #self._train_vat_loss += lds.item()
             
             # Normalize results
             self._train_epoch_loss /= train_set_size
-            self._train_epoch_acc /= train_set_size
             self._train_epoch_f1 /= train_set_size
+            self._train_epoch_recall /= train_set_size
+            self._train_epoch_prec /= train_set_size
 
             # Store the results
             self._eval_results['epoch'].append(epoch)
             self._eval_results['cross_entropy_loss'].append(self._train_epoch_loss)
-            self._eval_results['accuracy'].append(self._train_epoch_acc)
+            self._eval_results['recall'].append(self._train_epoch_recall)
             self._eval_results['f1'].append(self._train_epoch_f1)
+            self._eval_results['precision'].append(self._train_epoch_prec)
             
             # Print every 10 epochs
             print(
                 f'Epoch {epoch+0:03}: |'
                 f' Train Loss: {self._train_epoch_loss:.5f} | '
                 #f' VAT Loss: {(self._train_vat_loss * alpha_val)/train_set_size:.5f} | '
-                f' Train Acc: {self._train_epoch_acc:.3f} | '
+                f' Train Recall: {self._train_epoch_recall:.3f} | '
                 f' Train F1: {self._train_epoch_f1:.3f} | '
+                f' Train Precision: {self._train_epoch_prec:.3f} '
             )
 
         # Save the CSV file
