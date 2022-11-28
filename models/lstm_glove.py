@@ -1,5 +1,5 @@
 from torch import nn
-from torch.nn.utils.rnn import pad_sequence, pack_padded_sequence
+from torch.nn.utils.rnn import pack_padded_sequence
 
 import torch
 
@@ -9,9 +9,7 @@ class LSTM_GLove(nn.Module):
 
         super(LSTM_GLove, self).__init__()
 
-        # Number of samples to pass in training
-        # Explanation: https://discuss.pytorch.org/t/generic-question-about-batch-sizes/1321
-        self._batch_size = 64
+        # Batch size: https://discuss.pytorch.org/t/generic-question-about-batch-sizes/1321
 
         # Output size: Based on labels
         # Layers: Number of layers
@@ -59,9 +57,7 @@ class LSTM_GLove(nn.Module):
         )
 
         # Input the second transformation to LSTM
-        out_lstm, (hidden, cell) = self._lstm(pack_output)
-        #dense_outputs = self._linear(hidden[-1])
+        _, (hidden, cell) = self._lstm(pack_output)
 
         # Get the output in the softmax
-        #output = self._act(dense_outputs)
         return self._linear(hidden[-1])
