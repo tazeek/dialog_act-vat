@@ -14,14 +14,16 @@ def preprocess_text(utterances: list, tokenize:'bool'=True, remove_punctuation:'
     """
 
     for utterance in utterances:
+
         # Split based on tokenizer
-        words = _tokenizer(utterance)
+        if tokenize:
+            utterance = _tokenizer(utterance)
 
-        # Remove punctuation (OPTIONAL)
-        if remove_punctuation:
-            words = [word for word in words if word not in punctuation]
+            # Remove punctuation (OPTIONAL)
+            if remove_punctuation:
+                utterance = [word for word in utterance if word not in punctuation]
 
-        processed_utterances += [words]
+        processed_utterances += [utterance]
 
 
     return processed_utterances
