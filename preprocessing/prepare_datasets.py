@@ -29,7 +29,7 @@ def _transform_dataloader(dataloader_dataset, batch_size):
         collate_fn=_custom_collate
     )
 
-def fetch_generators(word_to_index: dict):
+def fetch_generators(args, word_to_index: dict):
 
     # Load the raw datasets
     x_train, y_train = dailydialog.DailyDialog('train.zip').fetch_dataframe()
@@ -37,14 +37,17 @@ def fetch_generators(word_to_index: dict):
     x_test, y_test = dailydialog.DailyDialog('test.zip').fetch_dataframe()
 
     # Preprocessing
-    x_train = text_processing.preprocess_text(x_train, remove_punctuation=False)
-    x_test = text_processing.preprocess_text(x_test, remove_punctuation=False)
-    x_val = text_processing.preprocess_text(x_val, remove_punctuation=False)
+    tokenize = True if args.embed == 'glove' else False
+
+    x_train = text_processing.preprocess_text(x_train, tokenize=tokenize, remove_punctuation=False)
+    x_test = text_processing.preprocess_text(x_test, tokenize=tokenize, remove_punctuation=False)
+    x_val = text_processing.preprocess_text(x_val, tokenize=tokenize, remove_punctuation=False)
 
     # Transform to integer format for lookup (if using GloVe)
-    x_train = text_processing.transform_text_integer(x_train, word_to_index)
-    x_test = text_processing.transform_text_integer(x_test, word_to_index)
-    x_val = text_processing.transform_text_integer(x_val, word_to_index)
+    if tokenize:
+        x_train = text_processing.transform_text_integer(x_train, word_to_index)
+        x_test = text_processing.transform_text_integer(x_test, word_to_index)
+        x_val = text_processing.transform_text_integer(x_val, word_to_index)
 
     # Convert to DataLoaders
     train_set = dataloader_da.DataLoader_DA(x_train, y_train)

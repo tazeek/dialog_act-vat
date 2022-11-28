@@ -3,7 +3,7 @@ from string import punctuation
 def _tokenizer(utterance: str):
     return [word.lower() for word in utterance.split(" ") if word != '']
 
-def preprocess_text(utterances: list, remove_punctuation:'bool'=True) -> list:
+def preprocess_text(utterances: list, tokenize:'bool'=True, remove_punctuation:'bool'=True) -> list:
 
     processed_utterances = []
 
