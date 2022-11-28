@@ -38,14 +38,16 @@ if __name__ == '__main__':
     base_filename = util_helper.get_base_filename(args)
 
     # Get word to index dictionary
-    logger.info('Loading Word-to-index dictionary')
-    word_to_index = _get_index_dictionary()
-    logger.info('Word-to-index dictionary loaded successfully')
+    if args.embed == 'glove':
+        
+        logger.info('Loading Word-to-index dictionary')
+        word_to_index = _get_index_dictionary()
+        logger.info('Word-to-index dictionary loaded successfully')
 
-    # Create lookup table and check for embeddings test
-    logger.info('Creating embeddings')
-    embeddings = _create_embeddings(word_to_index)
-    logger.info('Embeddings created successfully')
+        # Create lookup table and check for embeddings test
+        logger.info('Creating embeddings')
+        embeddings = _create_embeddings(word_to_index)
+        logger.info('Embeddings created successfully')
 
     # Fetch the datasets (from raw to data generator format)
     logger.info('Loading dataset generators')
