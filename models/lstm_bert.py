@@ -22,6 +22,14 @@ class LSTM_Bert(nn.Module):
         # Create BERT embedding layer
 
         # Create LSTM model and linear layer
+        self._lstm = nn.LSTM(
+            input_size = self._embedding_dim, 
+            hidden_size = self._hidden_nodes,
+            num_layers = self._layers,
+            batch_first = True
+        )
+
+        self._linear = nn.Linear(self._hidden_nodes, self._output_size)
 
     def forward(self):
 
@@ -29,8 +37,8 @@ class LSTM_Bert(nn.Module):
 
         # Extract the features from the BERT model
 
-        # Enter the features into the LSTM model
+         # Input the second transformation to LSTM
+        _, (hidden, cell) = self._lstm(cls_output)
 
-        # Extract output into the linear layer
-
-        ...
+        # Get the output in the softmax
+        return self._linear(hidden[-1])
