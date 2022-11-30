@@ -1,4 +1,5 @@
 from torch import nn
+from transformers import BertModel
 
 import torch
 
@@ -15,15 +16,12 @@ class LSTM_Bert(nn.Module):
         self._layers = 1
         self._hidden_nodes = 256
 
-        # Create BERT tokenizer
-
-        # Create BERT lookup table
-
         # Create BERT embedding layer
+        self._bert = BertModel.from_pretrained('bert-base-uncased')
 
         # Create LSTM model and linear layer
         self._lstm = nn.LSTM(
-            input_size = self._embedding_dim, 
+            input_size = 758, 
             hidden_size = self._hidden_nodes,
             num_layers = self._layers,
             batch_first = True
