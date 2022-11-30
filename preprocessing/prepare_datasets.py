@@ -2,8 +2,9 @@ from data_loaders import dataloader_da, dailydialog
 
 from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader, random_split
-
+from transformers import BertTokenizer
 import torch
+
 from preprocessing import text_processing
 from preprocessing import bert_embeddings
 
@@ -49,7 +50,7 @@ def fetch_generators(args, word_to_index: dict):
         x_val = text_processing.transform_text_integer(x_val, word_to_index)
 
     # BERT Encoding
-    tokenizer = None
+    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
     x_train, x_train_mask = bert_embeddings.encode(tokenizer, x_train)
     x_val, y_val_mask = bert_embeddings.encode(tokenizer, x_val)
     x_test, y_test_mask = bert_embeddings.encode(tokenizer, x_test)
