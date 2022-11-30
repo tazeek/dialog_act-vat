@@ -50,11 +50,14 @@ def fetch_generators(args, word_to_index: dict):
         x_val = text_processing.transform_text_integer(x_val, word_to_index)
 
     # BERT Encoding
-    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-    x_train, x_train_mask = bert_embeddings.encode(tokenizer, x_train)
-    x_val, y_val_mask = bert_embeddings.encode(tokenizer, x_val)
-    x_test, y_test_mask = bert_embeddings.encode(tokenizer, x_test)
+    if args.embed == 'bert':
+        tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+        x_train, x_train_mask = bert_embeddings.encode_bert(tokenizer, x_train)
+        x_val, y_val_mask = bert_embeddings.encode_bert(tokenizer, x_val)
+        x_test, y_test_mask = bert_embeddings.encode_bert(tokenizer, x_test)
 
+    exit()
+    
     # Convert to DataLoaders
     train_set = dataloader_da.DataLoader_DA(x_train, y_train)
     train_generator = _transform_dataloader(train_set, 64)

@@ -15,8 +15,7 @@ def encode_bert(tokenizer, data):
         tokenized_text = tokenizer.encode_plus(
             text,
             add_special_tokens=True,
-            pad_to_max_length=True,
-            padding_side='right',
+            padding='max_length',
             return_attention_mask=True
         )
 
@@ -25,5 +24,5 @@ def encode_bert(tokenizer, data):
 
     input_ids = torch.tensor(input_ids)
     attention_mask = torch.tensor(attention_mask)
-    
+
     return input_ids, attention_mask
