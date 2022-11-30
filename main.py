@@ -20,8 +20,6 @@ def _get_index_dictionary():
 
 def _create_embeddings(word_to_index):
 
-    # TODO: Use RoBERTa and BERT embeddings
-
     # For GloVe
     return glove_embeddings.create_glove_embeddings(word_to_index)
 
