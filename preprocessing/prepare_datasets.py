@@ -5,6 +5,7 @@ from torch.utils.data import DataLoader, random_split
 
 import torch
 from preprocessing import text_processing
+from preprocessing import bert_embeddings
 
 def _custom_collate(data: list):
 
@@ -36,18 +37,22 @@ def fetch_generators(args, word_to_index: dict):
     x_val, y_val = dailydialog.DailyDialog('validation.zip').fetch_dataframe()
     x_test, y_test = dailydialog.DailyDialog('test.zip').fetch_dataframe()
 
-    # Preprocessing
-    tokenize = True if args.embed == 'glove' else False
-
-    x_train = text_processing.preprocess_text(x_train, tokenize=tokenize, remove_punctuation=False)
-    x_test = text_processing.preprocess_text(x_test, tokenize=tokenize, remove_punctuation=False)
-    x_val = text_processing.preprocess_text(x_val, tokenize=tokenize, remove_punctuation=False)
-
     # Transform to integer format for lookup (if using GloVe)
-    if tokenize:
+    if args.embed == 'glove':
+
+        x_train = text_processing.preprocess_text(x_train, remove_punctuation=False)
+        x_test = text_processing.preprocess_text(x_test, remove_punctuation=False)
+        x_val = text_processing.preprocess_text(x_val, remove_punctuation=False)
+
         x_train = text_processing.transform_text_integer(x_train, word_to_index)
         x_test = text_processing.transform_text_integer(x_test, word_to_index)
         x_val = text_processing.transform_text_integer(x_val, word_to_index)
+
+    # BERT Encoding
+    tokenizer = None
+    x_train, x_train_mask = bert_embeddings.encode(tokenizer, x_train)
+    x_val, y_val_mask = bert_embeddings.encode(tokenizer, x_val)
+    x_test, y_test_mask = bert_embeddings.encode(tokenizer, x_test)
 
     # Convert to DataLoaders
     train_set = dataloader_da.DataLoader_DA(x_train, y_train)
