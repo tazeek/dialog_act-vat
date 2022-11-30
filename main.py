@@ -15,16 +15,6 @@ if __name__ == '__main__':
     # Get filename
     base_filename = util_helper.get_base_filename(args)
 
-    # Get word to index dictionary
-    logger.info('Loading Word-to-index dictionary')
-    
-    logger.info('Word-to-index dictionary loaded successfully')
-
-    # Create lookup table and check for embeddings test
-    logger.info('Creating embeddings')
-    
-    logger.info('Embeddings created successfully')
-
     # Fetch the datasets (from raw to data generator format)
     logger.info('Loading dataset generators')
     values = prepare_datasets.fetch_generators(args)
@@ -34,7 +24,6 @@ if __name__ == '__main__':
     # - Visualize perturbed vs original results
     # - Compare with existing results and SOTA
 
-    # Train the model
     params_dict = {
         'training': values['train_generator'],
         'test': values['test_generator'],
@@ -43,6 +32,10 @@ if __name__ == '__main__':
         'args': args
     }
 
+    print(params_dict['training'])
+    exit()
+
+    # Train the model
     logger.info('Training Model')
     model = Model(params_dict)
     model.start_train()
