@@ -29,13 +29,18 @@ class LSTM_Bert(nn.Module):
 
         self._linear = nn.Linear(self._hidden_nodes, self._output_size)
 
-    def forward(self):
-
-        # Transform from raw string to BERT-based
+    def forward(self, input_ids, attention_masks):
 
         # Extract the features from the BERT model
+        hidden_states_output = None
 
-         # Input the second transformation to LSTM
+        with torch.no_grad():
+            outputs = self._bert(input_ids = input_ids, attention_mask=attention_masks)
+        
+            _, _, hidden_states_output, _ = outputs
+        
+        cls_output = hidden_states_output[0][:, 0, :]
+        # Input the second transformation to LSTM
         _, (hidden, cell) = self._lstm(cls_output)
 
         # Get the output in the softmax
