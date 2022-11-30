@@ -44,10 +44,8 @@ class LSTM_Bert(nn.Module):
 
             last_hidden_states = outputs.hidden_states[-1]
 
-        cls_output = last_hidden_states[:, 0, :]
-
         # Input the second transformation to LSTM
-        _, (hidden, cell) = self._lstm(cls_output)
+        _, (hidden, cell) = self._lstm(last_hidden_states)
 
         # Get the output in the softmax
         return self._linear(hidden[-1])

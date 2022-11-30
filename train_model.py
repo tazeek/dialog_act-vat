@@ -239,6 +239,7 @@ class Model():
 
                 # Convert to LongTensor
                 y_train = y_train.type(torch.LongTensor)
+                y_train = y_train.to(self._device)
 
                 optimizer.zero_grad()
 
@@ -278,8 +279,8 @@ class Model():
             self._eval_results['precision'].append(self._train_epoch_prec)
 
             # Print output (every 10 epochs)
-            if epoch % 10 == 0:
-                self._print_updates(epoch)
+            #if epoch % 10 == 0:
+            self._print_updates(epoch)
 
         # Save the CSV file
         self._save_csv_file()
