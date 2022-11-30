@@ -16,8 +16,9 @@ class LSTM_Bert(nn.Module):
         self._layers = 1
         self._hidden_nodes = 256
 
-        # Create BERT embedding layer
+        # Create BERT embedding layer and set to eval mode
         self._bert = BertModel.from_pretrained('bert-base-uncased')
+        self._bert_eval()
 
         # Create LSTM model and linear layer
         self._lstm = nn.LSTM(
@@ -32,14 +33,14 @@ class LSTM_Bert(nn.Module):
     def forward(self, input_ids, attention_masks):
 
         # Extract the features from the BERT model
-        hidden_states_output = None
+        output = None
 
         with torch.no_grad():
-            outputs = self._bert(input_ids = input_ids, attention_mask=attention_masks)
+            output = self._bert(input_ids = input_ids, attention_mask=attention_masks)
         
-            _, _, hidden_states_output, _ = outputs
-        
-        cls_output = hidden_states_output[0][:, 0, :]
+        print(output.shape)
+        cls_output = None
+        #cls_output = hidden_states_output[0][:, 0, :]
         
         # Input the second transformation to LSTM
         _, (hidden, cell) = self._lstm(cls_output)
