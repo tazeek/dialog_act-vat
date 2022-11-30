@@ -22,7 +22,7 @@ class LSTM_Bert(nn.Module):
 
         # Create LSTM model and linear layer
         self._lstm = nn.LSTM(
-            input_size = 758, 
+            input_size = 768, 
             hidden_size = self._hidden_nodes,
             num_layers = self._layers,
             batch_first = True
@@ -44,9 +44,8 @@ class LSTM_Bert(nn.Module):
 
             last_hidden_states = outputs.hidden_states[-1]
 
-
         cls_output = last_hidden_states[:, 0, :]
-        
+
         # Input the second transformation to LSTM
         _, (hidden, cell) = self._lstm(cls_output)
 
