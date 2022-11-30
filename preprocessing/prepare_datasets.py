@@ -109,4 +109,11 @@ def fetch_generators(args):
         test_generator = DataLoader(test_tensordataset, sampler=test_sampler, batch_size=64)
         valid_generator = DataLoader(valid_tensordataset, sampler=valid_sampler, batch_size=64)
 
-    return train_generator, test_generator, valid_generator
+    values = {
+        'embedding': embeddings,
+        'train_generator': train_generator,
+        'test_generator': test_generator,
+        'valid_generator': valid_generator
+    }
+
+    return values

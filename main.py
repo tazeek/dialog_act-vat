@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
     # Fetch the datasets (from raw to data generator format)
     logger.info('Loading dataset generators')
-    train_generator, test_generator, valid_generator = prepare_datasets.fetch_generators(args)
+    values = prepare_datasets.fetch_generators(args)
     logger.info('Dataset generators loaded successfully')
 
     # TODO:
@@ -36,9 +36,9 @@ if __name__ == '__main__':
 
     # Train the model
     params_dict = {
-        'training': train_generator,
-        'test': test_generator,
-        'valid': valid_generator,
+        'training': values['train_generator'],
+        'test': values['test_generator'],
+        'valid': values['valid_generator'],
         'file_name': base_filename,
         'args': args
     }
