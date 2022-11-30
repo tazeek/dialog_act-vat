@@ -82,9 +82,7 @@ class Model():
     def _create_model(self, args, params):
 
         model_name = args.model + '_' + args.embed
-        print(model_name)
-        exit()
-        
+
         return {
             'lstm_glove': lstm_glove.LSTM_GLove(params['embeddings']),
             'lstm_bert': lstm_bert.LSTM_Bert()
@@ -131,7 +129,7 @@ class Model():
 
         return lds
 
-    def start_train(self):
+    def start_train_glove(self):
 
         # Define the loss function
         criterion = nn.CrossEntropyLoss()
@@ -211,7 +209,7 @@ class Model():
 
         return None
 
-    def test_model(self):
+    def test_model_glove(self):
         
         # Mount model onto the GPU
         self._model.to(self._device)
