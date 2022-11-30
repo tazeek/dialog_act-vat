@@ -1,7 +1,7 @@
 from data_loaders import dataloader_da, dailydialog
 
 from torch.nn.utils.rnn import pad_sequence
-from torch.utils.data import DataLoader, random_split
+from torch.utils.data import DataLoader, TensorDataset, RandomSampler
 from transformers import BertTokenizer
 import torch
 
@@ -90,11 +90,23 @@ def fetch_generators(args):
     if args.embed == 'bert':
         tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
         x_train, x_train_mask = bert_embeddings.encode_bert(tokenizer, x_train)
-        x_val, y_val_mask = bert_embeddings.encode_bert(tokenizer, x_val)
-        x_test, y_test_mask = bert_embeddings.encode_bert(tokenizer, x_test)
+        x_val, x_val_mask = bert_embeddings.encode_bert(tokenizer, x_val)
+        x_test, x_test_mask = bert_embeddings.encode_bert(tokenizer, x_test)
 
         y_train = torch.tensor(y_train)
         y_test = torch.tensor(y_test)
         y_val = torch.tensor(y_val)
+
+        train_tensordataset = TensorDataset(x_train, x_train_mask, y_train)
+        test_tensordataset = TensorDataset(x_test, x_test_mask, y_test)
+        valid_tensordataset = TensorDataset(x_val, x_val_mask, y_val)
+
+        train_sampler = RandomSampler(train_tensordataset)
+        test_sampler = RandomSampler(test_tensordataset)
+        valid_sampler = RandomSampler(valid_tensordataset)
+
+        train_generator = DataLoader(train_tensordataset, sampler=train_sampler, batch_size=64)
+        test_generator = DataLoader(test_tensordataset, sampler=test_sampler, batch_size=64)
+        valid_generator = DataLoader(valid_tensordataset, sampler=valid_sampler, batch_size=64)
 
     return train_generator, test_generator, valid_generator
