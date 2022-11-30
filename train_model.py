@@ -1,4 +1,4 @@
-from models import lstm_glove
+from models import lstm_glove, lstm_bert
 from vat_loss import VATLoss
 from torchmetrics import Recall
 from torchmetrics.classification import MulticlassF1Score, MulticlassPrecision
@@ -36,7 +36,7 @@ class Model():
         self._device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
         # Create model and mount to device
-        self._model = self._create_model(params)
+        self._model = self._create_model(args, params)
         self._model.to(self._device)
     
     def _metrics_evaluation(self, y_pred, y_train, device):
@@ -79,11 +79,16 @@ class Model():
             'recall': []
         }
 
-    def _create_model(self, params):
+    def _create_model(self, args, params):
 
-        model = lstm_glove.LSTM_GLove(params['embeddings'])
-
-        return model
+        model_name = args.model + '_' + args.embed
+        print(model_name)
+        exit()
+        
+        return {
+            'lstm_glove': lstm_glove.LSTM_GLove(params['embeddings']),
+            'lstm_bert': lstm_bert.LSTM_Bert()
+        }[model_name]
 
     def _reset_metrics(self):
 

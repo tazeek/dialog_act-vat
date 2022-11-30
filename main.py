@@ -32,9 +32,6 @@ if __name__ == '__main__':
         'args': args
     }
 
-    print(params_dict['training'])
-    exit()
-
     # Train the model
     logger.info('Training Model')
     model = Model(params_dict)

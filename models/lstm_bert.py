@@ -40,6 +40,7 @@ class LSTM_Bert(nn.Module):
             _, _, hidden_states_output, _ = outputs
         
         cls_output = hidden_states_output[0][:, 0, :]
+        
         # Input the second transformation to LSTM
         _, (hidden, cell) = self._lstm(cls_output)
 
