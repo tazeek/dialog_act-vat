@@ -36,13 +36,13 @@ if __name__ == '__main__':
     # Train the model
     logger.info('Training Model')
     model = Model(params_dict)
-    #model.start_train_bert()
+    model.start_train_bert()
     #model.start_train_glove()
     
     logger.info('Training done successfully')
 
     # Test the model
-    logger.info('Testing Model')
+    #logger.info('Testing Model')
     #model.test_model_bert()
     #model.test_model_glove()
-    logger.info('Testing done successfully')
+    #logger.info('Testing done successfully')

@@ -33,19 +33,19 @@ class LSTM_Bert(nn.Module):
     def forward(self, input_ids, attention_masks):
 
         # Extract the features from the BERT model
-        output = None
-
-        print(input_ids)
-        print('\n')
-        print(attention_masks)
+        outputs  = None
+        last_hidden_states = None
 
         with torch.no_grad():
-            output = self._bert(input_ids = input_ids, attention_mask=attention_masks)
-        
-        print('\n')
-        print(output.shape)
-        cls_output = None
-        #cls_output = hidden_states_output[0][:, 0, :]
+            outputs  = self._bert(input_ids = input_ids, 
+                attention_mask=attention_masks, 
+                output_hidden_states=True
+            )
+
+            last_hidden_states = outputs.hidden_states[-1]
+
+
+        cls_output = last_hidden_states[:, 0, :]
         
         # Input the second transformation to LSTM
         _, (hidden, cell) = self._lstm(cls_output)
