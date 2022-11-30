@@ -50,7 +50,7 @@ def _transform_dataloader(dataloader_dataset, batch_size):
         collate_fn=_custom_collate
     )
 
-def fetch_generators(args, word_to_index: dict):
+def fetch_generators(args):
 
     # Load the raw datasets
     x_train, y_train = dailydialog.DailyDialog('train.zip').fetch_dataframe()
@@ -58,6 +58,9 @@ def fetch_generators(args, word_to_index: dict):
     x_test, y_test = dailydialog.DailyDialog('test.zip').fetch_dataframe()
 
     embeddings = None
+    train_generator = None
+    test_generator = None
+    valid_generator = None
 
     # Transform to integer format for lookup (if using GloVe)
     if args.embed == 'glove':
@@ -73,6 +76,16 @@ def fetch_generators(args, word_to_index: dict):
         x_test = text_processing.transform_text_integer(x_test, word_to_index)
         x_val = text_processing.transform_text_integer(x_val, word_to_index)
 
+        # Convert to DataLoaders
+        train_set = dataloader_da.DataLoader_DA(x_train, y_train)
+        train_generator = _transform_dataloader(train_set, 64)
+
+        test_set = dataloader_da.DataLoader_DA(x_test, y_test)
+        test_generator = _transform_dataloader(test_set, 64)
+
+        valid_set = dataloader_da.DataLoader_DA(x_val, y_val)
+        valid_generator = _transform_dataloader(valid_set, 128)
+
     # BERT Encoding
     if args.embed == 'bert':
         tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
@@ -80,14 +93,8 @@ def fetch_generators(args, word_to_index: dict):
         x_val, y_val_mask = bert_embeddings.encode_bert(tokenizer, x_val)
         x_test, y_test_mask = bert_embeddings.encode_bert(tokenizer, x_test)
 
-    # Convert to DataLoaders
-    train_set = dataloader_da.DataLoader_DA(x_train, y_train)
-    train_generator = _transform_dataloader(train_set, 64)
-
-    test_set = dataloader_da.DataLoader_DA(x_test, y_test)
-    test_generator = _transform_dataloader(test_set, 64)
-
-    valid_set = dataloader_da.DataLoader_DA(x_val, y_val)
-    valid_generator = _transform_dataloader(valid_set, 128)
+        y_train = torch.tensor(y_train)
+        y_test = torch.tensor(y_test)
+        y_val = torch.tensor(y_val)
 
     return train_generator, test_generator, valid_generator
