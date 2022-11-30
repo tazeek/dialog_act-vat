@@ -5,8 +5,27 @@ from torch.utils.data import DataLoader, random_split
 from transformers import BertTokenizer
 import torch
 
-from preprocessing import text_processing
-from preprocessing import bert_embeddings
+from preprocessing import text_processing, glove_embeddings, bert_embeddings
+from data_loaders import dailydialog_full
+
+def _get_index_dictionary():
+
+    # Load the full data of DailyDialog
+    label_loader = dailydialog_full.DailyDialog_Full().fetch_dataframe()
+
+    # Differentiate labels and text
+    full_file = label_loader['utterance']
+
+    # Preprocess the text and get tokens for dictionary creation
+    all_possible_words_list = text_processing.preprocess_text(full_file, remove_punctuation=False)
+
+    # Get word to index dictionary
+    return text_processing.convert_word_index(all_possible_words_list)
+
+def _create_embeddings(word_to_index):
+
+    # For GloVe
+    return glove_embeddings.create_glove_embeddings(word_to_index)
 
 def _custom_collate(data: list):
 
@@ -38,8 +57,13 @@ def fetch_generators(args, word_to_index: dict):
     x_val, y_val = dailydialog.DailyDialog('validation.zip').fetch_dataframe()
     x_test, y_test = dailydialog.DailyDialog('test.zip').fetch_dataframe()
 
+    embeddings = None
+
     # Transform to integer format for lookup (if using GloVe)
     if args.embed == 'glove':
+
+        word_to_index = _get_index_dictionary()
+        embeddings = _create_embeddings(word_to_index)
 
         x_train = text_processing.preprocess_text(x_train, remove_punctuation=False)
         x_test = text_processing.preprocess_text(x_test, remove_punctuation=False)
@@ -56,8 +80,6 @@ def fetch_generators(args, word_to_index: dict):
         x_val, y_val_mask = bert_embeddings.encode_bert(tokenizer, x_val)
         x_test, y_test_mask = bert_embeddings.encode_bert(tokenizer, x_test)
 
-    exit()
-    
     # Convert to DataLoaders
     train_set = dataloader_da.DataLoader_DA(x_train, y_train)
     train_generator = _transform_dataloader(train_set, 64)

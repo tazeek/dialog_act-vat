@@ -1,27 +1,7 @@
-from data_loaders import dailydialog_full
-from preprocessing import text_processing, glove_embeddings, prepare_datasets
 from train_model import Model
+from preprocessing import prepare_datasets
 
 import util_helper
-
-def _get_index_dictionary():
-
-    # Load the full data of DailyDialog
-    label_loader = dailydialog_full.DailyDialog_Full().fetch_dataframe()
-
-    # Differentiate labels and text
-    full_file = label_loader['utterance']
-
-    # Preprocess the text and get tokens for dictionary creation
-    all_possible_words_list = text_processing.preprocess_text(full_file, remove_punctuation=False)
-
-    # Get word to index dictionary
-    return text_processing.convert_word_index(all_possible_words_list)
-
-def _create_embeddings(word_to_index):
-
-    # For GloVe
-    return glove_embeddings.create_glove_embeddings(word_to_index)
 
 if __name__ == '__main__':
 
@@ -36,20 +16,18 @@ if __name__ == '__main__':
     base_filename = util_helper.get_base_filename(args)
 
     # Get word to index dictionary
-    if args.embed == 'glove':
-        
-        logger.info('Loading Word-to-index dictionary')
-        word_to_index = _get_index_dictionary()
-        logger.info('Word-to-index dictionary loaded successfully')
+    logger.info('Loading Word-to-index dictionary')
+    
+    logger.info('Word-to-index dictionary loaded successfully')
 
-        # Create lookup table and check for embeddings test
-        logger.info('Creating embeddings')
-        embeddings = _create_embeddings(word_to_index)
-        logger.info('Embeddings created successfully')
+    # Create lookup table and check for embeddings test
+    logger.info('Creating embeddings')
+    
+    logger.info('Embeddings created successfully')
 
     # Fetch the datasets (from raw to data generator format)
     logger.info('Loading dataset generators')
-    train_generator, test_generator, valid_generator = prepare_datasets.fetch_generators(word_to_index)
+    train_generator, test_generator, valid_generator = prepare_datasets.fetch_generators(args)
     logger.info('Dataset generators loaded successfully')
 
     # TODO:
@@ -62,7 +40,6 @@ if __name__ == '__main__':
         'test': test_generator,
         'valid': valid_generator,
         'file_name': base_filename,
-        'embeddings': embeddings,
         'args': args
     }
 
