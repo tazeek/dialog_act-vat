@@ -95,6 +95,20 @@ class Model():
 
         return None
 
+    def _print_updates(self, epoch):
+
+        # Print every 10 epochs
+        print(
+            f'Epoch {epoch+0:03}: |'
+            f' Train Loss: {self._train_epoch_loss:.5f} | '
+            #f' VAT Loss: {(self._train_vat_loss * alpha_val)/train_set_size:.5f} | '
+            f' Train Recall: {self._train_epoch_recall:.3f} | '
+            f' Train F1: {self._train_epoch_f1:.3f} | '
+            f' Train Precision: {self._train_epoch_prec:.3f} '
+        )
+
+        return None
+
     def _vat_loss_calculation(self, model, device, validation_data):
 
         # Create the VAT formula and test:
@@ -176,16 +190,10 @@ class Model():
             self._eval_results['recall'].append(self._train_epoch_recall)
             self._eval_results['f1'].append(self._train_epoch_f1)
             self._eval_results['precision'].append(self._train_epoch_prec)
-            
-            # Print every 10 epochs
-            print(
-                f'Epoch {epoch+0:03}: |'
-                f' Train Loss: {self._train_epoch_loss:.5f} | '
-                #f' VAT Loss: {(self._train_vat_loss * alpha_val)/train_set_size:.5f} | '
-                f' Train Recall: {self._train_epoch_recall:.3f} | '
-                f' Train F1: {self._train_epoch_f1:.3f} | '
-                f' Train Precision: {self._train_epoch_prec:.3f} '
-            )
+
+            # Print output (every 10 epochs)
+            if epoch % 10 == 0:
+                self._print_updates(epoch)
 
         # Save the CSV file
         self._save_csv_file()
