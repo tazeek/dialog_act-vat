@@ -29,6 +29,7 @@ if __name__ == '__main__':
         'test': values['test_generator'],
         'valid': values['valid_generator'],
         'file_name': base_filename,
+        'embeddings': values['embeddings'],
         'args': args
     }
 

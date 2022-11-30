@@ -84,7 +84,7 @@ class Model():
         model_name = args.model + '_' + args.embed
 
         return {
-            'lstm_glove': lstm_glove.LSTM_GLove(params['embeddings']),
+            #'lstm_glove': lstm_glove.LSTM_GLove(params['embeddings']),
             'lstm_bert': lstm_bert.LSTM_Bert()
         }[model_name]
 
