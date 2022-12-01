@@ -85,7 +85,7 @@ class Model():
 
         return {
             #'lstm_glove': lstm_glove.LSTM_GLove(params['embeddings']),
-            'lstm_bert': lstm_bert.LSTM_Bert()
+            'lstm_bert': lstm_bert.Bert_Classifier()
         }[model_name]
 
     def _reset_metrics(self):
@@ -224,7 +224,7 @@ class Model():
 
         train_set_size = len(self._train_data)
 
-        for epoch in range(1, self._epochs + 1):
+        for epoch in range(1, 6):
 
             self._model.train()
 
