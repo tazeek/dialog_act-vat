@@ -1,5 +1,6 @@
 from data_loaders import dailydialog_full
 from preprocessing import text_processing
+from torch.nn.utils.rnn import pad_sequence
 
 import numpy as np
 import torch
@@ -12,6 +13,37 @@ class Glove_Processor:
         self._glove_weights = self._load_glove_model()
 
         self._word2idx = self._create_word_index()
+
+    def _tokenizer(self, utterance: str):
+        return [word.lower() for word in utterance.split(" ") if word != '']
+
+    def _convert_word_index(self, words_list: list) -> dict:
+
+        word_to_index = {0: '<pad>'}
+        index = 1
+        
+        for list in words_list:
+
+            for word in list:
+
+                # Check if word does not exist
+                # and Increment index
+                if word not in word_to_index:
+                    word_to_index[word] = index
+                    index += 1
+
+        return word_to_index
+
+    def _preprocess_text(self, utterances: list) -> list:
+
+        processed_utterances = []
+
+        for utterance in utterances:
+
+            processed_utterances += [self._tokenizer(utterance)]
+
+
+        return processed_utterances
 
     def _load_glove_model(self):
 
@@ -37,13 +69,28 @@ class Glove_Processor:
         label_loader = dailydialog_full.DailyDialog_Full().fetch_dataframe()
 
         # Preprocess the text and get tokens for dictionary creation
-        all_possible_words_list = text_processing.preprocess_text(
-            label_loader['utterance'], 
-            remove_punctuation=False
+        all_possible_words_list = self._preprocess_text(
+            label_loader['utterance']
         )
 
         # Get word to index dictionary
-        return text_processing.convert_word_index(all_possible_words_list)
+        return self._convert_word_index(all_possible_words_list)
+
+    def _custom_collate(self, data: list):
+
+        # Get original input length for pack padded sequence
+        input_len = [len(d['text']) for d in data]
+        input_len = torch.tensor(input_len)
+
+        # For padding process
+        inputs = [torch.tensor(d['text']) for d in data]
+        inputs_padded = pad_sequence(inputs, batch_first=True)
+
+        # For labels
+        labels = [d['class'] for d in data]
+        labels = torch.tensor(labels)
+
+        return input_len, inputs_padded, labels
 
     def create_embeddings(self):
 
@@ -69,9 +116,5 @@ class Glove_Processor:
         ...
 
     def save_transformed_data():
-
-        ...
-
-    def custom_collate():
 
         ...
