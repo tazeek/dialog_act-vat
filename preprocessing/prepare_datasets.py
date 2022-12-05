@@ -117,3 +117,16 @@ def fetch_generators(args):
     }
 
     return values
+
+def preprocess_data():
+
+    # Load from saved pickle file, if it exists
+
+    # Otherwise, perform transformation process
+
+    # Transform GloVe embeddings and save
+
+    # Transform BERT embeddings and save
+
+    # Transform into data loader format
+    ...
