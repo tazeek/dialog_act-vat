@@ -7,12 +7,14 @@ import torch
 
 class Glove_Processor:
 
-    def __init__(self):
+    def _load_model(self):
 
         self._path = 'pre_trained\glove.6B.50d.txt'
         self._glove_weights = self._load_glove_model()
 
         self._word2idx = self._create_word_index()
+
+        return None
 
     def _tokenizer(self, utterance: str):
         return [word.lower() for word in utterance.split(" ") if word != '']

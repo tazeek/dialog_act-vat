@@ -1,5 +1,3 @@
-from string import punctuation
-
 def _tokenizer(utterance: str):
     return [word.lower() for word in utterance.split(" ") if word != '']
 
