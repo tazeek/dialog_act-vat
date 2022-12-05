@@ -22,6 +22,13 @@ class Glove_Processor:
         1. Load the vector tokens
         2. Perform collate function
         3. Transform to data loader
+
+        Final output: B * N * V
+        B -> Batch Size (Number of utterances)
+        N -> Number of tokens
+        V -> Vector size of each token
+        
+        V is always 50
     """
 
     def _load_model(self):
@@ -53,17 +60,6 @@ class Glove_Processor:
 
         return word_to_index
 
-    def _preprocess_text(self, utterances: list) -> list:
-
-        processed_utterances = []
-
-        for utterance in utterances:
-
-            processed_utterances += [self._tokenizer(utterance)]
-
-
-        return processed_utterances
-
     def _load_glove_model(self):
 
         glove = {}
@@ -88,12 +84,21 @@ class Glove_Processor:
         label_loader = dailydialog_full.DailyDialog_Full().fetch_dataframe()
 
         # Preprocess the text and get tokens for dictionary creation
-        all_possible_words_list = self._preprocess_text(
+        all_possible_words_list = self.preprocess_text(
             label_loader['utterance']
         )
 
         # Get word to index dictionary
         return self._convert_word_index(all_possible_words_list)
+
+    def _convert_text_integer(self, words_list):
+
+        transformed_list = []
+
+        for words in words_list:
+            transformed_list += [[self._word2idx[word] for word in words]]
+        
+        return transformed_list
 
     def _custom_collate(self, data: list):
 
@@ -111,6 +116,17 @@ class Glove_Processor:
 
         return input_len, inputs_padded, labels
 
+    def preprocess_text(self, utterances: list) -> list:
+
+        processed_utterances = []
+
+        for utterance in utterances:
+
+            processed_utterances += [self._tokenizer(utterance)]
+
+
+        return processed_utterances
+
     def create_embeddings(self):
 
         embeddings = np.zeros((len(self._word2idx), 50))
@@ -126,14 +142,17 @@ class Glove_Processor:
 
         return torch.from_numpy(embeddings).float()
 
-    def transform_data(self, words_list):
+    def begin_transformation(self, utterances_list):
 
-        transformed_list = []
+        # List of sentences -> List of tokens list
+        tokenized_list = self.preprocess_text(utterances_list)
 
-        for words in words_list:
-            transformed_list += [[self._word2idx[word] for word in words]]
-        
-        return transformed_list
+        # List of tokens list -> List of integers list
+        transformed_list = self.convert_text_integer(tokenized_list)
+
+        # List of integers list -> List of vectorized tokens
+
+        ...
 
     def embeddings_test():
 
