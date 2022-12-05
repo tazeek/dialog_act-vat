@@ -16,6 +16,12 @@ class Glove_Processor:
         4. Convert tokens to integers
         5. Convert the integers to vector tokens via embedding
         6. Save the transformed vector tokens
+
+        Batching for Deep Learning (from transformed to batch):
+
+        1. Load the vector tokens
+        2. Perform collate function
+        3. Transform to data loader
     """
 
     def _load_model(self):
