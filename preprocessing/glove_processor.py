@@ -7,6 +7,17 @@ import torch
 
 class Glove_Processor:
 
+    """
+        Preprocessing Steps (from raw to transformed):
+        
+        1. Load the model weights
+        2. Create the lookup table from dailydialog vocab
+        3. Tokenization of utterances from dataset
+        4. Convert tokens to integers
+        5. Convert the integers to vector tokens via embedding
+        6. Save the transformed vector tokens
+    """
+
     def _load_model(self):
 
         self._path = 'pre_trained\glove.6B.50d.txt'
