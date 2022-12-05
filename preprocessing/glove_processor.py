@@ -107,9 +107,14 @@ class Glove_Processor:
 
         return torch.from_numpy(embeddings).float()
 
-    def transform_data():
+    def transform_data(self, words_list):
 
-        ...
+        transformed_list = []
+
+        for words in words_list:
+            transformed_list += [[self._word2idx[word] for word in words]]
+        
+        return transformed_list
 
     def embeddings_test():
 
