@@ -44,6 +44,12 @@ class Glove_Processor:
         # Get word to index dictionary
         return text_processing.convert_word_index(all_possible_words_list)
 
+    def create_embeddings(self):
+
+        embeddings = np.zeros((len(word_index_dict), 50))
+
+        ...
+
     def transform_data():
 
         ...

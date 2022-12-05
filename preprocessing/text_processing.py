@@ -7,22 +7,9 @@ def preprocess_text(utterances: list, remove_punctuation:'bool'=True) -> list:
 
     processed_utterances = []
 
-    """
-        TODO:
-        - Complete the sentence (example: i'll -> i, will)
-        - Break sentence further (example: jane's -> jane, ', s)
-    """
-
     for utterance in utterances:
 
-        
-        words = _tokenizer(utterance)
-
-        # Remove punctuation (OPTIONAL)
-        if remove_punctuation:
-            utterance = [word for word in words if word not in punctuation]
-
-        processed_utterances += [words]
+        processed_utterances += [_tokenizer(utterance)]
 
 
     return processed_utterances
@@ -41,8 +28,6 @@ def convert_word_index(words_list: list) -> dict:
             if word not in word_to_index:
                 word_to_index[word] = index
                 index += 1
-
-    print(f"Number of unique words: {len(word_to_index)}")
 
     return word_to_index
 
