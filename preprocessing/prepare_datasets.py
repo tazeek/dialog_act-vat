@@ -27,7 +27,7 @@ def _create_embeddings(word_to_index):
     # For GloVe
     return glove_embeddings.create_glove_embeddings(word_to_index)
 
-def _custom_collate(data: list):
+def _custom_collate_glove(data: list):
 
     # Get original input length for pack padded sequence
     input_len = [len(d['text']) for d in data]
@@ -47,9 +47,12 @@ def _transform_dataloader(dataloader_dataset, batch_size):
     return DataLoader(dataloader_dataset, 
         batch_size=batch_size, 
         shuffle=False, 
-        collate_fn=_custom_collate
+        collate_fn=_custom_collate_glove
     )
 
+def glove_transformation(train, test, valid):
+    ...
+    
 def fetch_generators(args):
 
     # Load the raw datasets
@@ -107,7 +110,7 @@ def fetch_generators(args):
 
         train_generator = DataLoader(train_tensordataset, sampler=train_sampler, batch_size=64)
         test_generator = DataLoader(test_tensordataset, sampler=test_sampler, batch_size=64)
-        valid_generator = DataLoader(valid_tensordataset, sampler=valid_sampler, batch_size=64)
+        valid_generator = DataLoader(valid_tensordataset, sampler=valid_sampler, batch_size=128)
 
     values = {
         'embeddings': embeddings,
@@ -123,6 +126,13 @@ def preprocess_data():
     # Load from saved pickle file, if it exists
 
     # Otherwise, perform transformation process
+
+    # Load the raw datasets
+    x_train, y_train = dailydialog.DailyDialog('train.zip').fetch_dataframe()
+    x_val, y_val = dailydialog.DailyDialog('validation.zip').fetch_dataframe()
+    x_test, y_test = dailydialog.DailyDialog('test.zip').fetch_dataframe()
+
+    # Fetch the datasets
 
     # Transform GloVe embeddings and save
 
