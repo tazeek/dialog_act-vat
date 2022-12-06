@@ -129,7 +129,7 @@ class Glove_Processor:
 
         return input_len, inputs_padded, labels
 
-    def tokenize_utterances(self, utterances: list) -> list:
+    def _tokenize_utterances(self, utterances: list) -> list:
         """
             Convert list of sentences into list of words via tokenizer
         """
@@ -145,7 +145,7 @@ class Glove_Processor:
     def begin_transformation(self, utterances_list):
 
         # List of sentences -> List of tokens list
-        tokenized_list = self.tokenize_utterances(utterances_list)
+        tokenized_list = self._tokenize_utterances(utterances_list)
 
         # List of tokens list -> List of integers list
         transformed_list = self._convert_text_integer(tokenized_list)
@@ -168,5 +168,5 @@ class Glove_Processor:
         file = open(filename, 'rb')
         data = pickle.load(file)
         file.close()
-        
+
         return data
