@@ -36,7 +36,7 @@ class Glove_Processor:
         self._word2idx = {'<pad>': 0}
         self._lookup_table_glove = {}
 
-        self._create_lookup_table()
+        self._create_lookup_tables()
 
         self._path = 'pre_trained\glove.6B.50d.txt'
 
@@ -45,7 +45,13 @@ class Glove_Processor:
     def _tokenizer(self, utterance: str):
         return [word.lower() for word in utterance.split(" ") if word != '']
 
-    def _create_lookup_table(self) -> None:
+    def _create_lookup_tables(self) -> None:
+
+        """
+            Create the following lookup tables:
+            - Word-to-index: Word corresponds to specific index
+            - Index-to-Vector: Index corresponds to specific vectors
+        """
 
         index = 1
 
@@ -63,10 +69,17 @@ class Glove_Processor:
                 self._word2idx[word] = index
 
                 index += 1
+
+        # Save lookup table and word-integer transformation
             
         return None
 
     def _convert_text_integer(self, words_list):
+
+        """
+            Convert list of words into list of integers
+            by the use of a lookup table
+        """
 
         transformed_list = []
 
@@ -80,7 +93,12 @@ class Glove_Processor:
         
         return transformed_list
 
-    def _convert_using_lookuptable(self, index_list):
+    def _convert_integers_vectors(self, index_list):
+
+        """
+            Convert list of integers into list of vectors
+            by the use of a lookup table
+        """
 
         vectorized_list = []
 
@@ -112,6 +130,9 @@ class Glove_Processor:
         return input_len, inputs_padded, labels
 
     def tokenize_utterances(self, utterances: list) -> list:
+        """
+            Convert list of sentences into list of words via tokenizer
+        """
 
         tokenized_utterances = []
 
@@ -130,14 +151,10 @@ class Glove_Processor:
         transformed_list = self._convert_text_integer(tokenized_list)
 
         # List of integers list -> List of vectorized tokens
-        vectorized_list = self._convert_using_lookuptable(transformed_list)
+        vectorized_list = self._convert_integers_vectors(transformed_list)
 
         return vectorized_list
 
-    def embeddings_test():
-
-        ...
-
-    def save_transformed_data():
+    def save_files(self, filename):
 
         ...
