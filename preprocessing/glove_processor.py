@@ -80,6 +80,21 @@ class Glove_Processor:
         
         return transformed_list
 
+    def _convert_using_lookuptable(self, index_list):
+
+        vectorized_list = []
+
+        for numbers_list in index_list:
+
+            vectorized_list += [
+                [
+                    self._lookup_table_glove[index]
+                    for index in numbers_list
+                ]
+            ]
+
+        return vectorized_list
+
     def _custom_collate(self, data: list):
 
         # Get original input length for pack padded sequence
@@ -115,8 +130,9 @@ class Glove_Processor:
         transformed_list = self._convert_text_integer(tokenized_list)
 
         # List of integers list -> List of vectorized tokens
+        vectorized_list = self._convert_using_lookuptable(transformed_list)
 
-        ...
+        return vectorized_list
 
     def embeddings_test():
 
