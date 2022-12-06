@@ -71,7 +71,12 @@ class Glove_Processor:
         transformed_list = []
 
         for words in words_list:
-            transformed_list += [[self._word2idx[word] for word in words]]
+            transformed_list += [
+                [
+                    self._word2idx[word] for word in words
+                    if word in self._word2idx
+                ]
+            ]
         
         return transformed_list
 
@@ -91,7 +96,7 @@ class Glove_Processor:
 
         return input_len, inputs_padded, labels
 
-    def preprocess_text(self, utterances: list) -> list:
+    def tokenize_utterances(self, utterances: list) -> list:
 
         tokenized_utterances = []
 
@@ -104,7 +109,7 @@ class Glove_Processor:
     def begin_transformation(self, utterances_list):
 
         # List of sentences -> List of tokens list
-        tokenized_list = self.preprocess_text(utterances_list)
+        tokenized_list = self.tokenize_utterances(utterances_list)
 
         # List of tokens list -> List of integers list
         transformed_list = self._convert_text_integer(tokenized_list)
