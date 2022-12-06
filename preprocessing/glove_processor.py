@@ -1,9 +1,8 @@
-from data_loaders import dailydialog_full
-from preprocessing import text_processing
 from torch.nn.utils.rnn import pad_sequence
 
 import numpy as np
 import torch
+import pickle
 
 class Glove_Processor:
 
@@ -155,6 +154,12 @@ class Glove_Processor:
 
         return vectorized_list
 
-    def save_files(self, filename):
+    def save_file(self, filename):
 
-        ...
+        pickle.dump(filename)
+
+        return None
+
+    def load_file(self, filename):
+
+        return pickle.load(open(filename))
