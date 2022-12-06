@@ -33,17 +33,48 @@ class Glove_Processor:
 
     def _load_model(self):
 
-        self._path = 'pre_trained\glove.6B.50d.txt'
-        self._glove_weights = self._load_glove_model()
+        self._word2idx = {'<pad>': 0}
+        self._lookup_table_glove = {}
 
-        self._word2idx = self._create_word_index()
+        self._create_lookup_table()
+
+        self._path = 'pre_trained\glove.6B.50d.txt'
 
         return None
 
     def _tokenizer(self, utterance: str):
         return [word.lower() for word in utterance.split(" ") if word != '']
 
-    def _convert_word_index(self, words_list: list) -> dict:
+    def _create_lookup_table(self) -> None:
+
+        index = 1
+
+        with open(self._path, encoding="utf8") as f:
+
+            for line in f.readlines():
+
+                values = line.split()
+                
+                # Index 0: Word
+                # Index 1 onwards: Weights
+                word = values[0]
+                self._lookup_table_glove[index] = np.array(values[1:], dtype='float32')
+
+                self._word2idx[word] = index
+
+                index += 1
+            
+        return None
+
+    def _create_word_index(self):
+
+        # Load the full data of DailyDialog
+        label_loader = dailydialog_full.DailyDialog_Full().fetch_dataframe()
+
+        # Preprocess the text and get tokens for dictionary creation
+        words_list = self.preprocess_text(
+            label_loader['utterance']
+        )
 
         word_to_index = {0: '<pad>'}
         index = 1
@@ -59,37 +90,6 @@ class Glove_Processor:
                     index += 1
 
         return word_to_index
-
-    def _load_glove_model(self):
-
-        glove = {}
-
-        with open(self._path, encoding="utf8") as f:
-
-            for line in f.readlines():
-
-                values = line.split()
-                
-                # Index 0: Word
-                # Index 1 onwards: Weights
-                word = values[0]
-
-                glove[word] = np.array(values[1:], dtype='float32')
-            
-        return glove
-
-    def _create_word_index(self):
-
-        # Load the full data of DailyDialog
-        label_loader = dailydialog_full.DailyDialog_Full().fetch_dataframe()
-
-        # Preprocess the text and get tokens for dictionary creation
-        all_possible_words_list = self.preprocess_text(
-            label_loader['utterance']
-        )
-
-        # Get word to index dictionary
-        return self._convert_word_index(all_possible_words_list)
 
     def _convert_text_integer(self, words_list):
 
