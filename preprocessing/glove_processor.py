@@ -70,6 +70,7 @@ class Glove_Processor:
                 index += 1
 
         # Save lookup table and word-integer transformation
+        self.save_file()
             
         return None
 
@@ -154,12 +155,18 @@ class Glove_Processor:
 
         return vectorized_list
 
-    def save_file(self, filename):
+    def save_file(self, file, filename):
 
-        pickle.dump(filename)
+        file = open(filename, 'wb')
+        pickle.dump(file, filename)
+        file.close()
 
         return None
 
     def load_file(self, filename):
 
-        return pickle.load(open(filename))
+        file = open(filename, 'rb')
+        data = pickle.load(file)
+        file.close()
+        
+        return data
