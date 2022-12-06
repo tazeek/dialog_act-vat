@@ -58,38 +58,13 @@ class Glove_Processor:
                 # Index 0: Word
                 # Index 1 onwards: Weights
                 word = values[0]
-                self._lookup_table_glove[index] = np.array(values[1:], dtype='float32')
+                self._lookup_table_glove[index] = torch.from_numpy(values[1:]).float()
 
                 self._word2idx[word] = index
 
                 index += 1
             
         return None
-
-    def _create_word_index(self):
-
-        # Load the full data of DailyDialog
-        label_loader = dailydialog_full.DailyDialog_Full().fetch_dataframe()
-
-        # Preprocess the text and get tokens for dictionary creation
-        words_list = self.preprocess_text(
-            label_loader['utterance']
-        )
-
-        word_to_index = {0: '<pad>'}
-        index = 1
-        
-        for list in words_list:
-
-            for word in list:
-
-                # Check if word does not exist
-                # and Increment index
-                if word not in word_to_index:
-                    word_to_index[word] = index
-                    index += 1
-
-        return word_to_index
 
     def _convert_text_integer(self, words_list):
 
@@ -118,29 +93,13 @@ class Glove_Processor:
 
     def preprocess_text(self, utterances: list) -> list:
 
-        processed_utterances = []
+        tokenized_utterances = []
 
         for utterance in utterances:
 
-            processed_utterances += [self._tokenizer(utterance)]
+            tokenized_utterances += [self._tokenizer(utterance)]
 
-
-        return processed_utterances
-
-    def create_embeddings(self):
-
-        embeddings = np.zeros((len(self._word2idx), 50))
-
-        count = 0
-        # Loop through word_index_dict
-        for word, index in self._word2idx.items():
-
-            # Check if item is in glove_vectors
-            if word in self._glove_weights:
-                count += 1
-                embeddings[index] = self._glove_weights[word]
-
-        return torch.from_numpy(embeddings).float()
+        return tokenized_utterances
 
     def begin_transformation(self, utterances_list):
 
@@ -148,7 +107,7 @@ class Glove_Processor:
         tokenized_list = self.preprocess_text(utterances_list)
 
         # List of tokens list -> List of integers list
-        transformed_list = self.convert_text_integer(tokenized_list)
+        transformed_list = self._convert_text_integer(tokenized_list)
 
         # List of integers list -> List of vectorized tokens
 
