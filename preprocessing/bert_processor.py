@@ -33,3 +33,14 @@ class Bert_Processor:
         """
 
         ...
+
+    def begin_transformation(self, utterances):
+
+        # Convert from list of sentences to list of tokens
+
+        # Convert from list of tokens to list of integers
+
+        # Convert from list of integers to BERT output
+
+        # Extract the given output
+        ...
