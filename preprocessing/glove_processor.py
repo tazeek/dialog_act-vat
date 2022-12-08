@@ -43,6 +43,17 @@ class Glove_Processor:
 
     def _custom_collate_fn(self):
 
+        # List of sentences -> List of tokens list
+
+        # Get original length for pack padded sequence
+
+        # List of tokens list -> List of integers list
+
+        # List of integers list -> List of vectorized tokens
+
+        # For padding process
+
+        # For labels
         ...
 
     def _tokenizer(self, utterance: str):
