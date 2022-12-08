@@ -83,6 +83,9 @@ class Glove_Processor:
 
         index = 1
 
+        # For padded embeddings
+        self._lookup_table_glove[0] = np.zeros(50)
+
         with open(self._path, encoding="utf8") as f:
 
             for line in f.readlines():
