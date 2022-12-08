@@ -1,4 +1,4 @@
-from data_loaders import dataloader_da, dailydialog
+from data_loaders import custom_dataloader, dailydialog
 
 from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader, TensorDataset, RandomSampler
@@ -80,13 +80,13 @@ def fetch_generators(args):
         x_val = text_processing.transform_text_integer(x_val, word_to_index)
 
         # Convert to DataLoaders
-        train_set = dataloader_da.DataLoader_DA(x_train, y_train)
+        train_set = custom_dataloader.DataLoader_DA(x_train, y_train)
         train_generator = _transform_dataloader(train_set, 64)
 
-        test_set = dataloader_da.DataLoader_DA(x_test, y_test)
+        test_set = custom_dataloader.DataLoader_DA(x_test, y_test)
         test_generator = _transform_dataloader(test_set, 64)
 
-        valid_set = dataloader_da.DataLoader_DA(x_val, y_val)
+        valid_set = custom_dataloader.DataLoader_DA(x_val, y_val)
         valid_generator = _transform_dataloader(valid_set, 128)
 
     # BERT Encoding
