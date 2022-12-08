@@ -8,6 +8,17 @@ class Bert_Processor:
 
     def _custom_collate_fn(self):
 
+        # Convert from list of sentences to list of tokens
+
+        # Find the maximum length
+
+        # Convert from list of tokens to list of integers
+        # Get the attention masks
+
+        # Convert from list of integers to BERT output
+
+        # Extract the given output
+
         ...
 
     def _load_model(self):
@@ -38,13 +49,10 @@ class Bert_Processor:
 
         ...
 
-    def begin_transformation(self, utterances):
+    def begin_transformation(self, utterances, labels):
 
-        # Convert from list of sentences to list of tokens
+        # Use custom dataset
 
-        # Convert from list of tokens to list of integers
-
-        # Convert from list of integers to BERT output
-
-        # Extract the given output
+        # Use dataloader
+        
         ...
