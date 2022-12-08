@@ -8,7 +8,7 @@ class Bert_Processor:
 
     def _custom_collate_fn(self):
 
-        # Convert from list of sentences to list of tokens (Use tokenize)
+        # Convert from list of sentences to list of tokens (Use encode)
 
         # Find the maximum length
 
