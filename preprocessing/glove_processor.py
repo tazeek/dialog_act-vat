@@ -1,4 +1,7 @@
 from torch.nn.utils.rnn import pad_sequence
+from torch.utils.data import DataLoader
+
+from data_loaders import custom_dataloader
 
 import numpy as np
 import torch
@@ -174,16 +177,16 @@ class Glove_Processor:
 
         return tokenized_utterances
 
-    def begin_transformation(self, utterances_list):
+    def begin_transformation(self, text, labels, batch_size):
 
-        # List of sentences -> List of tokens list
-        tokenized_list = self._tokenize_utterances(utterances_list)
+        # Use customized dataset
+        dataset = custom_dataloader.CustomDataLoader(text, labels)
 
-        # List of tokens list -> List of integers list
-        transformed_list = self._convert_text_integer(tokenized_list)
-
-        # List of integers list -> List of vectorized tokens
-        vectorized_list = self._convert_integers_vectors(transformed_list)
+        return DataLoader(dataset, 
+            batch_size=batch_size, 
+            shuffle=False, 
+            collate_fn=self._custom_collate_fn
+        )
 
         return vectorized_list
 
