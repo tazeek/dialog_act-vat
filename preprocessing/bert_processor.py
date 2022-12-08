@@ -8,11 +8,11 @@ class Bert_Processor:
 
     def _custom_collate_fn(self):
 
-        # Convert from list of sentences to list of tokens
+        # Convert from list of sentences to list of tokens (Use tokenize)
 
         # Find the maximum length
 
-        # Convert from list of tokens to list of integers
+        # Convert from list of tokens to list of integers (Use batch_encode_plus)
         # Get the attention masks
 
         # Convert from list of integers to BERT output
