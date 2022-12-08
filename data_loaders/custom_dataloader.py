@@ -8,7 +8,7 @@ class CustomDataLoader(Dataset):
         self._labels = labels
     
     def __len__(self):
-        return len(self._labels)
+        return len(self._text)
 
     def __getitem__(self, idx):
 
