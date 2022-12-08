@@ -2,7 +2,7 @@ from torch.utils.data import Dataset
 
 class CustomDataLoader(Dataset):
 
-    def __init__(self, text, labels=None):
+    def __init__(self, text, labels=[]):
         
         self._text = text
         self._labels = labels
@@ -16,7 +16,7 @@ class CustomDataLoader(Dataset):
             'text': self._text[idx]
         }
 
-        if self._labels is not None:
+        if len(self._labels) != 0:
             data_dict['label'] = int(self._labels[idx])
         
         return data_dict
