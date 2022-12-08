@@ -6,6 +6,10 @@ class Bert_Processor:
 
         ...
 
+    def _custom_collate_fn(self):
+
+        ...
+
     def _load_model(self):
 
         self._tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')

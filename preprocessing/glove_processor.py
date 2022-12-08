@@ -41,6 +41,10 @@ class Glove_Processor:
 
         return None
 
+    def _custom_collate_fn(self):
+
+        ...
+
     def _tokenizer(self, utterance: str):
         return [word.lower() for word in utterance.split(" ") if word != '']
 
