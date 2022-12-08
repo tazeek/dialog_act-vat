@@ -188,8 +188,6 @@ class Glove_Processor:
             collate_fn=self._custom_collate_fn
         )
 
-        return vectorized_list
-
     def save_file(self, file, filename):
 
         file = open(filename, 'wb')
