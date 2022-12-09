@@ -121,6 +121,14 @@ def fetch_generators(args):
 
     return values
 
+def _preprocess_glove():
+
+    ...
+
+def _preprocess_bert():
+
+    ...
+
 def preprocess_data():
 
     # Load from saved pickle file, if it exists
