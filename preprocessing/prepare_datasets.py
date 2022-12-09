@@ -123,9 +123,16 @@ def fetch_generators(args):
 
 def _preprocess_glove():
 
+    # Transform
+
+    # Save dataloader with PyTorch
     ...
 
 def _preprocess_bert():
+
+    # Transform
+
+    # Save dataloader with PyTorch
 
     ...
 
