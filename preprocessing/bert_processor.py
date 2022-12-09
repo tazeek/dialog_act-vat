@@ -1,4 +1,9 @@
+from data_loaders import custom_dataloader
+
+from torch.utils.data import DataLoader
 from transformers import BertTokenizer, BertModel
+
+import torch
 
 class Bert_Processor:
 
@@ -18,7 +23,7 @@ class Bert_Processor:
         2. Transform to data loader
 
         Final output: B * L * N * V
-        
+
         B -> Batch Size (Number of utterances)
         L -> Number of Hidden State layers from BERT
         N -> Number of tokens
@@ -26,9 +31,11 @@ class Bert_Processor:
 
     """
 
-    def __init__():
+    def _load_model(self):
 
-        ...
+        self._tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+        self._model = BertModel.from_pretrained('bert-base-uncased')
+        self._model.eval()
 
     def _custom_collate_fn(self, data):
 
@@ -53,43 +60,20 @@ class Bert_Processor:
         )
 
         # Convert from list of integers to BERT output
-
-        # Extract the given output
+        # And get the features of all hidden states
 
         return encoded_text, torch.tensor(labels_list)
 
-    def _load_model(self):
+    def begin_transformation(self, text, labels, batch_size):
 
-        self._tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-        self._model = BertModel.from_pretrained('bert-base-uncased')
-        self._model.eval()
+        # Load the models
+        self._load_model()
 
-    def _tokenize_utterance(self):
-        """
-            Convert a sentence to a list of integers
-            PS: Bert Tokenizer returns other information as well
-        """
+        # Use customized dataset
+        dataset = custom_dataloader.CustomDataLoader(text, labels)
 
-        ...
-
-    def _perform_transformation(self):
-        """
-            Convert a list of integers to BERT features
-            PS: BERT model returns other pieces of informationa as well
-        """
-        ...
-
-    def _extract_features(self):
-        """
-            Extract the specific features required for ML
-        """
-
-        ...
-
-    def begin_transformation(self, utterances, labels, batch_size):
-
-        # Use custom dataset
-
-        # Use dataloader
-        
-        ...
+        return DataLoader(dataset, 
+            batch_size=batch_size, 
+            shuffle=False, 
+            collate_fn=self._custom_collate_fn
+        )
