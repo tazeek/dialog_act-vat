@@ -35,43 +35,14 @@ class Glove_Processor:
 
     def _load_model(self):
 
+        self._path = 'pre_trained\glove.6B.50d.txt'
+
         self._word2idx = {'<pad>': 0}
         self._lookup_table_glove = {}
 
         self._create_lookup_tables()
 
-        self._path = 'pre_trained\glove.6B.50d.txt'
-
         return None
-
-    def _custom_collate_fn(self, data: list):
-
-        utterances = data['text']
-        labels = data['label']
-
-        # List of sentences -> List of tokens list
-        tokenized_list = self._tokenize_utterances(utterances)
-
-        # Get original length for pack padded sequence
-        # Then, convert to tensor
-        original_len = [len(tokens_list) for tokens_list in tokenized_list]
-        original_len = torch.tensor(original_len)
-
-        # List of tokens list -> List of integers list
-        transformed_list = self._convert_text_integer(tokenized_list)
-
-        # List of integers list -> List of vectorized tokens
-        vectorized_list = self._convert_integers_vectors(transformed_list)
-
-        # For padding process
-        vector_inputs = [torch.tensor(vector_list) for vector_list in vectorized_list]
-        vector_inputs_padded = pad_sequence(vector_inputs, batch_first=True)
-
-        # For labels
-        labels = [label for label in labels]
-        labels = torch.tensor(labels)
-        
-        return original_len, vector_inputs_padded, labels
 
     def _tokenizer(self, utterance: str):
         return [word.lower() for word in utterance.split(" ") if word != '']
@@ -148,22 +119,6 @@ class Glove_Processor:
 
         return vectorized_list
 
-    def _custom_collate(self, data: list):
-
-        # Get original input length for pack padded sequence
-        input_len = [len(d['text']) for d in data]
-        input_len = torch.tensor(input_len)
-
-        # For padding process
-        inputs = [torch.tensor(d['text']) for d in data]
-        inputs_padded = pad_sequence(inputs, batch_first=True)
-
-        # For labels
-        labels = [d['class'] for d in data]
-        labels = torch.tensor(labels)
-
-        return input_len, inputs_padded, labels
-
     def _tokenize_utterances(self, utterances: list) -> list:
         """
             Convert list of sentences into list of words via tokenizer
@@ -177,7 +132,39 @@ class Glove_Processor:
 
         return tokenized_utterances
 
+    def _custom_collate_fn(self, data: list):
+
+        utterances = data['text']
+        labels = data['label']
+
+        # List of sentences -> List of tokens list
+        tokenized_list = self._tokenize_utterances(utterances)
+
+        # Get original length for pack padded sequence
+        # Then, convert to tensor
+        original_len = [len(tokens_list) for tokens_list in tokenized_list]
+        original_len = torch.tensor(original_len)
+
+        # List of tokens list -> List of integers list
+        transformed_list = self._convert_text_integer(tokenized_list)
+
+        # List of integers list -> List of vectorized tokens
+        vectorized_list = self._convert_integers_vectors(transformed_list)
+
+        # For padding process
+        vector_inputs = [torch.tensor(vector_list) for vector_list in vectorized_list]
+        vector_inputs_padded = pad_sequence(vector_inputs, batch_first=True)
+
+        # For labels
+        labels = [label for label in labels]
+        labels = torch.tensor(labels)
+        
+        return original_len, vector_inputs_padded, labels
+
     def begin_transformation(self, text, labels, batch_size):
+
+        # Load the models
+        self._load_model()
 
         # Use customized dataset
         dataset = custom_dataloader.CustomDataLoader(text, labels)
@@ -187,19 +174,3 @@ class Glove_Processor:
             shuffle=False, 
             collate_fn=self._custom_collate_fn
         )
-
-    def save_file(self, file, filename):
-
-        file = open(filename, 'wb')
-        pickle.dump(file, filename)
-        file.close()
-
-        return None
-
-    def load_file(self, filename):
-
-        file = open(filename, 'rb')
-        data = pickle.load(file)
-        file.close()
-
-        return data
