@@ -1,4 +1,6 @@
 from data_loaders import custom_dataloader, dailydialog
+from bert_processor import Bert_Processor
+from glove_processor import Glove_Processor
 
 from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader, TensorDataset, RandomSampler
@@ -49,9 +51,6 @@ def _transform_dataloader(dataloader_dataset, batch_size):
         shuffle=False, 
         collate_fn=_custom_collate_glove
     )
-
-def glove_transformation(train, test, valid):
-    ...
     
 def fetch_generators(args):
 
@@ -124,39 +123,20 @@ def fetch_generators(args):
 def _preprocess_methods():
 
     return {
-        'glove': _preprocess_glove(),
-        'bert': _preprocess_bert()
+        'glove': Glove_Processor(),
+        'bert': Bert_Processor()
     }
-
-def _preprocess_glove(text, labels):
-
-    # Transform
-
-    # Save dataloader with PyTorch
-    ...
-
-def _preprocess_bert(text, labels):
-
-    # Transform
-
-    # Save dataloader with PyTorch
-
-    ...
 
 def preprocess_data(args):
 
-    # Load the dataloader files, if it exists
-
-    methods_available = _preprocess_methods()
-
-    # Otherwise, perform transformation process from scratch
-
     # Load the raw datasets
     x_train, y_train = dailydialog.DailyDialog('train.zip').fetch_dataframe()
-    x_val, y_val = dailydialog.DailyDialog('validation.zip').fetch_dataframe()
     x_test, y_test = dailydialog.DailyDialog('test.zip').fetch_dataframe()
+
+    # Load the preprocessor
+
+    # Transform the data and get the data loader
+
+    # Save using PyTorch
     
-    # Perform transformation with the given method
-    methods_available[args.preprocess](x_train, y_train)
-    methods_available[args.preprocess](x_test, y_test)
     ...
