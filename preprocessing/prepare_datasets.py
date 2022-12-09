@@ -121,14 +121,21 @@ def fetch_generators(args):
 
     return values
 
-def _preprocess_glove():
+def _preprocess_methods():
+
+    return {
+        'glove': _preprocess_glove(),
+        'bert': _preprocess_bert()
+    }
+
+def _preprocess_glove(text, labels):
 
     # Transform
 
     # Save dataloader with PyTorch
     ...
 
-def _preprocess_bert():
+def _preprocess_bert(text, labels):
 
     # Transform
 
@@ -136,22 +143,20 @@ def _preprocess_bert():
 
     ...
 
-def preprocess_data():
+def preprocess_data(args):
 
-    # Load from saved pickle file, if it exists
+    # Load the dataloader files, if it exists
 
-    # Otherwise, perform transformation process
+    methods_available = _preprocess_methods()
+
+    # Otherwise, perform transformation process from scratch
 
     # Load the raw datasets
     x_train, y_train = dailydialog.DailyDialog('train.zip').fetch_dataframe()
     x_val, y_val = dailydialog.DailyDialog('validation.zip').fetch_dataframe()
     x_test, y_test = dailydialog.DailyDialog('test.zip').fetch_dataframe()
-
-    # Fetch the datasets
-
-    # Transform GloVe embeddings and save
-
-    # Transform BERT embeddings and save
-
-    # Transform into data loader format
+    
+    # Perform transformation with the given method
+    methods_available[args.preprocess](x_train, y_train)
+    methods_available[args.preprocess](x_test, y_test)
     ...
