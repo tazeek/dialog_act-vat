@@ -27,12 +27,12 @@ class Bert_Processor:
             return_tensors='pt',
             return_attention_masks=True
         )
-        
+
         # Convert from list of integers to BERT output
 
         # Extract the given output
 
-        ...
+        return encoded_text, torch.tensor(labels_list)
 
     def _load_model(self):
 
