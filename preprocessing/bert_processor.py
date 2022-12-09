@@ -62,7 +62,7 @@ class Bert_Processor:
 
         ...
 
-    def begin_transformation(self, utterances, labels):
+    def begin_transformation(self, utterances, labels, batch_size):
 
         # Use custom dataset
 
