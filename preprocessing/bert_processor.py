@@ -2,6 +2,30 @@ from transformers import BertTokenizer, BertModel
 
 class Bert_Processor:
 
+    """
+        Preprocessing Steps (from raw to transformed):
+        
+        1. Load the tokenizer and model
+        2. Create the lookup table from dailydialog vocab
+        3. Tokenization of utterances from dataset
+        4. Convert tokens to integers
+        5. Convert the integers to vector tokens via embedding
+        6. Save the transformed vector tokens
+
+        Batching for Deep Learning (from transformed to batch):
+
+        1. Load the extracted features and labels
+        2. Transform to data loader
+
+        Final output: B * L * N * V
+        
+        B -> Batch Size (Number of utterances)
+        L -> Number of Hidden State layers from BERT
+        N -> Number of tokens
+        V -> Vector size of each token
+
+    """
+
     def __init__():
 
         ...

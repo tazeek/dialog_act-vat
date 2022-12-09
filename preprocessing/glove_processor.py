@@ -21,9 +21,8 @@ class Glove_Processor:
 
         Batching for Deep Learning (from transformed to batch):
 
-        1. Load the vector tokens
-        2. Perform collate function
-        3. Transform to data loader
+        1. Load the vector tokens, original length, and label
+        2. Transform to data loader
 
         Final output: B * N * V
         B -> Batch Size (Number of utterances)
