@@ -6,15 +6,28 @@ class Bert_Processor:
 
         ...
 
-    def _custom_collate_fn(self):
+    def _custom_collate_fn(self, data):
+
+        text_list = data['text']
+        labels_list = data['label']
 
         # Convert from list of strings to list of tokens (Use encode)
+        tokens_list = [self._tokenizer.encode(text) for text in text_list]
 
         # Find the maximum length
+        max_len = max([len(token_list) for token_list in tokens_list])
 
         # Convert from list of strings to list of integers (Use batch_encode_plus)
         # Get the attention masks
-
+        encoded_text = self._tokenizer.batch_encode_plus(
+            text_list,
+            add_special_tokens=True,
+            max_length=max_len,
+            pad_to_max_length=True,
+            return_tensors='pt',
+            return_attention_masks=True
+        )
+        
         # Convert from list of integers to BERT output
 
         # Extract the given output
