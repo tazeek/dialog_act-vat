@@ -50,3 +50,11 @@ def get_base_filename(args):
         base_filename += '_vat'
     
     return base_filename
+
+def load_transformed_datasets(args, file):
+
+    ...
+
+def load_model(args):
+
+    ...
