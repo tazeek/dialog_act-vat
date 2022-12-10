@@ -70,9 +70,7 @@ class Bert_Processor:
                 return_dict=True
             )
 
-        hidden_states = vectorized_out.hidden_states[1:]
-
-        return hidden_states, torch.tensor(labels_list)
+        return vectorized_out, torch.tensor(labels_list)
 
     def begin_transformation(self, text, labels, batch_size):
 
