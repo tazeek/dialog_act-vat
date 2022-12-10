@@ -22,10 +22,10 @@ class Bert_Processor:
         1. Load the extracted features and labels
         2. Transform to data loader
 
-        Final output: B * L * N * V
+        Final output: L * B * N * V
 
-        B -> Batch Size (Number of utterances)
         L -> Number of Hidden State layers from BERT (1 embedding layer, 12 BERT layers)
+        B -> Batch Size (Number of utterances)
         N -> Number of tokens
         V -> Vector size of each token (Default: 768)
 
