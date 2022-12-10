@@ -25,9 +25,9 @@ class Bert_Processor:
         Final output: B * L * N * V
 
         B -> Batch Size (Number of utterances)
-        L -> Number of Hidden State layers from BERT
+        L -> Number of Hidden State layers from BERT (1 embedding layer, 12 BERT layers)
         N -> Number of tokens
-        V -> Vector size of each token
+        V -> Vector size of each token (Default: 768)
 
     """
 
@@ -61,8 +61,18 @@ class Bert_Processor:
 
         # Convert from list of integers to BERT output
         # And get the features of all hidden states
+        vectorized_out = None
 
-        return encoded_text, torch.tensor(labels_list)
+        with torch.no_grad():
+            vectorized_out = self._model(
+                encoded_text,
+                output_hidden_states=True,
+                return_dict=True
+            )
+
+        hidden_states = vectorized_out.hidden_states[1:]
+
+        return hidden_states, torch.tensor(labels_list)
 
     def begin_transformation(self, text, labels, batch_size):
 
