@@ -18,7 +18,8 @@ def preprocess_data(args) -> None:
     x_test, y_test = dailydialog.DailyDialog('test.zip').fetch_dataframe()
 
     # Load the preprocessor
-    processor = _preprocess_methods(args.processor)
+    processor_method = args.processor
+    processor = _preprocess_methods(processor_method)
 
     # Transform the data and get the data loader
     batch_size = 64
@@ -26,7 +27,7 @@ def preprocess_data(args) -> None:
     test_loader = processor.begin_transformation(x_test, y_test, batch_size)
 
     # Save using PyTorch
-    torch.save(train_loader, 'preprocessed_data/trainloader.pth')
-    torch.save(test_loader, 'preprocessed_data/testloader.pth')
+    torch.save(train_loader, f'preprocessed_data/trainloader_{processor_method}.pth')
+    torch.save(test_loader, f'preprocessed_data/testloader_{processor_method}.pth')
 
     return None
