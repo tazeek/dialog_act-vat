@@ -11,7 +11,7 @@ def _preprocess_methods(processor):
         'bert': Bert_Processor()
     }[processor]
 
-def preprocess_data(args) -> None:
+def transform_features_datasets(args) -> None:
 
     # Load the raw datasets
     x_train, y_train = dailydialog.DailyDialog('train.zip').fetch_dataframe()
