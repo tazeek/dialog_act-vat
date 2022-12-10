@@ -1,6 +1,6 @@
 from models import lstm_glove, lstm_bert
 from vat_loss import VATLoss
-from torchmetrics import Recall
+from torchmetrics import Recall, ConfusionMatrix
 from torchmetrics.classification import MulticlassF1Score, MulticlassPrecision
 from torch import nn
 from torch import optim
@@ -328,11 +328,13 @@ class Model():
         y_test_list = [output for list in y_test_list for output in list]
 
         # Get the confusion matrix
+        confusion_matrix = ConfusionMatrix(task="multiclass", num_classes=4)
+        confusion_matrix_results = confusion_matrix(y_pred_list, y_test_list)
+        print(confusion_matrix_results)
+
         # Save the confusion matrix
-        cm_results = confusion_matrix(y_pred_list, y_test_list)
-        file_name = 'results/' + self._base_file + '_confusion_matrix.pk'
-        pickle.dump(cm_results, open(file_name, "wb"))
-        print(cm_results)
+        file_name = 'results/' + self._base_file + '_confusion_matrix.pth'
+        torch.save(confusion_matrix_results, file_name)
 
         print('\n')
         print(classification_report(y_test_list, y_pred_list))
