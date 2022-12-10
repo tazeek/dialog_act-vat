@@ -53,7 +53,8 @@ def get_base_filename(args):
 
 def load_transformed_datasets(args, file):
 
-    ...
+    file_name = f'preprocessed_data/{file}_{args.processor}.pth'
+    return torch.load(file_name)
 
 def load_model(args):
 
