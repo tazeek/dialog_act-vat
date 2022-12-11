@@ -1,8 +1,17 @@
 
 title = 'model-config-file'
 
-[model]
+[default]
+
+output_size = 4
 
 [lstm_glove]
 
+embedding = 50
+hidden_nodes = 256
+bidirectional = false
+
 [lstm_bert]
+
+embedding = 768
+hidden_nodes = 256
