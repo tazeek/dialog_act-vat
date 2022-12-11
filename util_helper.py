@@ -1,7 +1,16 @@
+from models import *
+
 import logging
 import argparse
 import torch
 import tomli
+
+def _models_list(model_name):
+
+    return {
+        'lstm_bert': None,
+        'lstm_glove': None
+    }[model_name]
 
 def _load_config_file():
 
@@ -73,7 +82,10 @@ def load_model(args):
     config_doc = _load_config_file()
 
     # Load the dictionary of models
+    default_args = config_doc['default']
     model_args = config_doc[args.model_name]
 
     # Initialize model and return
-    ...
+    model = _models_list(args.model_name)
+
+    return model(model_args, default_args)
