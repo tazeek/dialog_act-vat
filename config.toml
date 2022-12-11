@@ -3,6 +3,6 @@ title = 'model-config-file'
 
 [model]
 
-[[lstm_glove]]
+[lstm_glove]
 
-[[lstm_bert]]
+[lstm_bert]
