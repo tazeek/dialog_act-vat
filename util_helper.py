@@ -73,6 +73,7 @@ def load_model(args):
     config_doc = _load_config_file()
 
     # Load the dictionary of models
+    model_args = config_doc[args.model_name]
 
     # Initialize model and return
     ...
