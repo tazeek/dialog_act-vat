@@ -7,6 +7,9 @@ def _load_config_file():
 
     config_dict = {}
 
+    with open("config.toml", mode="rb") as file:
+        config_dict = tomli.load(file)
+
     return config_dict
 
 def get_logger():
@@ -66,4 +69,10 @@ def load_transformed_datasets(args, file):
 
 def load_model(args):
 
+    # Load the configuration file
+    config_doc = _load_config_file()
+
+    # Load the dictionary of models
+
+    # Initialize model and return
     ...
