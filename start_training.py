@@ -15,8 +15,11 @@ if __name__ == '__main__':
     base_filename = util_helper.get_base_filename(args)
 
     # Load the transformed datasets
+    train_set = util_helper.load_transformed_datasets(args, 'trainloader')
+    test_set = util_helper.load_transformed_datasets(args, 'testloader')
 
     # Load the model
+    model = util_helper.load_model(args)
 
     # Train the model
 
