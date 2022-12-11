@@ -21,6 +21,8 @@ if __name__ == '__main__':
     # Load the model
     model = util_helper.load_model(args)
 
-    # Train the model
+    # [OPTIONAL] Train the VAT model
 
-    # Test the model
+    # Train the model [Train set]
+
+    # Test the model [Test set]
