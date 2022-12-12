@@ -5,7 +5,7 @@ import torch
 
 class LSTM_GLove(nn.Module):
 
-    def __init__(self, embedding_layer):
+    def __init__(self, args):
 
         super(LSTM_GLove, self).__init__()
 
@@ -17,16 +17,6 @@ class LSTM_GLove(nn.Module):
         self._output_size = 4
         self._layers = 1
         self._hidden_nodes = 256
-
-        # Vocab size: Number of unique words
-        # Embedding dim: Dimension size of each word
-        self._vocab_size = embedding_layer.size(0)
-        self._embedding_dim = embedding_layer.size(1)
-        
-        # Create embedding layer and weights
-        # We don't have retrain the gradients again
-        self._word_embeddings = nn.Embedding(self._vocab_size, self._embedding_dim, padding_idx=0)
-        self._word_embeddings.weight = nn.Parameter(embedding_layer, requires_grad = False)
 
         # Create the LSTM model
         self._lstm = nn.LSTM(
