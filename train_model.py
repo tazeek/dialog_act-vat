@@ -12,22 +12,20 @@ import torch
 
 class Model():
 
-    def __init__(self, params):
-
-        args = params['args']
+    def __init__(self, args):
 
         # Hyperparams
-        self._lr = 0.001
-        self._epochs = 10
-        self._alpha_val = 0.01
+        self._lr = args['learning_rate']
+        self._epochs = args['epochs']
+        self._alpha_val = args['alpha_val']
 
         # Data Generators
-        self._train_data = params['training']
-        self._test_data = params['test']
-        self._unlabeled_data = params['valid']
+        self._train_data = args['training']
+        self._test_data = args['test']
+        self._unlabeled_data = args['unlabeled']
 
         # Others
-        self._base_file = params['file_name']
+        self._base_file = args['file_name']
 
         # Results evaluation
         self._eval_results = self._get_results_dictionary()
@@ -36,7 +34,8 @@ class Model():
         self._device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
         # Create model and mount to device
-        #self._model.to(self._device)
+        self._model = args['model']
+        self._model.to(self._device)
     
     def _metrics_evaluation(self, y_pred, y_train, device):
 
