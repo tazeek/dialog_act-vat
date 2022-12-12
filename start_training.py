@@ -24,6 +24,8 @@ if __name__ == '__main__':
     # Load the model
     model = util_helper.load_model(config_settings, args)
 
+    # Create model object
+
     # [OPTIONAL] Train the VAT model
 
     # Train the model [Train set]

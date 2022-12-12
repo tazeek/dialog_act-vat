@@ -46,8 +46,6 @@ def get_logger():
 
 def create_parser():
 
-    # TODO:
-    # - Add in rest of hyperparameters
     parser = argparse.ArgumentParser(description='Parser for VAT and Dialog Act')
     
     parser.add_argument('--model', default='lstm', metavar='model',
