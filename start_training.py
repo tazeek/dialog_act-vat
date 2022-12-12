@@ -23,7 +23,7 @@ if __name__ == '__main__':
     unlabeled_set = util_helper.load_transformed_datasets(args, 'unlabeledloader')
 
     # Load the model
-    model = util_helper.load_model(config_settings, args)
+    model_obj = util_helper.load_model(config_settings, args)
 
     # Populate all in a dictionary for training model object
     args_dict = {
@@ -31,10 +31,11 @@ if __name__ == '__main__':
         'test': test_set,
         'unlabeled': unlabeled_set,
         'file_name': base_filename,
-        'model': model,
+        'model': model_obj,
     }
 
     # Create model object
+    train_model = Model(args_dict | config_settings)
 
     # [OPTIONAL] Train the VAT model
 
