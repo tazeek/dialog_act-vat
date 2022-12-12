@@ -14,13 +14,15 @@ class LSTM_GLove(nn.Module):
         # Output size: Based on labels
         # Layers: Number of layers
         # Hidden Nodes: Number of Nodes
-        self._output_size = 4
-        self._layers = 1
-        self._hidden_nodes = 256
+        # Input Size: This is based on the embedding size
+        self._output_size = args['output_size']
+        self._layers = args['layers']
+        self._hidden_nodes = args['hidden_nodes']
+        self._input_size = args['embedding']
 
         # Create the LSTM model
         self._lstm = nn.LSTM(
-            input_size = self._embedding_dim, 
+            input_size = self._input_size, 
             hidden_size = self._hidden_nodes,
             num_layers = self._layers,
             batch_first = True

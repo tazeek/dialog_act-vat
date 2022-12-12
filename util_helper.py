@@ -85,4 +85,4 @@ def load_model(config_settings, args):
     # Initialize model and return
     model = _models_list(args.model_name)
 
-    return model(model_args, default_args)
+    return model(model_args | default_args)

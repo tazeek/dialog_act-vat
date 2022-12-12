@@ -12,10 +12,11 @@ output_size = 4
 [lstm_glove]
 
 embedding = 50
+layers = 1
 hidden_nodes = 256
-bidirectional = false
 
 [lstm_bert]
 
 embedding = 768
+layers = 1
 hidden_nodes = 256
