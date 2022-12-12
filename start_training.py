@@ -20,9 +20,19 @@ if __name__ == '__main__':
     # Load the transformed datasets
     train_set = util_helper.load_transformed_datasets(args, 'trainloader')
     test_set = util_helper.load_transformed_datasets(args, 'testloader')
+    unlabeled_set = util_helper.load_transformed_datasets(args, 'unlabeledloader')
 
     # Load the model
     model = util_helper.load_model(config_settings, args)
+
+    # Populate all in a dictionary for training model object
+    args_dict = {
+        'train': train_set,
+        'test': test_set,
+        'unlabeled': unlabeled_set,
+        'file_name': base_filename,
+        'model': model,
+    }
 
     # Create model object
 
