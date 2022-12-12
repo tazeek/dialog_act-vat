@@ -12,7 +12,7 @@ def _models_list(model_name):
         'lstm_glove': None
     }[model_name]
 
-def _load_config_file():
+def load_config_file():
 
     config_dict = {}
 
@@ -76,14 +76,11 @@ def load_transformed_datasets(args, file):
     file_name = f'preprocessed_data/{file}_{args.processor}.pth'
     return torch.load(file_name)
 
-def load_model(args):
-
-    # Load the configuration file
-    config_doc = _load_config_file()
+def load_model(config_settings, args):
 
     # Load the dictionary of models
-    default_args = config_doc['default']
-    model_args = config_doc[args.model_name]
+    default_args = config_settings['default']
+    model_args = config_settings[args.model_name]
 
     # Initialize model and return
     model = _models_list(args.model_name)
