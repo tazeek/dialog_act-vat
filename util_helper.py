@@ -21,7 +21,7 @@ def load_config_file():
 
     return config_dict
 
-def get_logger():
+def get_logger(log_file):
 
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
@@ -33,7 +33,7 @@ def get_logger():
         "[%(levelname)s] %(message)s"
     )
 
-    fh = logging.FileHandler('log_file.log', 'w')
+    fh = logging.FileHandler(f'log_output/{log_file}.log', 'w')
     fh.setFormatter(formatter)
 
     sh = logging.StreamHandler()
