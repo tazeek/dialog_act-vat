@@ -70,7 +70,10 @@ class Bert_Processor:
                 return_dict=True
             )
 
-        return vectorized_out, torch.tensor(labels_list)
+        return {
+            'features': vectorized_out,
+            'labels': torch.tensor(labels_list)
+        }
 
     def begin_transformation(self, text, labels, batch_size):
 

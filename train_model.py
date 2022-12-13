@@ -175,6 +175,7 @@ class Model():
 
         self._logger.info('Initialize hyperparameters and loss functions')
         
+        train_batch = self._batch_type()
         self._intialize_hyperparam_loss()
 
         for epoch in range(1, self._epochs + 1):
@@ -184,11 +185,8 @@ class Model():
             # Reset every epoch
             self._reset_metrics()
 
-            # TODO: Different embeddings have different batches
-            # Hence, need to split into different functions
-            self._train_batches()
-
-            # Compute the losses and evaluation metrics per loop
+            # Start Training
+            train_batch()
 
             # Normalize and record the results every epoch
             self._normalize_and_store(epoch)
@@ -288,22 +286,20 @@ class Model():
 
     def _bert_batch(self):
 
-        for batch_tuple in self._train_data:
+        for batch_data in self._train_data:
 
-            batch_tuple = (t.to(self._device) for t in batch_tuple)
-
-            x_train, x_attention_mask, y_train = batch_tuple
-
-            # Convert to LongTensor
+            # Unpack the data from the batch
+            x_train = batch_data['features']
+            y_train = batch_data['labels']
             y_train = y_train.type(torch.LongTensor)
+
+            # Mount onto the device
+            x_train = x_train.to(self._device)
             y_train = y_train.to(self._device)
 
             # Predict the outputs
             self._optimizer.zero_grad()
-            y_pred = self._model(x_train, x_attention_mask)
-
-            # For VAT
-            #lds = _vat_loss_calculation(model, device, validation_data)
+            y_pred = self._model(x_train)
 
             # Compute the loss and metrics
             self._compute_loss_results(y_pred, y_train)
