@@ -178,9 +178,9 @@ class Model():
         train_batch = self._batch_type()
         self._intialize_hyperparam_loss()
 
-        for epoch in range(1, self._epochs + 1):
+        self._model.train()
 
-            self._model.train()
+        for epoch in range(1, self._epochs + 1):
 
             # Reset every epoch
             self._reset_metrics()
@@ -232,7 +232,7 @@ class Model():
 
             # Unpack the data from the batch
             x_train = batch_data['features'].to(self._device)
-            
+
             y_train = batch_data['labels']
             y_train = y_train.type(torch.LongTensor)
             y_train = y_train.to(self._device)
