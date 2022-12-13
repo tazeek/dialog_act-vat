@@ -162,7 +162,7 @@ class Model():
         for epoch in range(1, self._epochs + 1):
 
             # Reset every epoch
-            self._reset_metrics
+            self._reset_metrics()
 
             # TODO: Different embeddings have different batches
             # Hence, need to split into different functions
@@ -174,7 +174,17 @@ class Model():
 
             # Print every epoch or every X epoch
             self._print_updates(epoch)
-        ...
+
+        # Save the CSV file
+        self._save_csv_file('training_results')
+
+        # Save the model
+        torch.save(
+            self._model.state_dict(), 
+            'models/' + self._base_file + '_model_weights.pth'
+        )
+        
+        return None
 
     def start_train_glove(self):
 
