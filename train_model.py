@@ -207,80 +207,23 @@ class Model():
 
     def _glove_batch(self):
 
-        self._model.train()
+        for batch_data in self._train_data:
 
-        # Define the loss function
-        criterion = nn.CrossEntropyLoss()
+            # Convert to LongTensor
+            y_train = y_train.type(torch.LongTensor)
 
-        # Define Optimizer
-        optimizer = optim.Adam(
-            self._model.parameters(), 
-            lr= self._lr
-        )
+            # Load inputs and labels onto device
+            x_padded, y_train = x_padded.to(self._device), y_train.to(self._device)
 
-        train_set_size = len(self._train_data)
+            # Predict the outputs
+            #y_pred = self._model(x_padded, x_original_len)
 
-        for epoch in range(1, self._epochs + 1):
+            # Get the model outputs
+            self._optimizer.zero_grad()
+            #y_pred = self._model(x_train)
 
-            # Reset every poch
-            self._reset_metrics()
-
-            for (x_original_len, x_padded, y_train) in self._train_data:
-
-                # Convert to LongTensor
-                y_train = y_train.type(torch.LongTensor)
-
-                # Load inputs and labels onto device
-                x_padded, y_train = x_padded.to(self._device), y_train.to(self._device)
-
-                self._optimizer.zero_grad()
-
-                # Predict the outputs
-                y_pred = self._model(x_padded, x_original_len)
-
-                # For VAT
-                #lds = _vat_loss_calculation(model, device, validation_data)
-
-                train_loss = criterion(y_pred.squeeze(), y_train)
-                precision, f1, recall = self._metrics_evaluation(y_pred, y_train, self._device)
-
-                # Back propagation
-                # Update for parameters and compute the updates
-                train_loss.backward()
-                optimizer.step()
-                
-                # Update for Display
-                self._train_epoch_loss += train_loss.item()
-                self._train_epoch_prec += precision
-                self._train_epoch_f1 += f1
-                self._train_epoch_recall += recall
-                #self._train_vat_loss += lds.item()
-            
-            # Normalize results
-            self._train_epoch_loss /= train_set_size
-            self._train_epoch_f1 /= train_set_size
-            self._train_epoch_recall /= train_set_size
-            self._train_epoch_prec /= train_set_size
-
-            # Store the results
-            self._eval_results['epoch'].append(epoch)
-            self._eval_results['cross_entropy_loss'].append(self._train_epoch_loss)
-            self._eval_results['recall'].append(self._train_epoch_recall)
-            self._eval_results['f1'].append(self._train_epoch_f1)
-            self._eval_results['precision'].append(self._train_epoch_prec)
-
-            # Print output (every 10 epochs)
-            if epoch % 10 == 0:
-                self._print_updates(epoch)
-
-        # Save the CSV file
-        self._save_csv_file()
-
-        # Save the model
-        torch.save(
-            self._model.state_dict(), 
-            'models/' + self._base_file + '_model_weights.pth'
-        )
+            # Compute the loss and metrics
+            #self._compute_loss_results(y_pred, y_train)
 
         return None
 
