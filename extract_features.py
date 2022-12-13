@@ -14,5 +14,5 @@ if __name__ == '__main__':
 
     # Fetch the datasets (from raw to data generator format)
     logger.info('Starting transformation process')
-    prepare_datasets.transform_features_datasets(args)
+    prepare_datasets.transform_features_datasets(args, logger)
     logger.info('Transformation finished')

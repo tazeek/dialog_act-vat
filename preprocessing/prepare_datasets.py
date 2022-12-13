@@ -11,14 +11,16 @@ def _preprocess_methods(processor):
         'bert': Bert_Processor()
     }[processor]
 
-def transform_features_datasets(args) -> None:
+def transform_features_datasets(args, logger) -> None:
 
     # Load the raw datasets
+    logger.info('Loading training and testing datasets')
     x_train, y_train = dailydialog.DailyDialog('train.zip').fetch_dataframe()
     x_test, y_test = dailydialog.DailyDialog('test.zip').fetch_dataframe()
 
     # Load the preprocessor
     processor_method = args.processor
+    logger.info(f'Using processor: {processor_method}')
     processor = _preprocess_methods(processor_method)
 
     # Transform the data and get the data loader
