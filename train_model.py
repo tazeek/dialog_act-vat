@@ -261,7 +261,16 @@ class Model():
 
         return None
 
-    def _compute_loss_results(y_pred, y_train, loss, optimizer):
+    def _compute_loss_results(self, y_pred, y_train):
+
+        train_loss = self._loss_func(y_pred, y_train)
+        precision, f1, recall = self._metrics_evaluation(y_pred, y_train)
+
+        # Back propagration and Updates
+        train_loss.backward()
+        self._optimizer.step()
+
+        return None
 
     def start_train_bert(self, optimizer, loss):
 
