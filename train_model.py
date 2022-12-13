@@ -144,6 +144,17 @@ class Model():
 
         for epoch in range(1, self._epochs + 1):
 
+            # Reset every epoch
+            self._reset_metrics
+
+            # TODO: Different embeddings have different batches
+            # Hence, need to split into different functions
+
+            # Compute the losses and evaluation metrics per loop
+
+            # Normalize and record the results every epoch
+
+            # Print every epoch or every X epoch
             ...
         ...
 
