@@ -33,7 +33,7 @@ def transform_features_datasets(args, logger) -> None:
     torch.save(train_loader, f'preprocessed_data/trainloader_{processor_method}.pth')
 
     logger.info(f'Transforming testing dataset')
-    test_loader = processor.begin_transformation(x_test, y_test, batch_size)
+    test_loader = processor.begin_transformation(x_test, y_test, batch_size * 2)
     
     logger.info(f'Saving testing dataset')
     torch.save(test_loader, f'preprocessed_data/testloader_{processor_method}.pth')
