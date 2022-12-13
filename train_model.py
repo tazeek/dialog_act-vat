@@ -101,11 +101,9 @@ class Model():
 
     def _print_updates(self, epoch):
 
-        # Print every 10 epochs
         print(
             f'Epoch {epoch+0:03}: |'
             f' Train Loss: {self._train_epoch_loss:.5f} | '
-            #f' VAT Loss: {(self._train_vat_loss * alpha_val)/train_set_size:.5f} | '
             f' Train Recall: {self._train_epoch_recall:.3f} | '
             f' Train F1: {self._train_epoch_f1:.3f} | '
             f' Train Precision: {self._train_epoch_prec:.3f} '
@@ -129,6 +127,24 @@ class Model():
         lds = vat_loss(model, x_padded_val, x_original_len_val)
 
         return lds
+
+    def _compute_loss_results(self, y_pred, y_train):
+
+        train_loss = self._loss_func(y_pred, y_train)
+        precision, f1, recall = self._metrics_evaluation(y_pred, y_train)
+
+        # Back propagration and update for parameters
+        train_loss.backward()
+        self._optimizer.step()
+
+        # Update metrics
+        self._train_epoch_loss += train_loss.item()
+        self._train_epoch_prec += precision
+        self._train_epoch_f1 += f1
+        self._train_epoch_recall += recall
+        #self._train_vat_loss += lds.item()
+
+        return None
 
     def _normalize_and_store(self, epoch):
 
@@ -210,7 +226,7 @@ class Model():
                 # Load inputs and labels onto device
                 x_padded, y_train = x_padded.to(self._device), y_train.to(self._device)
 
-                optimizer.zero_grad()
+                self._optimizer.zero_grad()
 
                 # Predict the outputs
                 y_pred = self._model(x_padded, x_original_len)
@@ -261,23 +277,6 @@ class Model():
 
         return None
 
-    def _compute_loss_results(self, y_pred, y_train):
-
-        train_loss = self._loss_func(y_pred, y_train)
-        precision, f1, recall = self._metrics_evaluation(y_pred, y_train)
-
-        # Back propagration and update for parameters
-        train_loss.backward()
-        self._optimizer.step()
-
-        # Update metrics
-        self._train_epoch_loss += train_loss.item()
-        self._train_epoch_prec += precision
-        self._train_epoch_f1 += f1
-        self._train_epoch_recall += recall
-
-        return None
-
     def start_train_bert(self, optimizer, loss):
 
         for batch_tuple in self._train_data:
@@ -290,31 +289,15 @@ class Model():
             y_train = y_train.type(torch.LongTensor)
             y_train = y_train.to(self._device)
 
-            optimizer.zero_grad()
-
             # Predict the outputs
+            self._optimizer.zero_grad()
             y_pred = self._model(x_train, x_attention_mask)
 
             # For VAT
             #lds = _vat_loss_calculation(model, device, validation_data)
 
             # Compute the loss and metrics
-            self._compute_loss_results(y_pred, y_train, loss, optimizer)
-
-            train_loss = loss(y_pred.squeeze(), y_train)
-            precision, f1, recall = self._metrics_evaluation(y_pred, y_train, self._device)
-
-            # Back propagation
-            # Update for parameters and compute the updates
-            train_loss.backward()
-            optimizer.step()
-            
-            # Update for Display
-            self._train_epoch_loss += train_loss.item()
-            self._train_epoch_prec += precision
-            self._train_epoch_f1 += f1
-            self._train_epoch_recall += recall
-            #self._train_vat_loss += lds.item()
+            self._compute_loss_results(y_pred, y_train)
 
         return None
 
