@@ -42,7 +42,7 @@ if __name__ == '__main__':
     }
 
     # Create model object
-    train_model = Model(args_dict | config_settings)
+    train_model = Model(args_dict | config_settings, logger)
 
     # [OPTIONAL] Train the VAT model
 

@@ -12,7 +12,7 @@ import torch
 
 class Model():
 
-    def __init__(self, args):
+    def __init__(self, args, logger):
 
         # Hyperparams
         self._lr = args['learning_rate']
@@ -26,6 +26,7 @@ class Model():
 
         # Others
         self._base_file = args['file_name']
+        self._logger = logger
 
         # Results evaluation
         self._eval_results = self._get_results_dictionary()
