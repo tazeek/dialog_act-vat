@@ -41,15 +41,14 @@ class Model():
 
     def _intialize_hyperparam_loss(self):
 
-        optimizer = optim.Adam(
+        self._optimizer = optim.Adam(
             self._model.parameters(),
             lr = self._lr
         )
 
-        return {
-            'loss': nn.CrossEntropyLoss(),
-            'optimizer': optimizer
-        }
+        self._loss_func = nn.CrossEntropyLoss()
+
+        return None
     
     def _metrics_evaluation(self, y_pred, y_train, device):
 
@@ -151,15 +150,13 @@ class Model():
     def start_training(self):
 
         self._logger.info('Initialize hyperparameters and loss functions')
-
-        info_dict = self._intialize_hyperparam_loss()
-        loss = info_dict['loss']
-        optimizer = info_dict['optimizer']
+        
+        self._intialize_hyperparam_loss()
 
         for epoch in range(1, self._epochs + 1):
 
             self._model.train()
-            
+
             # Reset every epoch
             self._reset_metrics()
 
@@ -221,7 +218,6 @@ class Model():
                 # For VAT
                 #lds = _vat_loss_calculation(model, device, validation_data)
 
-                # Compute the loss and metrics
                 train_loss = criterion(y_pred.squeeze(), y_train)
                 precision, f1, recall = self._metrics_evaluation(y_pred, y_train, self._device)
 
@@ -265,6 +261,8 @@ class Model():
 
         return None
 
+    def _compute_loss_results(y_pred, y_train, loss, optimizer):
+
     def start_train_bert(self, optimizer, loss):
 
         for batch_tuple in self._train_data:
@@ -286,6 +284,8 @@ class Model():
             #lds = _vat_loss_calculation(model, device, validation_data)
 
             # Compute the loss and metrics
+            self._compute_loss_results(y_pred, y_train, loss, optimizer)
+
             train_loss = loss(y_pred.squeeze(), y_train)
             precision, f1, recall = self._metrics_evaluation(y_pred, y_train, self._device)
 
