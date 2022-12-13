@@ -38,6 +38,18 @@ class Model():
         # Create model and mount to device
         self._model = args['model']
         self._model.to(self._device)
+
+    def _intialize_hyperparam_loss(self):
+
+        optimizer = optim.Adam(
+            self._model.parameters(),
+            lr = self._lr
+        )
+
+        return {
+            'loss': nn.CrossEntropyLoss(),
+            'optimizer': optimizer
+        }
     
     def _metrics_evaluation(self, y_pred, y_train, device):
 
@@ -120,6 +132,21 @@ class Model():
 
         return lds
 
+    def start_training(self):
+
+        self._model.train()
+
+        self._logger.info('Initialize hyperparameters and loss functions')
+
+        info_dict = self._intialize_hyperparam_loss()
+        loss = info_dict['loss']
+        optimizer = info_dict['optimizer']
+
+        for epoch in range(1, self._epochs + 1):
+
+            ...
+        ...
+
     def start_train_glove(self):
 
         self._model.train()
@@ -199,18 +226,6 @@ class Model():
         )
 
         return None
-
-    def _intialize_hyperparam_loss(self):
-
-        optimizer = optim.Adam(
-            self._model.parameters(),
-            lr = self._lr
-        )
-
-        return {
-            'loss': nn.CrossEntropyLoss(),
-            'optimizer': optimizer
-        }
 
     def start_train_bert(self):
 
