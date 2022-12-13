@@ -62,7 +62,7 @@ def create_parser():
 def get_base_filename(args):
 
     # File name format: <model>_<embed>_<vat>
-    base_filename = args.model + '_' + args.embed
+    base_filename = args.model
 
     if args.vat:
         base_filename += '_vat'
@@ -71,16 +71,16 @@ def get_base_filename(args):
 
 def load_transformed_datasets(args, file):
 
-    file_name = f'preprocessed_data/{file}_{args.processor}.pth'
+    file_name = f'preprocessed_data/{file}_{args.embed}.pth'
     return torch.load(file_name)
 
 def load_model(config_settings, args):
 
     # Load the dictionary of models
     default_args = config_settings['default']
-    model_args = config_settings[args.model_name]
+    model_args = config_settings[args.model]
 
     # Initialize model and return
-    model = _models_list(args.model_name)
+    model = _models_list(args.model)
 
     return model(model_args | default_args)

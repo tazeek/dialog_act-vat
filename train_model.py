@@ -1,4 +1,3 @@
-from models import lstm_glove, lstm_bert
 from vat_loss import VATLoss
 from torchmetrics import Recall, ConfusionMatrix
 from torchmetrics.classification import MulticlassF1Score, MulticlassPrecision
@@ -27,6 +26,7 @@ class Model():
         # Others
         self._base_file = args['file_name']
         self._logger = logger
+        self._embed = args['embed']
         self._train_size = len(self._train_data)
 
         # Results evaluation
@@ -49,25 +49,14 @@ class Model():
         self._loss_func = nn.CrossEntropyLoss()
 
         return None
+
+    def _batch_type(self):
+
+        return {
+            'bert': self._bert_batch(),
+            'glove': self._glove_batch()
+        }[self._embed]
     
-    def _metrics_evaluation(self, y_pred, y_train, device):
-
-        # Get the predicted labels and convert to CPU
-        y_pred_softmax = torch.log_softmax(y_pred, dim = 1)
-        _, y_pred_tags = torch.max(y_pred_softmax, dim = 1)
-
-        # Calculate the metrics
-        f1_metric = MulticlassF1Score(average = 'weighted', num_classes = 4).to(self._device)
-        f1_metric = f1_metric(y_pred_tags, y_train)
-
-        recall_metric = Recall(average = 'weighted', num_classes = 4).to(self._device)
-        recall_metric = recall_metric(y_pred_tags, y_train)
-
-        precision_metric = MulticlassPrecision(average = 'weighted', num_classes = 4).to(self._device)
-        precision_metric = precision_metric(y_pred_tags, y_train)
-
-        return precision_metric.item(), f1_metric.item(), recall_metric.item()
-
     def _save_csv_file(self, file_name) -> None:
 
         # Convert to dataframe
@@ -79,7 +68,7 @@ class Model():
 
         return None
 
-    def _get_results_dictionary(self):
+    def _get_results_dictionary(self) -> dict:
 
         return {
             'epoch': [],
@@ -89,7 +78,7 @@ class Model():
             'recall': []
         }
 
-    def _reset_metrics(self):
+    def _reset_metrics(self) -> None:
 
         self._train_epoch_loss = 0
         self._train_vat_loss = 0
@@ -99,14 +88,14 @@ class Model():
 
         return None
 
-    def _print_updates(self, epoch):
+    def _print_updates(self, epoch) -> None:
 
         print(
             f'Epoch {epoch+0:03}: |'
             f' Train Loss: {self._train_epoch_loss:.5f} | '
-            f' Train Recall: {self._train_epoch_recall:.3f} | '
-            f' Train F1: {self._train_epoch_f1:.3f} | '
-            f' Train Precision: {self._train_epoch_prec:.3f} '
+            f' Train Recall: {self._train_epoch_recall:.5f} | '
+            f' Train F1: {self._train_epoch_f1:.5f} | '
+            f' Train Precision: {self._train_epoch_prec:.5f} '
         )
 
         return None
@@ -128,7 +117,26 @@ class Model():
 
         return lds
 
-    def _compute_loss_results(self, y_pred, y_train):
+    def _metrics_evaluation(self, y_pred, y_train):
+
+        # Get the predicted labels and convert to CPU
+        y_pred_softmax = torch.log_softmax(y_pred, dim = 1)
+        _, y_pred_tags = torch.max(y_pred_softmax, dim = 1)
+
+        # Calculate the metrics
+        f1_metric = MulticlassF1Score(average = 'weighted', num_classes = 4).to(self._device)
+        f1_metric = f1_metric(y_pred_tags, y_train)
+
+        recall_metric = Recall(average = 'weighted', num_classes = 4).to(self._device)
+        recall_metric = recall_metric(y_pred_tags, y_train)
+
+        precision_metric = MulticlassPrecision(average = 'weighted', num_classes = 4).to(self._device)
+        precision_metric = precision_metric(y_pred_tags, y_train)
+
+        return precision_metric.item(), f1_metric.item(), recall_metric.item()
+
+
+    def _compute_loss_results(self, y_pred, y_train) -> None:
 
         train_loss = self._loss_func(y_pred, y_train)
         precision, f1, recall = self._metrics_evaluation(y_pred, y_train)
@@ -146,7 +154,7 @@ class Model():
 
         return None
 
-    def _normalize_and_store(self, epoch):
+    def _normalize_and_store(self, epoch) -> None:
 
         # Normalize results
         self._train_epoch_loss /= self._train_set_size
@@ -178,6 +186,7 @@ class Model():
 
             # TODO: Different embeddings have different batches
             # Hence, need to split into different functions
+            self._train_batches()
 
             # Compute the losses and evaluation metrics per loop
 
@@ -198,7 +207,7 @@ class Model():
         
         return None
 
-    def start_train_glove(self):
+    def _glove_batch(self):
 
         self._model.train()
 
@@ -277,7 +286,7 @@ class Model():
 
         return None
 
-    def start_train_bert(self, optimizer, loss):
+    def _bert_batch(self):
 
         for batch_tuple in self._train_data:
 

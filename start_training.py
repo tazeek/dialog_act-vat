@@ -39,6 +39,7 @@ if __name__ == '__main__':
         'unlabeled': unlabeled_set,
         'file_name': base_filename,
         'model': model_obj,
+        'embed': args.embed
     }
 
     # Create model object
