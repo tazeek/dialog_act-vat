@@ -132,6 +132,23 @@ class Model():
 
         return lds
 
+    def _normalize_and_store(self, epoch):
+
+        # Normalize results
+        self._train_epoch_loss /= self._train_set_size
+        self._train_epoch_f1 /= self._train_set_size
+        self._train_epoch_recall /= self._train_set_size
+        self._train_epoch_prec /= self._train_set_size
+
+        # Store the results
+        self._eval_results['epoch'].append(epoch)
+        self._eval_results['cross_entropy_loss'].append(self._train_epoch_loss)
+        self._eval_results['recall'].append(self._train_epoch_recall)
+        self._eval_results['f1'].append(self._train_epoch_f1)
+        self._eval_results['precision'].append(self._train_epoch_prec)
+
+        return None
+
     def start_training(self):
 
         self._model.train()
@@ -153,9 +170,10 @@ class Model():
             # Compute the losses and evaluation metrics per loop
 
             # Normalize and record the results every epoch
+            self._normalize_and_store(epoch)
 
             # Print every epoch or every X epoch
-            ...
+            self._print_updates(epoch)
         ...
 
     def start_train_glove(self):
