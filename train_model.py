@@ -266,9 +266,15 @@ class Model():
         train_loss = self._loss_func(y_pred, y_train)
         precision, f1, recall = self._metrics_evaluation(y_pred, y_train)
 
-        # Back propagration and Updates
+        # Back propagration and update for parameters
         train_loss.backward()
         self._optimizer.step()
+
+        # Update metrics
+        self._train_epoch_loss += train_loss.item()
+        self._train_epoch_prec += precision
+        self._train_epoch_f1 += f1
+        self._train_epoch_recall += recall
 
         return None
 
