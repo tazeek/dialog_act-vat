@@ -297,7 +297,7 @@ class Model():
             x_train = x_train.to(self._device)
             y_train = y_train.to(self._device)
 
-            # Predict the outputs
+            # Get the model outputs
             self._optimizer.zero_grad()
             y_pred = self._model(x_train)
 
