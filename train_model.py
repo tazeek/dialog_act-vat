@@ -209,21 +209,20 @@ class Model():
 
         for batch_data in self._train_data:
 
-            # Convert to LongTensor
+            # Unpack the dictionary and mount to device
+            x_train = batch_data['features'].to(self._device)
+            x_original_length = batch_data['original_length'].to(self._device)
+
+            y_train = batch_data['labels']
             y_train = y_train.type(torch.LongTensor)
-
-            # Load inputs and labels onto device
-            x_padded, y_train = x_padded.to(self._device), y_train.to(self._device)
-
-            # Predict the outputs
-            #y_pred = self._model(x_padded, x_original_len)
+            y_train = y_train.to(self._device)
 
             # Get the model outputs
             self._optimizer.zero_grad()
-            #y_pred = self._model(x_train)
+            y_pred = self._model(x_train, x_original_length)
 
             # Compute the loss and metrics
-            #self._compute_loss_results(y_pred, y_train)
+            self._compute_loss_results(y_pred, y_train)
 
         return None
 
@@ -232,12 +231,10 @@ class Model():
         for batch_data in self._train_data:
 
             # Unpack the data from the batch
-            x_train = batch_data['features']
+            x_train = batch_data['features'].to(self._device)
+            
             y_train = batch_data['labels']
             y_train = y_train.type(torch.LongTensor)
-
-            # Mount onto the device
-            x_train = x_train.to(self._device)
             y_train = y_train.to(self._device)
 
             # Get the model outputs

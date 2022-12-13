@@ -31,7 +31,7 @@ class Glove_Processor:
         V is always 50
     """
 
-    def _load_model(self):
+    def _load_tables(self):
 
         self._path = 'pre_trained\glove.6B.50d.txt'
 
@@ -157,12 +157,16 @@ class Glove_Processor:
         labels = [label for label in labels]
         labels = torch.tensor(labels)
         
-        return original_len, vector_inputs_padded, labels
+        return {
+            'original_length': original_len,
+            'features': vector_inputs_padded,
+            'labels': labels
+        }
 
     def begin_transformation(self, text, labels, batch_size):
 
         # Load the models
-        self._load_model()
+        self._load_tables()
 
         # Use customized dataset
         dataset = custom_dataloader.CustomDataLoader(text, labels)
