@@ -69,14 +69,13 @@ class Model():
 
         return precision_metric.item(), f1_metric.item(), recall_metric.item()
 
-    def _save_csv_file(self) -> None:
+    def _save_csv_file(self, file_name) -> None:
 
         # Convert to dataframe
         df = pd.DataFrame(self._eval_results)
 
         # Save dataframe to CSV
-        file_name = 'results/' + self._base_file + '_training_results.csv'
-
+        file_name = 'results/' + self._base_file + f'_{file_name}.csv'
         df.to_csv(file_name, index=False)
 
         return None
