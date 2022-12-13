@@ -25,11 +25,17 @@ def transform_features_datasets(args, logger) -> None:
 
     # Transform the data and get the data loader
     batch_size = 64
-    train_loader = processor.begin_transformation(x_train, y_train, batch_size)
-    test_loader = processor.begin_transformation(x_test, y_test, batch_size)
 
-    # Save using PyTorch
+    logger.info(f'Transforming training dataset')
+    train_loader = processor.begin_transformation(x_train, y_train, batch_size)
+
+    logger.info(f'Saving training dataset')
     torch.save(train_loader, f'preprocessed_data/trainloader_{processor_method}.pth')
+
+    logger.info(f'Transforming testing dataset')
+    test_loader = processor.begin_transformation(x_test, y_test, batch_size)
+    
+    logger.info(f'Saving testing dataset')
     torch.save(test_loader, f'preprocessed_data/testloader_{processor_method}.pth')
 
     return None
