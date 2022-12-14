@@ -30,7 +30,7 @@ class LSTM_GLove(nn.Module):
 
         self._linear = nn.Linear(self._hidden_nodes, self._output_size)
 
-    def forward(self, x_embed, x_origin_len, perturbation=torch.FloatTensor()):
+    def forward(self, x_train, x_origin_len, perturbation=torch.FloatTensor()):
 
         # Perturbation check (only in VAT checks)
         #if perturbation.nelement() != 0:
@@ -39,7 +39,7 @@ class LSTM_GLove(nn.Module):
         
         # Input the embeddings to the pack padded sequence
         pack_output = pack_padded_sequence(
-            x_embed, 
+            x_train, 
             x_origin_len, 
             batch_first=True, 
             enforce_sorted=False
