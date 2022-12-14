@@ -120,11 +120,10 @@ class Model():
     def _metrics_evaluation(self, y_pred, y_train):
 
         # Logits -> Probability distribution
-        # Probability distribution -> Most likely score
+        y_pred_distribution = torch.log_softmax(y_pred, dim = 1)
 
-        # Get the predicted labels and convert to CPU
-        y_pred_softmax = torch.log_softmax(y_pred, dim = 1)
-        _, y_pred_tags = torch.max(y_pred_softmax, dim = 1)
+        # Probability distribution -> Most likely score (TODO)
+        _, y_pred_tags = torch.max(y_pred_distribution, dim = 1)
 
         # Calculate the metrics
         f1_metric = MulticlassF1Score(average = 'weighted', num_classes = 4).to(self._device)
