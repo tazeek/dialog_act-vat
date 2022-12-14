@@ -31,7 +31,7 @@ class Model():
 
         # Results evaluation
         self._eval_results = self._get_results_dictionary()
-        self._metric_evaluator = self._initialize_metrics()
+        self._metric_evaluator = self._initalize_metrics()
 
         # Device
         self._device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -40,9 +40,13 @@ class Model():
         self._model = args['model']
         self._model.to(self._device)
     
-    def _initalize_metrics():
+    def _initalize_metrics(self):
 
-        ...
+        return {
+            'f1': MulticlassF1Score(average = 'weighted', num_classes = 4).to(self._device),
+            'precision': MulticlassPrecision(average = 'weighted', num_classes = 4).to(self._device),
+            'recall': Recall(average = 'weighted', num_classes = 4).to(self._device),
+        }
 
     def _intialize_hyperparam_loss(self):
 
