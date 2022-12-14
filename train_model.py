@@ -119,6 +119,9 @@ class Model():
 
     def _metrics_evaluation(self, y_pred, y_train):
 
+        # Logits -> Probability distribution
+        # Probability distribution -> Most likely score
+
         # Get the predicted labels and convert to CPU
         y_pred_softmax = torch.log_softmax(y_pred, dim = 1)
         _, y_pred_tags = torch.max(y_pred_softmax, dim = 1)
