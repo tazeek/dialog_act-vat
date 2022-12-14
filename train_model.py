@@ -126,6 +126,7 @@ class Model():
         y_pred_tags = torch.argmax(y_pred_distribution, dim = 1)
 
         # Calculate the metrics
+        # TODO: Initialize the metrics once, instead of so many calls (speed up)
         f1_metric = MulticlassF1Score(average = 'weighted', num_classes = 4).to(self._device)
         f1_metric = f1_metric(y_pred_tags, y_train)
 
