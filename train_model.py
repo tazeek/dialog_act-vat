@@ -31,6 +31,7 @@ class Model():
 
         # Results evaluation
         self._eval_results = self._get_results_dictionary()
+        self._metric_evaluator = self._initialize_metrics()
 
         # Device
         self._device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -38,6 +39,10 @@ class Model():
         # Create model and mount to device
         self._model = args['model']
         self._model.to(self._device)
+    
+    def _initalize_metrics():
+
+        ...
 
     def _intialize_hyperparam_loss(self):
 
