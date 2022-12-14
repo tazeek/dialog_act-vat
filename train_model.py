@@ -129,6 +129,7 @@ class Model():
     def _metrics_evaluation(self, y_pred_logits, y_train):
 
         # Logits -> Probability distribution
+        # NOTE: Softmax for probability distribution, Log_softmax for log(softmax(x))
         y_pred_distribution = torch.log_softmax(y_pred_logits, dim = 1)
 
         # Probability distribution -> Most likely tag (and the indices)
