@@ -30,20 +30,17 @@ class LSTM_GLove(nn.Module):
 
         self._linear = nn.Linear(self._hidden_nodes, self._output_size)
 
-    def forward(self, input, actual_batch_len, perturbation=torch.FloatTensor()):
-        
-        # Transform from raw to embeddings
-        x_embed = self._word_embeddings(input)
+    def forward(self, x_embed, x_origin_len, perturbation=torch.FloatTensor()):
 
         # Perturbation check (only in VAT checks)
-        if perturbation.nelement() != 0:
+        #if perturbation.nelement() != 0:
 
-            x_embed = torch.add(x_embed, perturbation)
+        #    x_embed = torch.add(x_embed, perturbation)
         
         # Input the embeddings to the pack padded sequence
         pack_output = pack_padded_sequence(
             x_embed, 
-            actual_batch_len, 
+            x_origin_len, 
             batch_first=True, 
             enforce_sorted=False
         )
