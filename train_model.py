@@ -142,7 +142,6 @@ class Model():
 
         return precision_metric.item(), f1_metric.item(), recall_metric.item()
 
-
     def _compute_loss_results(self, y_pred_logits, y_train) -> None:
 
         train_loss = self._loss_func(y_pred_logits, y_train)
