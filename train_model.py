@@ -117,13 +117,13 @@ class Model():
 
         return lds
 
-    def _metrics_evaluation(self, y_pred, y_train):
+    def _metrics_evaluation(self, y_pred_logits, y_train):
 
         # Logits -> Probability distribution
-        y_pred_distribution = torch.log_softmax(y_pred, dim = 1)
+        y_pred_distribution = torch.log_softmax(y_pred_logits, dim = 1)
 
-        # Probability distribution -> Most likely score (TODO)
-        _, y_pred_tags = torch.max(y_pred_distribution, dim = 1)
+        # Probability distribution -> Most likely tag (and the indices)
+        y_pred_tags = torch.argmax(y_pred_distribution, dim = 1)
 
         # Calculate the metrics
         f1_metric = MulticlassF1Score(average = 'weighted', num_classes = 4).to(self._device)
@@ -138,10 +138,10 @@ class Model():
         return precision_metric.item(), f1_metric.item(), recall_metric.item()
 
 
-    def _compute_loss_results(self, y_pred, y_train) -> None:
+    def _compute_loss_results(self, y_pred_logits, y_train) -> None:
 
-        train_loss = self._loss_func(y_pred, y_train)
-        precision, f1, recall = self._metrics_evaluation(y_pred, y_train)
+        train_loss = self._loss_func(y_pred_logits, y_train)
+        precision, f1, recall = self._metrics_evaluation(y_pred_logits, y_train)
 
         # Back propagration and update for parameters
         train_loss.backward()
@@ -221,10 +221,10 @@ class Model():
 
             # Get the model outputs
             self._optimizer.zero_grad()
-            y_pred = self._model(x_train, x_original_length)
+            y_pred_logits = self._model(x_train, x_original_length)
 
             # Compute the loss and metrics
-            self._compute_loss_results(y_pred, y_train)
+            self._compute_loss_results(y_pred_logits, y_train)
 
         return None
 
@@ -241,10 +241,10 @@ class Model():
 
             # Get the model outputs
             self._optimizer.zero_grad()
-            y_pred = self._model(x_train)
+            y_pred_logits = self._model(x_train)
 
             # Compute the loss and metrics
-            self._compute_loss_results(y_pred, y_train)
+            self._compute_loss_results(y_pred_logits, y_train)
 
         return None
 
