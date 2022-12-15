@@ -45,7 +45,6 @@ class LSTM_GLove(nn.Module):
             enforce_sorted=False
         )
 
-
         # Input the second transformation to LSTM
         _, (hidden, cell) = self._lstm(pack_output)
         

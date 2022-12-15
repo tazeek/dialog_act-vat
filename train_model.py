@@ -29,12 +29,12 @@ class Model():
         self._embed = args['embed']
         self._train_size = len(self._train_data)
 
+        # Device
+        self._device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
         # Results evaluation
         self._eval_results = self._get_results_dictionary()
         self._metric_evaluator = self._initalize_metrics()
-
-        # Device
-        self._device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
         # Create model and mount to device
         self._model = args['model']
