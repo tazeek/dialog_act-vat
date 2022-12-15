@@ -1,0 +1,25 @@
+GloVe:
+> Lookup table created
+> Word-index created
+> Conversion (Word to index)
+> Conversion (Index to Lookup)
+> Dimension checkup
+> Batch loader checkup
+
+BERT:
+> Tokenisation
+> BERT conversion
+> Dimension checkup (All output sizes)
+> Batch loader checkup
+
+Args (Dataset transformer):
+> Correct transformer loaded
+> Arguments works as expected
+
+Args (Model creation):
+> Config file loaded properly
+> Model parameters loaded properly
+> Model loaded properly
+> Training works
+> Testing works
+> Unlabeled works
