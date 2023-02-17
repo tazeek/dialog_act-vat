@@ -30,7 +30,8 @@ if __name__ == '__main__':
 
     # Load the model
     logger.info(f'Loading model: {args.model}')
-    model_obj = util_helper.load_model(config_settings, args)
+    model_name = args.model + '_' + args.embed
+    model_obj = util_helper.load_model(config_settings, model_name)
 
     # Populate all in a dictionary for training model object
     args_dict = {

@@ -74,14 +74,14 @@ def load_transformed_datasets(args, file):
     file_name = f'preprocessed_data/{file}_{args.embed}.pth'
     return torch.load(file_name)
 
-def load_model(config_settings, args):
+def load_model(config_settings, model_name):
 
     # Load the dictionary of models
     default_args = config_settings['default']
     print(config_settings)
-    model_args = config_settings[args.model + '_' + args.embed]
+    model_args = config_settings[model_name]
 
     # Initialize model and return
-    model = _models_list(args.model)
+    model = _models_list(model_name)
 
     return model(model_args | default_args)
