@@ -7,6 +7,7 @@ import tomli
 
 def _models_list(model_name):
 
+    print(model_name)
     return {
         'lstm_bert': None,
         'lstm_glove': None
@@ -77,11 +78,5 @@ def load_transformed_datasets(args, file):
 def load_model(config_settings, model_name):
 
     # Load the dictionary of models
-    default_args = config_settings['default']
-    print(config_settings)
-    model_args = config_settings[model_name]
 
-    # Initialize model and return
-    model = _models_list(model_name)
-
-    return model(model_args | default_args)
+    return config_settings[model_name]

@@ -19,7 +19,7 @@ class Model():
         self._alpha_val = args['alpha_val']
 
         # Data Generators
-        self._train_data = args['training']
+        self._train_data = args['train']
         self._test_data = args['test']
         self._unlabeled_data = args['unlabeled']
 

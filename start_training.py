@@ -6,7 +6,8 @@ if __name__ == '__main__':
 
     # Get the logger
     logger = util_helper.get_logger('model_training')
-
+    unlabeled_set = None
+    
     # Get parser for command line inputs
     logger.info('Fetching Parser')
     args = util_helper.create_parser()
@@ -31,7 +32,7 @@ if __name__ == '__main__':
     # Load the model
     logger.info(f'Loading model: {args.model}')
     model_name = args.model + '_' + args.embed
-    model_obj = util_helper.load_model(config_settings, model_name)
+    model_obj = config_settings[model_name]
 
     # Populate all in a dictionary for training model object
     args_dict = {
