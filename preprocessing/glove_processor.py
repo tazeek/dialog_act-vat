@@ -180,10 +180,14 @@ class Glove_Processor:
 
         # Load the models
         self._load_tables()
+        self._logger.info('Table creation successful.')
 
         # Use customized dataset
+        self._logger.info('Loading DataLoader....')
         dataset = custom_dataloader.CustomDataLoader(text, labels)
-
+        exit()
+        
+        self._logger.info('Batch Division begins....')
         return DataLoader(dataset, 
             batch_size=batch_size, 
             shuffle=False, 
