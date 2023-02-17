@@ -35,16 +35,10 @@ class Glove_Processor:
     def __init__(self, logger):
         self._logger = logger
 
-    def _load_tables(self):
-
         self._path = 'pre_trained\glove.6B.50d.txt'
 
         self._word2idx = {'<pad>': 0}
         self._lookup_table_glove = {}
-
-        self._create_lookup_tables()
-
-        return None
 
     def _tokenizer(self, utterance: str):
         return [word.lower() for word in utterance.split(" ") if word != '']
@@ -150,14 +144,19 @@ class Glove_Processor:
 
         # List of sentences -> List of tokens list
         tokenized_list = self._tokenize_utterances(utterances)
+        print(tokenized_list)
 
         # Get original length for pack padded sequence
         # Then, convert to tensor
+        print(tokenized_list)
         original_len = [len(tokens_list) for tokens_list in tokenized_list]
         original_len = torch.tensor(original_len)
+        print(original_len)
 
         # List of tokens list -> List of integers list
+        print(original_len)
         transformed_list = self._convert_text_integer(tokenized_list)
+        print(transformed_list)
 
         # List of integers list -> List of vectorized tokens
         vectorized_list = self._convert_integers_vectors(transformed_list)
@@ -179,15 +178,13 @@ class Glove_Processor:
     def begin_transformation(self, text, labels, batch_size):
 
         # Load the models
-        self._load_tables()
+        self._create_lookup_tables()
         self._logger.info('Table creation successful.')
 
         # Use customized dataset
         self._logger.info('Loading DataLoader....')
         dataset = custom_dataloader.CustomDataLoader(text, labels)
-        exit()
-        
-        self._logger.info('Batch Division begins....')
+
         return DataLoader(dataset, 
             batch_size=batch_size, 
             shuffle=False, 
