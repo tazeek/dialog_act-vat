@@ -32,6 +32,9 @@ class Glove_Processor:
         V is always 50
     """
 
+    def __init__(self, logger):
+        self._logger = logger
+
     def _load_tables(self):
 
         self._path = 'pre_trained\glove.6B.50d.txt'
@@ -59,6 +62,8 @@ class Glove_Processor:
         # For padded embeddings
         self._lookup_table_glove[0] = np.zeros(50)
 
+        self._logger.info(f'Loading GloVe vectors and creating the word-index dictionary')
+
         with open(self._path, encoding="utf8") as f:
 
             for line in f.readlines():
@@ -77,6 +82,8 @@ class Glove_Processor:
                 index += 1
 
         # Save lookup table and word-integer transformation
+        self._logger.info(f'Saving the lookup table and word-index dictionary')
+
         torch.save(self._lookup_table_glove, 'lookup_table_glove.pt')
 
         with open('word_to_index.pickle', 'wb') as file:

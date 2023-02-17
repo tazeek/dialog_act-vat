@@ -4,10 +4,10 @@ from preprocessing.glove_processor import Glove_Processor
 
 import torch
 
-def _preprocess_methods(processor):
+def _preprocess_methods(processor, logger):
 
     return {
-        'glove': Glove_Processor(),
+        'glove': Glove_Processor(logger),
         'bert': Bert_Processor()
     }[processor]
 
@@ -20,9 +20,9 @@ def transform_features_datasets(args, logger) -> None:
 
     # Load the preprocessor
     processor_method = args.embed
-    
+
     logger.info(f'Using processor: {processor_method}')
-    processor = _preprocess_methods(processor_method)
+    processor = _preprocess_methods(processor_method, logger)
 
     # Transform the data and get the data loader
     batch_size = 64
