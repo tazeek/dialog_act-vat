@@ -5,6 +5,7 @@ from data_loaders import custom_dataloader
 
 import numpy as np
 import torch
+import pickle
 
 class Glove_Processor:
 
@@ -76,9 +77,10 @@ class Glove_Processor:
                 index += 1
 
         # Save lookup table and word-integer transformation
-        print(self._lookup_table_glove[1])
-        exit()
-        self.save_file()
+        torch.save(self._lookup_table_glove, 'lookup_table_glove.pt')
+
+        with open('word_to_index.pickle', 'wb') as file:
+            pickle.dump(self._word2idx, file, protocol=pickle.HIGHEST_PROTOCOL)
             
         return None
 
