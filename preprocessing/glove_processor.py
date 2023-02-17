@@ -144,19 +144,14 @@ class Glove_Processor:
 
         # List of sentences -> List of tokens list
         tokenized_list = self._tokenize_utterances(utterances)
-        print(tokenized_list)
 
         # Get original length for pack padded sequence
         # Then, convert to tensor
-        print(tokenized_list)
         original_len = [len(tokens_list) for tokens_list in tokenized_list]
         original_len = torch.tensor(original_len)
-        print(original_len)
 
         # List of tokens list -> List of integers list
-        print(original_len)
         transformed_list = self._convert_text_integer(tokenized_list)
-        print(transformed_list)
 
         # List of integers list -> List of vectorized tokens
         vectorized_list = self._convert_integers_vectors(transformed_list)
