@@ -43,10 +43,13 @@ if __name__ == '__main__':
     }
 
     # Create model object
+    logger.info(f'Create model')
     train_model = Model(args_dict | config_settings, logger)
 
     # [OPTIONAL] Train the VAT model
 
     # Train the model [Train set]
+    logger.info(f'Training begins')
 
     # Test the model [Test set]
+    logger.info(f'Testing begins')

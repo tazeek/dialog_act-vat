@@ -78,7 +78,8 @@ def load_model(config_settings, args):
 
     # Load the dictionary of models
     default_args = config_settings['default']
-    model_args = config_settings[args.model]
+    print(config_settings)
+    model_args = config_settings[args.model + '_' + args.embed]
 
     # Initialize model and return
     model = _models_list(args.model)
