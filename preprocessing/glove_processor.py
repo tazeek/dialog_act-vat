@@ -67,13 +67,17 @@ class Glove_Processor:
                 # Index 0: Word
                 # Index 1 onwards: Weights
                 word = values[0]
-                self._lookup_table_glove[index] = torch.from_numpy(values[1:]).float()
+                weights_val = [float(vector) for vector in values[1:]]
 
+                # Storage time
+                self._lookup_table_glove[index] = torch.FloatTensor(weights_val)
                 self._word2idx[word] = index
 
                 index += 1
 
         # Save lookup table and word-integer transformation
+        print(self._lookup_table_glove[1])
+        exit()
         self.save_file()
             
         return None

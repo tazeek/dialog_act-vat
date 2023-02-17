@@ -1,6 +1,6 @@
 from data_loaders import dailydialog
-from bert_processor import Bert_Processor
-from glove_processor import Glove_Processor
+from preprocessing.bert_processor import Bert_Processor
+from preprocessing.glove_processor import Glove_Processor
 
 import torch
 
@@ -19,7 +19,8 @@ def transform_features_datasets(args, logger) -> None:
     x_test, y_test = dailydialog.DailyDialog('test.zip').fetch_dataframe()
 
     # Load the preprocessor
-    processor_method = args.processor
+    processor_method = args.embed
+    
     logger.info(f'Using processor: {processor_method}')
     processor = _preprocess_methods(processor_method)
 
