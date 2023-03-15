@@ -49,8 +49,7 @@ class Bert_Processor:
 
     def _custom_collate_fn(self, data):
 
-        text_list = data['text']
-        labels_list = data['label']
+        text_list, labels_list = zip(*data)
 
         # Find the maximum length
         max_len = self._find_maximum_width(text_list)
