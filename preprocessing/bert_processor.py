@@ -37,16 +37,23 @@ class Bert_Processor:
         self._model = BertModel.from_pretrained('bert-base-uncased')
         self._model.eval()
 
+    def _find_maximum_width(self, text_list):
+        # Maximum width refers to the maximum sentence length in the batch
+
+        # Convert from list of strings to list of tokens (Use encode)
+        tokens_list = [self._tokenizer.encode(text) for text in text_list]
+
+        return max([len(token_list) for token_list in tokens_list])
+
+        ...
+
     def _custom_collate_fn(self, data):
 
         text_list = data['text']
         labels_list = data['label']
 
-        # Convert from list of strings to list of tokens (Use encode)
-        tokens_list = [self._tokenizer.encode(text) for text in text_list]
-
         # Find the maximum length
-        max_len = max([len(token_list) for token_list in tokens_list])
+        max_len = self._find_maximum_width(text_list)
 
         # Convert from list of strings to list of integers (Use batch_encode_plus)
         # Get the attention masks
@@ -71,6 +78,7 @@ class Bert_Processor:
             )
 
         return {
+            'text': text_list,
             'features': vectorized_out,
             'labels': torch.tensor(labels_list)
         }
