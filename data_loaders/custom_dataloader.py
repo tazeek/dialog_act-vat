@@ -12,11 +12,10 @@ class CustomDataLoader(Dataset):
 
     def __getitem__(self, idx):
 
-        data_dict = {
-            'text': self._text[idx]
-        }
+        text = self._text[idx]
+        label = None
 
         if len(self._labels) != 0:
-            data_dict['label'] = int(self._labels[idx])
+            label = int(self._labels[idx])
         
-        return data_dict
+        return text, label
