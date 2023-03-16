@@ -26,3 +26,7 @@ if __name__ == '__main__':
         unlabeled_set = util_helper.load_transformed_datasets(args, 'unlabeledloader')
 
     logger.info('Dataset loading completed')
+
+    logger.info('Start Training')
+    util_helper.train_model(train_set)
+

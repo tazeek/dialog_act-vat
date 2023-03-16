@@ -1,5 +1,4 @@
-from models import *
-from transformers import BertModel
+from models import bert_finetune
 
 import logging
 import argparse
@@ -75,14 +74,14 @@ def prepare_model_attributes(model):
 
     return criterion, optimizer
 
-def train_model():
+def train_model(train_set):
 
     # Get the model
-    model = BertModel.from_pretrained('bert-base-uncased')
+    model = bert_finetune.BERT_FineTune(5)
+    print(model)
 
     # Load the loss functions
     criterion, optimizer = prepare_model_attributes(model)
-    ...
 
 def test_model():
 

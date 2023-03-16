@@ -1,10 +1,10 @@
 from torch import nn
 from transformers import BertModel
 
-class BERT(nn.Module):
+class BERT_FineTune(nn.Module):
     def __init__(self, output_size):
 
-        super(BERT, self).__init__()
+        super(BERT_FineTune, self).__init__()
 
         self.bert_model = BertModel.from_pretrained("bert-base-uncased")
 
