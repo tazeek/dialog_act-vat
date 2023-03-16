@@ -137,10 +137,9 @@ class Glove_Processor:
 
         return tokenized_utterances
 
-    def _custom_collate_fn(self, data: list):
+    def _custom_collate_fn(self, data: tuple):
 
-        utterances = data['text']
-        labels = data['label']
+        utterances, labels = zip(*data)
 
         # List of sentences -> List of tokens list
         tokenized_list = self._tokenize_utterances(utterances)
