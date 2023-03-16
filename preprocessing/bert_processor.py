@@ -1,7 +1,7 @@
 from data_loaders import custom_dataloader
 
 from torch.utils.data import DataLoader
-from transformers import BertTokenizer, BertModel
+from transformers import BertTokenizer
 
 import torch
 
