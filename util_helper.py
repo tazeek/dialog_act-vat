@@ -78,5 +78,12 @@ def load_transformed_datasets(args, file):
 def load_model(config_settings, model_name):
 
     # Load the dictionary of models
-
     return config_settings[model_name]
+
+def train_model():
+
+    ...
+
+def test_model():
+
+    ...
