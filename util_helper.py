@@ -1,17 +1,10 @@
 from models import *
+from transformers import BertModel
 
 import logging
 import argparse
 import torch
 import tomli
-
-def _models_list(model_name):
-
-    print(model_name)
-    return {
-        'lstm_bert': None,
-        'lstm_glove': None
-    }[model_name]
 
 def load_config_file():
 
@@ -75,13 +68,20 @@ def load_transformed_datasets(args, file):
     file_name = f'preprocessed_data/{file}_{args.embed}.pth'
     return torch.load(file_name)
 
-def load_model(config_settings, model_name):
+def prepare_model_attributes(model):
 
-    # Load the dictionary of models
-    return config_settings[model_name]
+    criterion = torch.nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(model.parameters(), lr=1e-5)
+
+    return criterion, optimizer
 
 def train_model():
 
+    # Get the model
+    model = BertModel.from_pretrained('bert-base-uncased')
+
+    # Load the loss functions
+    criterion, optimizer = prepare_model_attributes(model)
     ...
 
 def test_model():
