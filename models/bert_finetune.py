@@ -14,7 +14,7 @@ class BERT_FineTune(nn.Module):
 
         #self._sent_linear = nn.Linear(hidden_dim, 5)
         self._dialog_act_linear = nn.Linear(hidden_dim, 64)
-        self._relu = nn.Relu()
+        self._relu = nn.ReLU()
         self._linear = nn.Linear(64, output_size)
         
     def forward(self, ids, attention_mask):

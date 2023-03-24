@@ -76,12 +76,26 @@ def prepare_model_attributes(model):
 
 def train_model(train_set):
 
+    # Prepare device
+    use_cuda = torch.cuda.is_available()
+    device = torch.device("cuda" if use_cuda else "cpu")
+
     # Get the model
-    model = bert_finetune.BERT_FineTune(5)
-    print(model)
+    model = bert_finetune.BERT_FineTune(768, 5)
 
     # Load the loss functions
     criterion, optimizer = prepare_model_attributes(model)
+
+    for batch_data in train_set:
+
+        features = batch_data['features']
+        labels = batch_data['labels']
+
+        print(features)
+        exit()
+
+        input_ids = features['input_ids'].to(device)
+        mask = features['attention_mask'].to(device)
 
 def test_model():
 
