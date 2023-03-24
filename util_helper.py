@@ -90,6 +90,18 @@ def train_model(train_set):
     model = bert_finetune.BERT_FineTune(768, 4)
     model.to(device)
 
+    trainable_params, nontrainable_params = 0, 0
+
+    # Count the parameters
+    for p in model.parameters():
+        n_params = torch.prod(torch.tensor(p.shape))
+        if p.requires_grad:
+            trainable_params += n_params
+        else:
+            nontrainable_params += n_params
+
+    print(f"Trainable parameters: {trainable_params}\n, Non-trainable parameters: {nontrainable_params}")
+
     # Load the loss functions
     criterion, optimizer = prepare_model_attributes(model)
 
