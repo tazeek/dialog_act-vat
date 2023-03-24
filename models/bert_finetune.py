@@ -2,7 +2,7 @@ from torch import nn
 from transformers import BertModel
 
 class BERT_FineTune(nn.Module):
-    def __init__(self, hidden_dim, output_size):
+    def __init__(self, hidden_dim, da_labels, sc_labels):
 
         super(BERT_FineTune, self).__init__()
 
@@ -12,10 +12,17 @@ class BERT_FineTune(nn.Module):
         for param in self.bert_model.parameters():
             param.requires_grad = False
 
-        #self._sent_linear = nn.Linear(hidden_dim, 5)
+        # For Dialog Act
         self._dialog_act_linear = nn.Linear(hidden_dim, 64)
         self._relu = nn.ReLU()
-        self._linear = nn.Linear(64, output_size)
+        self._linear = nn.Linear(64, da_labels)
+
+        # For Sentiment Classification
+        self._sentiment_class_linear = nn.Linear(hidden_dim, 64)
+        self._relu = nn.RELU()
+        self._linear = nn.Linear(64, sc_labels)
+
+
         
     def forward(self, ids, attention_mask):
 
@@ -24,8 +31,8 @@ class BERT_FineTune(nn.Module):
             attention_mask = attention_mask
         )
         
-        out = self._dialog_act_linear(bert_output.pooler_output)
-        out = self._relu(out)
-        out = self._linear(out)
+        da_out = self._dialog_act_linear(bert_output.pooler_output)
+        da_out = self._relu(da_out)
+        da_out = self._linear(da_out)
         
-        return out
+        return da_out
