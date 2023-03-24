@@ -86,7 +86,7 @@ def train_model(train_set):
         print('Using CPU')
 
     # Get the model and put it on CUDA
-    model = bert_finetune.BERT_FineTune(768, 5)
+    model = bert_finetune.BERT_FineTune(768, 4)
     model.to(device)
 
     # Load the loss functions
@@ -102,9 +102,15 @@ def train_model(train_set):
         mask = features['attention_mask'].to(device)
         labels = labels.to(device)
 
-        logits = model(input_ids, mask)
-        print('\n\n')
-        print(logits)
+        # Get the output and losses
+        output = model(input_ids, mask)
+        loss = criterion(output, labels)
+        
+        # Update optimizer and loss
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
         exit()
 
 def test_model():
