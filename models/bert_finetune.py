@@ -19,10 +19,9 @@ class BERT_FineTune(nn.Module):
         
     def forward(self, ids, attention_mask):
 
-        bert_output  = self.bert_model(
+        bert_output = self.bert_model(
             input_ids = ids,
-            attention_mask = attention_mask,
-            return_dict=False
+            attention_mask = attention_mask
         )
         
         out = self._dialog_act_linear(bert_output.pooler_output)
