@@ -57,7 +57,7 @@ class Bert_Processor:
             truncation=True,
             add_special_tokens=True,
             max_length=max_len,
-            pad_to_max_length=True,
+            padding='max_length',
             return_tensors='pt'
         )
 
