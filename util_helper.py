@@ -7,6 +7,8 @@ import argparse
 import torch
 import tomli
 
+from sklearn.metrics import f1_score, recall_score, precision_score
+
 def load_config_file():
 
     config_dict = {}
@@ -138,7 +140,7 @@ def train_model(train_set):
         print(f'Total loss: {total_loss}')
         print('\n\n')
         epoch_end_time = time.time() - epoch_start_time
-        
+
         print(f"Epoch {epoch} training time: {epoch_end_time:.4f}")
     
     end_time = time.time() - start_time
@@ -146,6 +148,34 @@ def train_model(train_set):
 
     return None
 
-def test_model():
+def test_model(model, test_set, device):
 
+    # Set in eval mode
+    model.eval()
+
+    actual, predicted = [], []
+
+    for batch_data in tqdm(test_set, ncols=50):
+
+        features = batch_data['features']
+        labels = batch_data['labels']
+
+        # Move to CUDA
+        input_ids = features['input_ids'].to(device)
+        mask = features['attention_mask'].to(device)
+
+        actual.extend(labels)
+
+        with torch.no_grad():
+            pred_results = model(input_ids, mask)
+            
+        predicted.extend(pred_results)
+
+    f_score = f1_score(actual, predicted, average="macro")
+    r_score = recall_score(actual, predicted, average="macro")
+    p_score = precision_score(actual, predicted, average="macro")
+
+    print(f'F1-score: {f_score}\nRecall score: {r_score}\nPrecision score: {p_score}')
+
+    return None
     ...
