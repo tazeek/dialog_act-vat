@@ -78,7 +78,7 @@ def prepare_model_attributes(model):
 
     return criterion, optimizer
 
-def train_model(train_set):
+def train_model(train_set, test_set):
 
     # Prepare device
     use_cuda = torch.cuda.is_available()
@@ -114,7 +114,7 @@ def train_model(train_set):
 
         print(f"Training Epoch: {epoch} \n")
         model.train()
-        
+
         total_loss = 0
 
         epoch_start_time = time.time()
@@ -144,6 +144,9 @@ def train_model(train_set):
         epoch_end_time = time.time() - epoch_start_time
 
         print(f"Epoch {epoch} training time: {epoch_end_time:.4f}")
+
+        test_model(model, test_set, device)
+        exit()
     
     end_time = time.time() - start_time
     print(f"Total Training Time: f{end_time:.4f} s")
