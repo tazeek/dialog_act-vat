@@ -106,8 +106,11 @@ def train_model(train_set):
     criterion, optimizer = prepare_model_attributes(model)
 
     start_time = time.time()
+    epoch = 5
 
-    for epoch in range(0, 5 + 1):
+    for epoch in range(0, epoch + 1):
+
+        print(f"Training Epoch: {epoch} \n")
         total_loss = 0
 
         for batch_data in tqdm(train_set, ncols=50):
