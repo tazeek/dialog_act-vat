@@ -113,6 +113,8 @@ def train_model(train_set):
     for epoch in range(0, epoch + 1):
 
         print(f"Training Epoch: {epoch} \n")
+        model.train()
+        
         total_loss = 0
 
         epoch_start_time = time.time()
