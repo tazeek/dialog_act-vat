@@ -174,7 +174,7 @@ def test_model(model, test_set, device):
         with torch.no_grad():
             pred_results = model(input_ids, mask)
             
-        predicted.extend(pred_results)
+        predicted.extend(pred_results.cpu())
 
     f_score = f1_score(actual, predicted, average="macro")
     r_score = recall_score(actual, predicted, average="macro")
