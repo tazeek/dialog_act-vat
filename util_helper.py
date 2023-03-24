@@ -89,7 +89,7 @@ def train_model(train_set, test_set):
         print('Using CPU')
 
     # Get the model and put it on CUDA
-    model = bert_finetune.BERT_FineTune(768, 4)
+    model = bert_finetune.BERT_FineTune(768, 4, 5)
     model.to(device)
 
     trainable_params, nontrainable_params = 0, 0
@@ -174,13 +174,17 @@ def test_model(model, test_set, device):
         with torch.no_grad():
             pred_results = model(input_ids, mask)
             
-        predicted.extend(pred_results.cpu())
+        predicted.extend(pred_results)
 
-    f_score = f1_score(actual, predicted, average="macro")
-    r_score = recall_score(actual, predicted, average="macro")
-    p_score = precision_score(actual, predicted, average="macro")
+    print("\n\n")
+    print(actual.cpu().numpy().flatten().tolist())
+    print("\n\n")
+    print(predicted.cpu().numpy().flatten().tolist())
+    #f_score = f1_score(actual, predicted, average="macro")
+    #r_score = recall_score(actual, predicted, average="macro")
+    #p_score = precision_score(actual, predicted, average="macro")
 
-    print(f'F1-score: {f_score}\nRecall score: {r_score}\nPrecision score: {p_score}')
+    #print(f'F1-score: {f_score}\nRecall score: {r_score}\nPrecision score: {p_score}')
 
     return None
     ...
