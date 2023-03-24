@@ -79,6 +79,8 @@ def train_model(train_set):
     # Prepare device
     use_cuda = torch.cuda.is_available()
     device = torch.device("cuda" if use_cuda else "cpu")
+    if use_cuda:
+        print(f'Using Device: {torch.cuda.get_device_name()}')
 
     # Get the model
     model = bert_finetune.BERT_FineTune(768, 5)
@@ -91,11 +93,10 @@ def train_model(train_set):
         features = batch_data['features']
         labels = batch_data['labels']
 
-        print(features)
-        exit()
-
+        # Move to CUDA
         input_ids = features['input_ids'].to(device)
         mask = features['attention_mask'].to(device)
+        labels = labels.to(device)
 
 def test_model():
 
