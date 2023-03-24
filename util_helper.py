@@ -1,4 +1,5 @@
 from models import bert_finetune
+from tqdm import tqdm
 
 import logging
 import argparse
@@ -81,6 +82,8 @@ def train_model(train_set):
     device = torch.device("cuda" if use_cuda else "cpu")
     if use_cuda:
         print(f'Using Device: {torch.cuda.get_device_name()}')
+    else:
+        print('Using CPU')
 
     # Get the model
     model = bert_finetune.BERT_FineTune(768, 5)
@@ -88,7 +91,7 @@ def train_model(train_set):
     # Load the loss functions
     criterion, optimizer = prepare_model_attributes(model)
 
-    for batch_data in train_set:
+    for batch_data in tqdm(train_set, ncols=50):
 
         features = batch_data['features']
         labels = batch_data['labels']
