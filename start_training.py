@@ -28,5 +28,5 @@ if __name__ == '__main__':
     logger.info('Dataset loading completed')
 
     logger.info('Start Training')
-    util_helper.train_model(train_set)
+    util_helper.train_model(train_set, test_set)
 
