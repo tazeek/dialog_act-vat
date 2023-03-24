@@ -1,6 +1,7 @@
 from models import bert_finetune
 from tqdm import tqdm
 
+import time
 import logging
 import argparse
 import torch
@@ -92,26 +93,37 @@ def train_model(train_set):
     # Load the loss functions
     criterion, optimizer = prepare_model_attributes(model)
 
-    for batch_data in tqdm(train_set, ncols=50):
+    start_time = time.time()
 
-        features = batch_data['features']
-        labels = batch_data['labels']
+    for epoch in range(0, 5 + 1):
+        total_loss = 0
 
-        # Move to CUDA
-        input_ids = features['input_ids'].to(device)
-        mask = features['attention_mask'].to(device)
-        labels = labels.to(device)
+        for batch_data in tqdm(train_set, ncols=50):
 
-        # Get the output and losses
-        output = model(input_ids, mask)
-        loss = criterion(output, labels)
+            features = batch_data['features']
+            labels = batch_data['labels']
+
+            # Move to CUDA
+            input_ids = features['input_ids'].to(device)
+            mask = features['attention_mask'].to(device)
+            labels = labels.to(device)
+
+            # Get the output and losses
+            output = model(input_ids, mask)
+            loss = criterion(output, labels)
+            total_loss += loss.cpu().item()
+            
+            # Update optimizer and loss
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
         
-        # Update optimizer and loss
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
+        print(f'Total loss: {total_loss}')
+        print('\n\n')
+    
+    end_time = time.time() - start_time
 
-        exit()
+    return None
 
 def test_model():
 
