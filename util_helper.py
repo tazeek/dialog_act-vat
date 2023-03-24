@@ -113,6 +113,8 @@ def train_model(train_set):
         print(f"Training Epoch: {epoch} \n")
         total_loss = 0
 
+        epoch_start_time = time.time()
+
         for batch_data in tqdm(train_set, ncols=50):
 
             features = batch_data['features']
@@ -135,8 +137,12 @@ def train_model(train_set):
         
         print(f'Total loss: {total_loss}')
         print('\n\n')
+        epoch_end_time = time.time() - epoch_start_time
+        
+        print(f"Epoch {epoch} training time: {epoch_end_time:.4f}")
     
     end_time = time.time() - start_time
+    print(f"Total Training Time: f{end_time:.4f} s")
 
     return None
 
